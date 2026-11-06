@@ -112,12 +112,13 @@ Rationale: una herramienta entre amigos se adopta por ser confiable y rápida, n
 ### Cuentas (`Account`)
 
 - **Alta:** cualquier usuario registrado MUST poder crear una Cuenta con Nombre, Moneda,
-  Descripción (opcional) y Foto (opcional). El creador es el **Owner**.
+  Descripción (opcional) e Ícono (elegido de un conjunto fijo, con uno por defecto; no se suben
+  imágenes). El creador es el **Owner**.
 - **Participantes híbridos:** el creador define inicialmente los participantes como nombres en
   texto libre. La Cuenta MUST generar una invitación vinculable. Cuando un usuario acepta la
   invitación y se registra/inicia sesión, su perfil MUST asociarse al participante de texto libre
   que elija, o agregarse como nuevo participante si no existía.
-- **Modificación:** cualquier miembro MUST poder modificar Nombre, Descripción, Foto y agregar o
+- **Modificación:** cualquier miembro MUST poder modificar Nombre, Descripción, Ícono y agregar o
   quitar participantes.
 - **Remoción de participantes:** cualquier miembro MUST poder quitar a un participante de la
   Cuenta, tenga o no saldo distinto de cero. Sus gastos MUST NOT eliminarse: en cada gasto que
@@ -299,4 +300,4 @@ constitución.
 - El cumplimiento se revisa en el Constitution Check de cada plan y en la revisión de cada cambio;
   toda complejidad adicional MUST justificarse por escrito.
 
-**Version**: 4.3.0 | **Ratified**: 2026-11-04 | **Last Amended**: 2026-11-06
+**Version**: 4.4.0 | **Ratified**: 2026-11-04 | **Last Amended**: 2026-11-06
