@@ -450,9 +450,9 @@ Con varias personas, después de Foundational:
 
 ## Implementation Notes (2026-11-06)
 
-- T149 queda abierta: en Web se validaron a mano los escenarios 1, 3, 8 y 10 (registro, verificación,
-  moneda, preferencias, logout y login con `callbackUrl`). Faltan Google (requiere consentimiento real
-  con una cuenta de Google) y todo Mobile en un development build (emulador o dispositivo).
+- T149 queda abierta solo por Mobile: en Web se validaron a mano los escenarios 1, 3, 4 (Google, con
+  la redirect URI `http://localhost:3000/api/auth/callback/google` autorizada en Google Cloud), 8 y
+  10. Falta correr los escenarios en Mobile con un development build (emulador o dispositivo).
 - Desvíos de rutas respecto de las tareas: en Mobile las pantallas viven en `mobile/src/screens/` y
   las rutas de `mobile/app/` las reexportan; `CodeInput` y `ResendButton` están en
   `mobile/src/components/FormBits.tsx`; la prueba de logout de Mobile está en
