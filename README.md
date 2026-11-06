@@ -34,8 +34,10 @@ docker compose up -d --build
 
 - API: http://localhost:8000/api/v1 (OpenAPI at `/api/v1/openapi.json`, docs at `/api/v1/docs`)
 - Web: http://localhost:3000
-- Mobile: `cd mobile && npx expo run:android` (or `run:ios`). On the Android emulator the API is
-  at `http://10.0.2.2:8000/api/v1`.
+- Mobile: `cd mobile && npx expo run:android` (or `run:ios`). Needs JDK 17 and the Android SDK
+  (`ANDROID_HOME`). Inside the emulator `localhost` is the emulator itself: set
+  `EXPO_PUBLIC_API_BASE_URL=http://10.0.2.2:8000/api/v1` in `mobile/.env`, or keep `localhost` and
+  run `adb reverse tcp:8000 tcp:8000` after starting the emulator.
 
 ## Tests
 

@@ -32,8 +32,13 @@ Guía para comprobar la feature de punta a punta, una vez implementada. Los endp
 3. Comprobar que la API responde: `GET http://localhost:8000/api/v1/openapi.json` devuelve el
    contrato.
 4. Web: abrir `http://localhost:3000`.
-5. Mobile: desde `mobile/`, correr `npx expo run:android` o `run:ios`. En el emulador de Android,
-   la API está en `http://10.0.2.2:8000/api/v1`.
+5. Mobile: desde `mobile/`, correr `npx expo run:android` o `run:ios`. Requiere JDK 17 y el Android
+   SDK (`ANDROID_HOME`). En el emulador, `localhost` es el propio emulador: usar
+   `EXPO_PUBLIC_API_BASE_URL=http://10.0.2.2:8000/api/v1` en `mobile/.env`, o dejar `localhost` y
+   correr `adb reverse tcp:8000 tcp:8000` cada vez que se inicia el emulador.
+   - Google Sign-In en Android necesita un client ID de tipo Android (package `com.myexpenses.app` y
+     SHA-1 de `cd mobile/android && ./gradlew signingReport`) en el mismo proyecto de Google Cloud
+     que el client web. No se configura en el código: la app usa el client ID web.
 
 ## Tests automáticos
 

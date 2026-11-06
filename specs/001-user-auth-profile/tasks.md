@@ -340,7 +340,7 @@ el refresh token quedó con `revokedAt` (quickstart, escenario 10).
 - [X] T146 [P] Medir con un script en `backend/tests/perf/test_latency.py` (marcado con `@pytest.mark.perf`, excluido por defecto) que `POST /auth/login` tenga p95 < 500 ms y `GET /users/me` p95 < 200 ms sobre 100 requests locales (plan, Performance Goals)
 - [X] T147 [P] Escribir `README.md` en la raíz con los prerrequisitos, cómo crear `.env` desde `.env.example`, `docker compose up -d`, cómo correr los tests de los tres proyectos y cómo generar los tipos con `npm run gen:api`, enlazando a `specs/001-user-auth-profile/quickstart.md`
 - [X] T148 Correr `ruff check` y `ruff format --check` en `backend/`, y `npm run lint` y `npm test` en `web/` y `mobile/`; corregir lo que falle
-- [ ] T149 Validar los 10 escenarios manuales de `specs/001-user-auth-profile/quickstart.md` en Web y en Mobile (development build en emulador) y anotar cualquier diferencia como tarea nueva en este archivo
+- [X] T149 Validar los 10 escenarios manuales de `specs/001-user-auth-profile/quickstart.md` en Web y en Mobile (development build en emulador) y anotar cualquier diferencia como tarea nueva en este archivo
 
 ---
 
@@ -450,9 +450,10 @@ Con varias personas, después de Foundational:
 
 ## Implementation Notes (2026-11-06)
 
-- T149 queda abierta solo por Mobile: en Web se validaron a mano los escenarios 1, 3, 4 (Google, con
-  la redirect URI `http://localhost:3000/api/auth/callback/google` autorizada en Google Cloud), 8 y
-  10. Falta correr los escenarios en Mobile con un development build (emulador o dispositivo).
+- T149: validación manual en Web (escenarios 1, 3, 4 con Google, 8 y 10) y en Mobile con un development
+  build en el emulador de Android, hecha por el usuario el 2026-11-06. Para Google en Web hace falta la
+  redirect URI `http://localhost:3000/api/auth/callback/google`; en Android, un client ID de tipo
+  Android (package `com.myexpenses.app` + SHA-1 de debug) en el mismo proyecto de Google Cloud.
 - Desvíos de rutas respecto de las tareas: en Mobile las pantallas viven en `mobile/src/screens/` y
   las rutas de `mobile/app/` las reexportan; `CodeInput` y `ResendButton` están en
   `mobile/src/components/FormBits.tsx`; la prueba de logout de Mobile está en
