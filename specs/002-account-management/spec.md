@@ -35,6 +35,8 @@ lógica por el Owner, salida de miembros y cierre de solo lectura.
 - Q: ¿El Owner puede reabrir una Cuenta Cerrada? → A: No; cerrar es definitivo.
 - Q: ¿Se puede revocar el enlace de invitación, y quién? → A: Sí, solo el Owner, generando uno
   nuevo; el anterior deja de funcionar.
+- Q: ¿El Owner puede dar de baja una Cuenta ya Cerrada? → A: Sí; la baja no modifica sus datos,
+  solo la oculta para todos.
 - Q: ¿Qué puede hacer el Owner si quiere dejar la Cuenta? → A: No puede salir, pero puede darla de
   baja, lo que la quita junto con todos sus gastos para todos los miembros. Antes se le pide
   confirmación en un diálogo con "Continuar" y "Cancelar".
@@ -260,9 +262,10 @@ otra Cuenta y desaparece para todos.
 - **FR-018**: Solo el Owner MUST poder cerrar la Cuenta, con cualquier saldo y tras confirmar. Una
   Cuenta Cerrada MUST ser estrictamente de solo lectura para todos sus miembros, y el cierre MUST
   ser definitivo: nadie puede reabrirla.
-- **FR-019**: Solo el Owner MUST poder dar de baja la Cuenta, tras confirmar en un diálogo con las
-  opciones "Continuar" y "Cancelar". La baja MUST ser lógica: la Cuenta y todos sus gastos dejan de
-  figurar para todos los miembros y su invitación deja de funcionar, pero los datos se conservan.
+- **FR-019**: Solo el Owner MUST poder dar de baja la Cuenta, esté abierta o Cerrada, tras
+  confirmar en un diálogo con las opciones "Continuar" y "Cancelar". La baja MUST ser lógica: la
+  Cuenta y todos sus gastos dejan de figurar para todos los miembros y su invitación deja de
+  funcionar, pero los datos se conservan.
 - **FR-019a**: El Owner MUST NOT poder salir de su Cuenta; para dejarla, la opción es la baja.
 - **FR-020**: Los permisos de Owner y de miembro MUST validarse en el servidor, no solo en la
   interfaz.
