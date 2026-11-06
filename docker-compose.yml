@@ -1,5 +1,5 @@
-# Local development stack. All credentials are read from .env (see .env.example).
-# The FastAPI backend and Next.js web services will be added once those projects exist.
+# Local development stack: MongoDB, the FastAPI backend and the Next.js web app.
+# All credentials are read from .env (see .env.example); none are written here.
 
 services:
   mongodb:
@@ -36,6 +36,45 @@ services:
       timeout: 10s
       retries: 10
       start_period: 30s
+
+  backend:
+    build: ./backend
+    container_name: myexpenses-backend
+    env_file: .env
+    environment:
+      # Inside the compose network MongoDB is reachable as "mongodb", not localhost: the backend
+      # swaps the host of MONGODB_URI (credentials stay URL-encoded as written in .env).
+      MONGODB_HOST_OVERRIDE: mongodb:27017
+    ports:
+      - "127.0.0.1:8000:8000"
+    volumes:
+      - ./backend:/app
+    depends_on:
+      mongodb:
+        condition: service_healthy
+
+  web:
+    build: ./web
+    container_name: myexpenses-web
+    env_file: .env
+    environment:
+      API_INTERNAL_BASE_URL: http://backend:8000/api/v1
+      AUTH_TRUST_HOST: "true"
+      # Principle VI: no data to third parties without opt-in.
+      NEXT_TELEMETRY_DISABLED: "1"
+      # Bind mounts from Windows/macOS hosts do not emit file events: poll for hot reload.
+      WATCHPACK_POLLING: "true"
+      CHOKIDAR_USEPOLLING: "true"
+    ports:
+      - "127.0.0.1:3000:3000"
+    volumes:
+      - ./web:/app
+      # Keep the container's own dependencies and build output, not the host's.
+      - /app/node_modules
+      - /app/.next
+    depends_on:
+      mongodb:
+        condition: service_healthy
 
 volumes:
   mongodb_data:

@@ -20,7 +20,9 @@ Guía para comprobar la feature de punta a punta, una vez implementada. Los endp
    - **Backend**: `MONGODB_URI`, `JWT_SECRET`, `CODE_HASH_SECRET`, `GOOGLE_CLIENT_IDS`,
      `RESEND_API_KEY`, `EMAIL_FROM`.
    - **Web**: `AUTH_SECRET`, `AUTH_GOOGLE_ID`, `AUTH_GOOGLE_SECRET`.
-   - **Mobile**: `EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID`.
+   - **Mobile**: `EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID` y `GOOGLE_IOS_URL_SCHEME`. Expo solo lee el
+     `.env` de su propia carpeta: copiar las variables `EXPO_PUBLIC_*`, `GOOGLE_IOS_URL_SCHEME` y
+     `EXPO_NO_TELEMETRY` a `mobile/.env` (también ignorado por git).
 2. Levantar los servicios y esperar a que `mongodb` figure como `healthy`:
 
    ```bash
@@ -43,10 +45,11 @@ Guía para comprobar la feature de punta a punta, una vez implementada. Los endp
 
 ## Escenarios manuales
 
-Con `EMAIL_DELIVERY=console`, los códigos aparecen en los logs del backend:
+Con `EMAIL_DELIVERY=console`, los emails no se envían: se agregan a `backend/.dev-outbox/emails.jsonl`
+(ignorado por git), donde se leen los códigos. Nunca aparecen en los logs del backend:
 
 ```bash
-docker compose logs -f backend
+tail -f backend/.dev-outbox/emails.jsonl
 ```
 
 1. **Registro con email (US1)**: registrarse con un email nuevo → llega el código → ingresarlo →
@@ -67,7 +70,7 @@ docker compose logs -f backend
      `rate_limited`.
 6. **Bloqueo**: 10 contraseñas incorrectas seguidas.
    - Esperado: `password_login_locked` durante 15 minutos, mientras el login por código sigue
-     funcionando.
+     funcionando. Con un email inexistente pasa exactamente lo mismo (FR-008).
 7. **Recuperación (US4)**: recuperar la contraseña con sesiones abiertas en Web y Mobile.
    - Esperado: la otra sesión se cierra en su próximo refresh y llega un aviso de seguridad.
 8. **Preferencias (US5)**: cambiar idioma y tema en Web.

@@ -36,7 +36,7 @@ v22.13.0 (web y mobile)
   expo-secure-store, expo-localization, i18next + react-i18next, openapi-typescript
 
 **Storage**: MongoDB 8.0 (replica set de un nodo en Docker). Colecciones: `users`,
-`pending_registrations`, `verification_codes`, `refresh_tokens`, `audit_logs`
+`pending_registrations`, `verification_codes`, `auth_attempts`, `refresh_tokens`, `audit_logs`
 
 **Testing**: pytest + pytest-asyncio + httpx `AsyncClient` contra MongoDB real del compose (base de
 datos de test separada; las transacciones no funcionan en mocks). Web: Jest con `next/jest` +
@@ -112,7 +112,8 @@ backend/
 │   ├── core/
 │   │   ├── config.py               # Settings desde .env (pydantic-settings)
 │   │   ├── security.py             # hash de contraseñas, JWT, generación/hash de códigos
-│   │   └── i18n.py                 # textos de email es/en
+│   │   ├── errors.py               # AppError y códigos del contrato
+│   │   └── i18n.py                 # mensajes de error es/en
 │   ├── db/
 │   │   ├── client.py               # AsyncMongoClient, sesiones de transacción
 │   │   └── indexes.py
@@ -123,6 +124,7 @@ backend/
 │   │   ├── google_service.py
 │   │   ├── token_service.py
 │   │   ├── verification_service.py
+│   │   ├── rate_limit_service.py   # límites y bloqueo por email, exista o no
 │   │   ├── user_service.py
 │   │   ├── email_service.py
 │   │   └── audit_service.py
@@ -154,13 +156,13 @@ web/
     │   ├── (private)/profile/page.tsx
     │   └── api/auth/[...nextauth]/route.ts
     ├── components/                 # PascalCase: LoginForm.tsx, CodeInput.tsx, ...
-    ├── hooks/
+    ├── lib/                        # currencySuggestion, displayName, currencies
     ├── lib/api/                    # cliente server-side + schema.d.ts generado
     ├── i18n/                       # next-intl config + messages/{es,en}.json
     └── __tests__/
 
 mobile/
-├── app.json
+├── app.config.ts                   # config de Expo; lee los client IDs de Google de .env
 ├── package.json
 ├── jest.config.js
 ├── app/                            # Expo Router
@@ -180,6 +182,7 @@ mobile/
     ├── services/auth/              # secure-store, Google Sign-In
     ├── i18n/                       # i18next + locales/{es,en}.json
     ├── theme/                      # temas MD3 de React Native Paper
+    ├── utils/                      # displayName, ...
     └── __tests__/
 
 docker-compose.yml                  # mongodb (existente) + backend + web
@@ -192,4 +195,30 @@ contratos sin agregar un paquete compartido.
 
 ## Complexity Tracking
 
-No hay violaciones a la constitución que justificar.
+No hay violaciones a la constitución. El Principio VIII exige justificar cada dependencia nueva;
+esta es la lista de las que agrega esta feature (las del stack fijado en la constitución, como
+FastAPI, Next.js, Expo, React Native Paper, `@react-native-google-signin/google-signin`, Auth.js,
+`expo-secure-store` y Resend, ya están justificadas allí):
+
+| Dependencia | Proyecto | Por qué hace falta | Alternativa más simple descartada |
+|---|---|---|---|
+| pydantic-settings | backend | Leer y validar la configuración desde `.env` (Principio VI) | `os.environ` a mano: sin validación ni tipos |
+| email-validator | backend | Requerida por `EmailStr` de Pydantic para validar emails en el límite de la API | Regex propia: menos correcta |
+| pymongo (async) | backend | Driver oficial de MongoDB con transacciones (R9) | Motor: deprecado |
+| PyJWT | backend | Firmar y validar los JWT de acceso (R1) | Implementación propia: inseguro |
+| pwdlib[argon2] | backend | Hash Argon2id exigido por la constitución (R8) | passlib: sin mantenimiento |
+| google-auth + requests | backend | Verificar la firma de los ID tokens de Google (R3) | Endpoint `tokeninfo`: latencia y dependencia de red |
+| pycountry | backend | Validar códigos ISO 4217 (FR-020) | Lista hardcodeada: se desactualiza |
+| Jinja2 | backend | Plantillas de email `es`/`en` con autoescape (R10) | f-strings: sin escape de HTML |
+| pytest, pytest-asyncio, httpx, ruff | backend (dev) | Tests contra la app ASGI y lint (Principio VII) | — |
+| next-intl | web | Traducciones en Server y Client Components (Principio II) | Diccionarios propios: sin formato de fechas ni plurales |
+| next-themes | web | Tema `light`/`dark`/`system` sin parpadeo al cargar (FR-021) | CSS a mano: parpadeo y sin `system` |
+| country-to-currency | web | Sugerir la moneda según la región (R12) | Tabla propia de ~250 países |
+| server-only | web | Impedir que el cliente de la API llegue al navegador (R2) | Disciplina manual: sin garantía |
+| openapi-typescript | web, mobile (dev) | Tipos estrictos del contrato sin paquete compartido (VIII) | Paquete compartido de tipos: más infraestructura |
+| i18next + react-i18next, expo-localization | mobile | Traducciones y región del dispositivo (Principio II, R12) | Diccionarios propios |
+| expo-dev-client | mobile | Development build, necesario para Google Sign-In nativo | Expo Go: no soporta Google Sign-In |
+| jest, jest-expo, Testing Library, prettier | web, mobile (dev) | Jest obligatorio por el Principio VII; formato | — |
+
+No se agregan servicios ni capas nuevas: no hay Redis, colas ni ODM. Los límites y bloqueos usan
+MongoDB (R5, R6).

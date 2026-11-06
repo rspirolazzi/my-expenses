@@ -36,7 +36,7 @@ sus propios textos traducidos según `code`.
 | `POST /auth/login` | `{ email, password }` | `200 AuthResponse` | `401 invalid_credentials` (igual exista o no el email); `423 password_login_locked` con `retryAfterSeconds` |
 | `POST /auth/login-code` | `{ email }` | `202 Accepted`. Envía un código `login` si el usuario existe | `429 rate_limited`; `503 email_unavailable` |
 | `POST /auth/login-code/verify` | `{ email, code }` | `200 AuthResponse` | `400 invalid_code` |
-| `POST /auth/google` | `{ idToken }` | `200 AuthResponse` (`isNewUser` indica si se creó el usuario). Vincula Google a un email existente si `email_verified` | `401 invalid_google_token`; `403 google_email_not_verified` |
+| `POST /auth/google` | `{ idToken }` | `200 AuthResponse` (`isNewUser` indica si se creó el usuario; un usuario nuevo toma `preferences.language` de `Accept-Language`). Vincula Google a un email existente si `email_verified` | `401 invalid_google_token`; `403 google_email_not_verified` |
 | `POST /auth/password-reset` | `{ email }` | `202 Accepted`. Envía un código `password_reset` si el usuario existe | `429 rate_limited`; `503 email_unavailable` |
 | `POST /auth/password-reset/confirm` | `{ email, code, newPassword }` | `200 AuthResponse`. Revoca las demás sesiones, agrega `"email"` a `authProviders` y envía aviso de seguridad | `400 invalid_code`; `422 validation_error` |
 | `POST /auth/refresh` | `{ refreshToken }` | `200 TokenPair` (rotado) | `401 invalid_refresh_token` (vencido o revocado; si se reusa uno rotado, revoca la familia) |
@@ -54,8 +54,11 @@ sus propios textos traducidos según `code`.
 ## Reglas transversales
 
 - **Seguridad del JWT**: el backend valida firma, `iss`, `aud` y `exp`, y que el usuario exista.
-- **Límites (`429`)**: incluyen `retryAfterSeconds`. Aplican 1 código por minuto y 5 por hora, por
-  email y propósito.
+- **Límites (`429`)**: incluyen `retryAfterSeconds`. Aplican 1 email por minuto y 5 por hora, por
+  email y propósito (`register` incluye el email "ya tenés una cuenta"), y se aplican igual exista
+  o no el email (FR-008).
+- **Bloqueo (`423`)**: 10 contraseñas incorrectas en 15 minutos bloquean el login con contraseña
+  de ese email por 15 minutos, exista o no el email.
 - **Auditoría**: cada endpoint que cambia datos inserta un `audit_logs` según
   [data-model.md](../data-model.md).
 - **Avisos de seguridad por email (FR-014a)**: `password-reset/confirm`, definir contraseña,

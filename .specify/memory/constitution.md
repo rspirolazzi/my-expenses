@@ -1,23 +1,3 @@
-<!--
-Sync Impact Report
-- Version change: 4.1.0 → 4.2.0 (MINOR: participant removal rules added; no principle removed or
-  redefined)
-- Modified principles:
-  - VII. Test-First para Lógica de Dominio (new edge cases: removed participant, null paidBy)
-- Modified sections:
-  - Reglas del Dominio > Cuentas: Modificación (removal rule), Salida (free-text name keeps
-    showing on its expenses)
-  - Reglas del Dominio > Gastos: paidBy required on create/edit but nullable when stored
-  - Reglas del Dominio > Saldos: expenses without paidBy excluded until reassigned
-  - Reglas del Dominio > Cuentas: removed participant's share redistributed among the rest
-- Added / removed sections: none
-- Templates: not modified (dependent templates read the constitution at runtime)
-  - Reglas del Dominio > Cuentas: settlements of a removed participant kept as history only
-- Resolved TODOs: REMOVE_PARTICIPANT, REMOVED_PARTICIPANT_SHARES (shares redistributed),
-  REMOVED_PARTICIPANT_SETTLEMENTS (kept, excluded from balances)
-- Deferred TODOs: none
--->
-
 # Mis Gastos (MyExpenses) Constitution
 
 **Mis Gastos** es una plataforma multiplataforma (Web y App Mobile) para gestionar y simplificar la
