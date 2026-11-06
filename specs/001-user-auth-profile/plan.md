@@ -1,0 +1,195 @@
+# Implementation Plan: Autenticación y Perfil de Usuario
+
+**Branch**: `001-user-auth-profile` (el proyecto todavía no es un repositorio git) | **Date**: 2026-11-06 |
+**Spec**: [spec.md](spec.md)
+
+**Input**: Feature specification from `specs/001-user-auth-profile/spec.md`
+
+## Summary
+
+Registro e inicio de sesión con email y contraseña (con verificación por código), con Google y con
+código de un solo uso por email; recuperación de contraseña; perfil con nombre, apellido, email y
+preferencias (idioma `es`/`en`, moneda por defecto elegida al registrarse, tema
+`light`/`dark`/`system`); avisos de seguridad por email y auditoría de eventos de seguridad.
+
+Enfoque técnico: el backend FastAPI es la única fuente de verdad de usuarios y el único emisor de
+tokens (JWT de acceso de 15 minutos + refresh token opaco rotativo con vencimiento deslizante de
+30 días). La Web (Next.js 16 + Auth.js) actúa como BFF: el navegador nunca ve los tokens del
+backend, que viajan dentro de la cookie de sesión cifrada `HttpOnly` de Auth.js. La App (Expo)
+llama a la API directamente y guarda los tokens en `expo-secure-store`. Google se valida en el
+backend verificando el ID token, tanto el que obtiene Auth.js en Web como el de
+`@react-native-google-signin/google-signin` en Mobile. Esta feature también crea el esqueleto de
+los tres proyectos (`backend/`, `web/`, `mobile/`) y agrega backend y web al `docker-compose.yml`.
+
+## Technical Context
+
+**Language/Version**: Python 3.13 (backend); TypeScript 5.x en modo `strict` sobre Node.js
+v22.13.0 (web y mobile)
+
+**Primary Dependencies**:
+- Backend: FastAPI, Pydantic v2 + pydantic-settings, PyMongo (API async `AsyncMongoClient`),
+  PyJWT, pwdlib[argon2], google-auth (verificación de ID tokens), resend, pycountry, Jinja2
+  (plantillas de email)
+- Web: Next.js ^16.4 (App Router), React ^19, Auth.js v5 (`next-auth`), next-intl, next-themes,
+  openapi-typescript (tipos generados del contrato), country-to-currency
+- Mobile: Expo SDK ^56 (Expo Router), React Native Paper, `@react-native-google-signin/google-signin`,
+  expo-secure-store, expo-localization, i18next + react-i18next, openapi-typescript
+
+**Storage**: MongoDB 8.0 (replica set de un nodo en Docker). Colecciones: `users`,
+`pending_registrations`, `verification_codes`, `refresh_tokens`, `audit_logs`
+
+**Testing**: pytest + pytest-asyncio + httpx `AsyncClient` contra MongoDB real del compose (base de
+datos de test separada; las transacciones no funcionan en mocks). Web: Jest con `next/jest` +
+React Testing Library. Mobile: Jest con preset `jest-expo` + React Native Testing Library
+
+**Target Platform**: Backend y Web en contenedores Linux; Web en navegadores modernos (últimas 2
+versiones); Mobile en iOS 16+ y Android 10+ mediante development build de Expo (Google Sign-In no
+funciona en Expo Go)
+
+**Project Type**: Web + Mobile + API (tres proyectos en un mismo repositorio)
+
+**Performance Goals**: endpoints de auth con p95 < 500 ms (incluye hash Argon2id de ~100 ms);
+endpoints de perfil con p95 < 200 ms; cambio de idioma o tema en la UI < 1 s (SC-004)
+
+**Constraints**: ningún secreto fuera de `.env`; tokens nunca en `localStorage`; respuestas que no
+revelan si un email existe (FR-008); emails en el idioma del usuario; toda escritura de usuario
+junto con su registro de auditoría en una misma transacción
+
+**Scale/Scope**: hasta ~10.000 usuarios en esta etapa; 2 idiomas; ~8 pantallas por cliente
+(login, registro, verificación, código de acceso, recuperación, moneda inicial, perfil, dashboard
+vacío)
+
+## Constitution Check
+
+*GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
+
+| Principio / sección | Cumplimiento en esta feature | Estado |
+|---|---|---|
+| I. Acceso Directo y Multiplataforma | Google y email+contraseña en Web y Mobile; misma API `/api/v1`; JWT validado en cada endpoint privado | PASS |
+| II. Internacionalización | next-intl (Web) e i18next (Mobile) con `es`/`en`; sin strings hardcodeados; emails traducidos; idioma en `preferences.language` | PASS |
+| III. Moneda Única y Exactitud | Solo aplica la moneda por defecto: código ISO 4217 validado contra `pycountry`. No hay importes en esta feature | PASS |
+| IV. Auditoría Inmutable y Bajas Lógicas | Eventos de seguridad en `audit_logs` (FR-014), en la misma transacción; el código solo inserta en `audit_logs`. Los registros pendientes y códigos vencidos se borran por TTL: no son Cuentas ni Gastos | PASS |
+| V. Strict English Rule | Código, colecciones, campos, rutas y commits en inglés; specs en español | PASS |
+| VI. Privacidad y Datos | Secretos solo en `.env`; contraseñas, códigos y tokens nunca en logs ni auditoría; Google solo comparte datos para el login. La exportación de datos queda para una feature propia (sin violación: aún no hay datos de gastos) | PASS |
+| VII. Test-First | Tests de dominio de auth (códigos, límites, vinculación Google, rotación de refresh) antes de implementar; Jest en cada feature de Web y Mobile | PASS |
+| VIII. Simplicidad | Sin paquete compartido de TS: los tipos se generan del OpenAPI en cada cliente. Sin Redis: límites y bloqueos en MongoDB con índices TTL | PASS |
+| Stack y versiones | Node 22.13.0, Next.js ^16.4, Expo ^56, React ^19, MongoDB 8.0, Docker 24.0 / Compose 2.22 | PASS |
+| Infraestructura local | Se agregan `backend` y `web` al compose; credenciales por `.env` | PASS |
+| Seguridad y Datos | Auth.js Google provider en Web; Google Sign-In nativo en Mobile; JWT; cookies `HttpOnly`/`Secure`/`SameSite`; `expo-secure-store`; Argon2id; Resend; validación Pydantic | PASS |
+| Nomenclatura / REST | Colecciones `snake_case` plural, campos `camelCase`, rutas en minúscula y `kebab-case` | PASS |
+
+**Resultado del gate (pre-research)**: PASS, sin violaciones a justificar.
+
+**Re-check post-diseño (Phase 1)**: PASS. El diseño de [data-model.md](data-model.md) y
+[contracts/api.md](contracts/api.md) no introduce violaciones. Nota: la transacción multi-documento
+requiere el replica set ya configurado en `docker-compose.yml`.
+
+## Project Structure
+
+### Documentation (this feature)
+
+```text
+specs/001-user-auth-profile/
+├── plan.md              # Este archivo
+├── research.md          # Phase 0
+├── data-model.md        # Phase 1
+├── quickstart.md        # Phase 1
+├── contracts/
+│   └── api.md           # Phase 1: contrato REST /api/v1
+├── checklists/
+│   └── requirements.md
+└── tasks.md             # Phase 2 (/speckit-tasks; no lo crea /speckit-plan)
+```
+
+### Source Code (repository root)
+
+```text
+backend/
+├── Dockerfile
+├── pyproject.toml
+├── app/
+│   ├── main.py                     # FastAPI app, routers, lifespan (índices de Mongo)
+│   ├── core/
+│   │   ├── config.py               # Settings desde .env (pydantic-settings)
+│   │   ├── security.py             # hash de contraseñas, JWT, generación/hash de códigos
+│   │   └── i18n.py                 # textos de email es/en
+│   ├── db/
+│   │   ├── client.py               # AsyncMongoClient, sesiones de transacción
+│   │   └── indexes.py
+│   ├── schemas/                    # Modelos Pydantic: UserResponse, RegisterRequest, ...
+│   ├── repositories/               # acceso a colecciones (users, codes, tokens, audit)
+│   ├── services/
+│   │   ├── auth_service.py
+│   │   ├── google_service.py
+│   │   ├── token_service.py
+│   │   ├── verification_service.py
+│   │   ├── user_service.py
+│   │   ├── email_service.py
+│   │   └── audit_service.py
+│   ├── api/v1/
+│   │   ├── auth.py
+│   │   ├── users.py
+│   │   └── dependencies.py         # get_current_user (valida JWT)
+│   └── templates/emails/           # {es,en}/*.html
+└── tests/
+    ├── unit/
+    ├── integration/
+    └── contract/
+
+web/
+├── Dockerfile
+├── package.json
+├── jest.config.ts
+└── src/
+    ├── auth.ts                     # Auth.js: Google + Credentials (password / code)
+    ├── proxy.ts                    # Next.js 16 proxy: protege rutas privadas
+    ├── app/
+    │   ├── (public)/login/page.tsx
+    │   ├── (public)/register/page.tsx
+    │   ├── (public)/verify-email/page.tsx
+    │   ├── (public)/login-code/page.tsx
+    │   ├── (public)/forgot-password/page.tsx
+    │   ├── (private)/onboarding/currency/page.tsx
+    │   ├── (private)/dashboard/page.tsx
+    │   ├── (private)/profile/page.tsx
+    │   └── api/auth/[...nextauth]/route.ts
+    ├── components/                 # PascalCase: LoginForm.tsx, CodeInput.tsx, ...
+    ├── hooks/
+    ├── lib/api/                    # cliente server-side + schema.d.ts generado
+    ├── i18n/                       # next-intl config + messages/{es,en}.json
+    └── __tests__/
+
+mobile/
+├── app.json
+├── package.json
+├── jest.config.js
+├── app/                            # Expo Router
+│   ├── _layout.tsx
+│   ├── (auth)/login.tsx
+│   ├── (auth)/register.tsx
+│   ├── (auth)/verify-email.tsx
+│   ├── (auth)/login-code.tsx
+│   ├── (auth)/forgot-password.tsx
+│   ├── (app)/onboarding-currency.tsx
+│   ├── (app)/index.tsx             # Dashboard
+│   └── (app)/profile.tsx
+└── src/
+    ├── components/
+    ├── hooks/                      # useAuth, usePreferences, ...
+    ├── services/api/               # cliente con refresh automático + schema.d.ts generado
+    ├── services/auth/              # secure-store, Google Sign-In
+    ├── i18n/                       # i18next + locales/{es,en}.json
+    ├── theme/                      # temas MD3 de React Native Paper
+    └── __tests__/
+
+docker-compose.yml                  # mongodb (existente) + backend + web
+```
+
+**Structure Decision**: tres proyectos hermanos en la raíz (`backend/`, `web/`, `mobile/`), sin
+herramienta de monorepo. El contrato entre clientes y API es el OpenAPI que publica FastAPI; cada
+cliente genera sus tipos TypeScript con `openapi-typescript`, lo que cumple el tipado estricto de
+contratos sin agregar un paquete compartido.
+
+## Complexity Tracking
+
+No hay violaciones a la constitución que justificar.

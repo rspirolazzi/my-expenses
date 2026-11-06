@@ -1,0 +1,34 @@
+# Secrets: only .env.example is committed
+.env
+.env.*
+!.env.example
+
+# Node / Next.js / Expo
+node_modules/
+.next/
+out/
+.expo/
+web-build/
+dist/
+build/
+coverage/
+*.tsbuildinfo
+next-env.d.ts
+npm-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# OS / editors
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
