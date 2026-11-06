@@ -1,0 +1,52 @@
+[project]
+name = "myexpenses-backend"
+version = "0.1.0"
+description = "Mis Gastos REST API"
+requires-python = ">=3.13,<3.14"
+dependencies = [
+    "fastapi",
+    "uvicorn[standard]",
+    "pydantic",
+    "pydantic-settings",
+    "email-validator",
+    "pymongo",
+    "pyjwt",
+    "pwdlib[argon2]",
+    "google-auth",
+    "requests",
+    "resend",
+    "pycountry",
+    "jinja2",
+]
+
+[dependency-groups]
+dev = [
+    "pytest",
+    "pytest-asyncio",
+    "httpx",
+    "ruff",
+]
+
+[tool.uv]
+package = false
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "session"
+asyncio_default_test_loop_scope = "session"
+testpaths = ["tests"]
+markers = ["perf: latency measurements, excluded by default"]
+addopts = "-m 'not perf'"
+
+[tool.ruff]
+target-version = "py313"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "S"]
+# B008: FastAPI dependencies; S101: asserts only narrow types after explicit checks.
+ignore = ["B008", "S101"]
+
+[tool.ruff.lint.per-file-ignores]
+"app/core/errors.py" = ["S105"]  # error codes, not passwords
+"tests/**" = ["S101", "S105", "S106", "S107", "E501"]

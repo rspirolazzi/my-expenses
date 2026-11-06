@@ -10,7 +10,9 @@ la constitución.
   claims `sub`, `iss`, `aud`, `iat`, `exp`, `jti`) y un refresh token opaco (256 bits aleatorios)
   que se guarda hasheado (SHA-256) en `refresh_tokens`. Cada uso del refresh lo rota y extiende el
   vencimiento a "ahora + 30 días" (vencimiento deslizante, FR-013). Si se presenta un refresh token
-  ya rotado, se revoca toda su familia (detección de robo).
+  ya rotado, se revoca toda su familia (detección de robo), salvo dentro de los 60 segundos
+  posteriores a su rotación: ahí se trata como un refresh concurrente del mismo cliente (por
+  ejemplo, varias requests en paralelo de la Web) y se emite otro par de la misma familia.
 - **Rationale**: Web y Mobile usan el mismo mecanismo (Principio I). Guardar los refresh tokens
   permite cerrar sesión en un dispositivo (FR-012) y cerrar las demás sesiones al cambiar la
   contraseña (FR-006), cosa que un JWT de larga vida no permite.
@@ -66,9 +68,10 @@ la constitución.
 - **Decision**: códigos de 6 dígitos generados con `secrets.randbelow`, guardados como HMAC-SHA256
   (clave `CODE_HASH_SECRET`) en `verification_codes`, con `purpose` (`verify_email`, `login`,
   `password_reset`, `change_email`), `expiresAt` (15 minutos), `attempts` (máximo 5) y TTL de
-  limpieza de 1 hora desde la creación. Los límites de reenvío (1 por minuto y 5 por hora por email
-  y propósito) se calculan contando los documentos recientes. Pedir un código nuevo invalida el
-  anterior del mismo propósito.
+  limpieza de 1 hora desde la creación. Pedir un código nuevo invalida el anterior del mismo
+  propósito. Los límites de reenvío (1 por minuto y 5 por hora por email y propósito) **no** se
+  cuentan sobre `verification_codes`, sino sobre `auth_attempts` (ver R6), para que se apliquen
+  igual exista o no el email (FR-008) y cubran también el email "ya tenés una cuenta".
 - **Rationale**: no hace falta otro servicio. El HMAC impide usar los códigos aunque se filtre la
   base, y es rápido (Argon2 sería innecesariamente lento para 6 dígitos con 5 intentos).
 - **Alternatives considered**: Redis con contadores (otro servicio); magic links (fuera de alcance:
@@ -76,12 +79,25 @@ la constitución.
 
 ## R6. Bloqueo por intentos fallidos de contraseña
 
-- **Decision**: campos en `users.passwordLogin`: `failedAttempts`, `windowStartedAt` y
-  `lockedUntil`. Con 10 fallos dentro de una ventana de 15 minutos se bloquea el login con
-  contraseña por 15 minutos. Un login exitoso reinicia los contadores. El login por código sigue
-  disponible durante el bloqueo.
-- **Rationale**: implementa el edge case de la spec con un update atómico sobre el mismo documento.
-- **Alternatives considered**: una colección aparte de intentos (más lecturas, sin beneficio).
+- **Decision**: una colección `auth_attempts` con TTL de 1 hora registra, por `emailHash`
+  (HMAC-SHA256 del email normalizado con `CODE_HASH_SECRET`), tres tipos de eventos:
+  `email_request` (con su `purpose`), `password_failure` y `password_lockout`. Se registran **exista
+  o no el usuario**:
+  - **Límite de envíos**: antes de enviar un email de código o de "ya tenés una cuenta", se cuentan
+    los `email_request` del mismo `emailHash` y `purpose` en el último minuto y la última hora. Si
+    el email no existe, se registra el pedido igual y no se envía nada. Si el envío falla, se borra
+    el pedido para que no cuente.
+  - **Bloqueo**: cada contraseña incorrecta (o email inexistente) inserta un `password_failure`. Al
+    llegar a 10 en los últimos 15 minutos se inserta un `password_lockout`; mientras exista uno de
+    menos de 15 minutos, el login con contraseña responde `423` con `retryAfterSeconds` sin
+    verificar la contraseña. Un login exitoso borra los `password_failure` de ese `emailHash`. El
+    login por código sigue disponible durante el bloqueo.
+- **Rationale**: si los límites y el bloqueo vivieran en `users` o en `verification_codes`, un email
+  inexistente nunca daría `423` ni `429` y eso revelaría qué emails existen (FR-008). Guardar el
+  HMAC y no el email evita acumular emails de personas que no son usuarias (Principio VI).
+- **Alternatives considered**: campos `passwordLogin.*` en `users` (filtra la existencia del
+  email); contar sobre `verification_codes` (mismo problema, y no cubre el email "ya tenés una
+  cuenta"); Redis (otro servicio).
 
 ## R7. No revelar si un email existe (FR-008)
 
@@ -90,7 +106,12 @@ la constitución.
   envía al dueño un email de "ya tenés una cuenta, iniciá sesión o recuperá la contraseña", en
   lugar de un error. El login con contraseña incorrecta o con un email inexistente devuelve el mismo
   `401`, y en el caso del email inexistente se ejecuta igual un hash de prueba para igualar los
-  tiempos.
+  tiempos. El registro calcula siempre el hash Argon2id de la contraseña antes de comprobar si el
+  email existe, por la misma razón. Los límites (`429`) y el bloqueo (`423`) se aplican igual a
+  emails existentes e inexistentes (R6).
+- **Riesgo residual aceptado**: cuando el email existe se llama a Resend, lo que agrega algo de
+  latencia que un atacante podría medir. Se acepta en esta versión; enviar en segundo plano lo
+  evitaría, pero impide responder `503` si el envío falla.
 - **Rationale**: el escenario 5 de la User Story 1 ("se le ofrece iniciar sesión") se cumple por
   email sin revelar nada en la pantalla, así que es consistente con FR-008. La spec se ajustó en
   ese sentido.
@@ -120,10 +141,14 @@ la constitución.
 - **Decision**: SDK oficial `resend` en `email_service.py`, con plantillas Jinja2 por idioma (`es`,
   `en`) y por tipo (código de verificación, código de acceso, recuperación, cambio de email, cuenta
   ya existente, avisos de seguridad). Si Resend falla, el endpoint responde `503` con un error
-  reintentable, y el código generado se invalida para que no cuente en el límite. En los tests,
-  `EMAIL_DELIVERY=console` imprime el código en lugar de enviarlo (nunca en producción).
+  reintentable, el código generado se invalida y el pedido se borra de `auth_attempts` para que no
+  cuente en el límite. Con `EMAIL_DELIVERY=console` (solo desarrollo y tests; el backend se niega a
+  arrancar así con `ENVIRONMENT=production`) el email **no** va al log de la aplicación: se agrega
+  como una línea JSON a `backend/.dev-outbox/emails.jsonl` (carpeta ignorada por git), y en los
+  tests se captura en memoria. El log de la aplicación nunca contiene destinatarios, códigos ni
+  tokens (Principio VI).
 - **Rationale**: cumple la constitución (Resend, API key solo en el `.env` del backend) y permite
-  probar sin enviar emails reales.
+  probar sin enviar emails reales sin escribir datos personales ni códigos en los logs.
 - **Alternatives considered**: cola de envíos asíncrona (no hace falta para el volumen previsto).
 
 ## R11. Internacionalización y preferencias en los clientes

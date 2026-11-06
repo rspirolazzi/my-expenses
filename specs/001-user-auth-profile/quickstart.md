@@ -20,7 +20,9 @@ Guía para comprobar la feature de punta a punta, una vez implementada. Los endp
    - **Backend**: `MONGODB_URI`, `JWT_SECRET`, `CODE_HASH_SECRET`, `GOOGLE_CLIENT_IDS`,
      `RESEND_API_KEY`, `EMAIL_FROM`.
    - **Web**: `AUTH_SECRET`, `AUTH_GOOGLE_ID`, `AUTH_GOOGLE_SECRET`.
-   - **Mobile**: `EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID`.
+   - **Mobile**: `EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID` y `GOOGLE_IOS_URL_SCHEME`. Expo solo lee el
+     `.env` de su propia carpeta: copiar las variables `EXPO_PUBLIC_*`, `GOOGLE_IOS_URL_SCHEME` y
+     `EXPO_NO_TELEMETRY` a `mobile/.env` (también ignorado por git).
 2. Levantar los servicios y esperar a que `mongodb` figure como `healthy`:
 
    ```bash
@@ -30,8 +32,13 @@ Guía para comprobar la feature de punta a punta, una vez implementada. Los endp
 3. Comprobar que la API responde: `GET http://localhost:8000/api/v1/openapi.json` devuelve el
    contrato.
 4. Web: abrir `http://localhost:3000`.
-5. Mobile: desde `mobile/`, correr `npx expo run:android` o `run:ios`. En el emulador de Android,
-   la API está en `http://10.0.2.2:8000/api/v1`.
+5. Mobile: desde `mobile/`, correr `npx expo run:android` o `run:ios`. Requiere JDK 17 y el Android
+   SDK (`ANDROID_HOME`). En el emulador, `localhost` es el propio emulador: usar
+   `EXPO_PUBLIC_API_BASE_URL=http://10.0.2.2:8000/api/v1` en `mobile/.env`, o dejar `localhost` y
+   correr `adb reverse tcp:8000 tcp:8000` cada vez que se inicia el emulador.
+   - Google Sign-In en Android necesita un client ID de tipo Android (package `com.myexpenses.app` y
+     SHA-1 de `cd mobile/android && ./gradlew signingReport`) en el mismo proyecto de Google Cloud
+     que el client web. No se configura en el código: la app usa el client ID web.
 
 ## Tests automáticos
 
@@ -43,10 +50,11 @@ Guía para comprobar la feature de punta a punta, una vez implementada. Los endp
 
 ## Escenarios manuales
 
-Con `EMAIL_DELIVERY=console`, los códigos aparecen en los logs del backend:
+Con `EMAIL_DELIVERY=console`, los emails no se envían: se agregan a `backend/.dev-outbox/emails.jsonl`
+(ignorado por git), donde se leen los códigos. Nunca aparecen en los logs del backend:
 
 ```bash
-docker compose logs -f backend
+tail -f backend/.dev-outbox/emails.jsonl
 ```
 
 1. **Registro con email (US1)**: registrarse con un email nuevo → llega el código → ingresarlo →
@@ -67,7 +75,7 @@ docker compose logs -f backend
      `rate_limited`.
 6. **Bloqueo**: 10 contraseñas incorrectas seguidas.
    - Esperado: `password_login_locked` durante 15 minutos, mientras el login por código sigue
-     funcionando.
+     funcionando. Con un email inexistente pasa exactamente lo mismo (FR-008).
 7. **Recuperación (US4)**: recuperar la contraseña con sesiones abiertas en Web y Mobile.
    - Esperado: la otra sesión se cierra en su próximo refresh y llega un aviso de seguridad.
 8. **Preferencias (US5)**: cambiar idioma y tema en Web.

@@ -1,0 +1,169 @@
+{
+  "common": {
+    "appName": "Mis Gastos",
+    "continue": "Continuar",
+    "save": "Guardar",
+    "saving": "Guardando…",
+    "cancel": "Cancelar",
+    "email": "Email",
+    "password": "Contraseña",
+    "or": "o",
+    "back": "Volver"
+  },
+  "nav": {
+    "home": "Inicio",
+    "howItWorks": "Cómo funciona",
+    "about": "Quiénes somos",
+    "contact": "Contacto",
+    "loginRegister": "Login / Registro",
+    "userMenu": "Menú de usuario",
+    "accounts": "Accounts",
+    "profile": "Profile",
+    "logout": "Logout",
+    "accountsSoon": "Disponible pronto"
+  },
+  "footer": {
+    "rights": "Mis Gastos. Dividí gastos entre amigos sin vueltas.",
+    "privacy": "Privacidad",
+    "terms": "Términos"
+  },
+  "home": {
+    "title": "Dividí gastos con amigos, sin vueltas",
+    "subtitle": "Cargá los gastos del grupo y Mis Gastos te dice quién le debe a quién.",
+    "cta": "Empezar"
+  },
+  "pages": {
+    "howItWorks": {
+      "title": "Cómo funciona",
+      "body": "Creá una cuenta compartida, cargá los gastos y mirá los saldos. Esta página se completa en una próxima versión."
+    },
+    "about": {
+      "title": "Quiénes somos",
+      "body": "Mis Gastos es un proyecto para que dividir gastos entre amigos sea simple y transparente."
+    },
+    "contact": {
+      "title": "Contacto",
+      "body": "Muy pronto vas a poder escribirnos desde acá."
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "Iniciar sesión",
+      "submit": "Entrar",
+      "noAccount": "¿No tenés cuenta?",
+      "register": "Registrate",
+      "useCode": "Entrar con un código por email",
+      "forgot": "Olvidé mi contraseña",
+      "lockedMinutes": "Demasiados intentos. Probá de nuevo en {minutes, plural, one {# minuto} other {# minutos}} o entrá con un código por email."
+    },
+    "register": {
+      "title": "Crear cuenta",
+      "firstName": "Nombre (opcional)",
+      "lastName": "Apellido (opcional)",
+      "submit": "Crear cuenta",
+      "haveAccount": "¿Ya tenés cuenta?",
+      "login": "Iniciá sesión",
+      "passwordHint": "Al menos 8 caracteres, distinta de tu email."
+    },
+    "verifyEmail": {
+      "title": "Confirmá tu email",
+      "sentTo": "Si el email {email} puede usarse, te enviamos un código de 6 dígitos. Ingresalo para continuar.",
+      "codeLabel": "Código de verificación",
+      "submit": "Confirmar",
+      "correctEmail": "Corregir el email"
+    },
+    "code": {
+      "resend": "Reenviar código",
+      "resendIn": "Reenviar en {seconds} s",
+      "resent": "Te enviamos un código nuevo."
+    },
+    "loginCode": {
+      "title": "Entrar con un código",
+      "intro": "Te enviamos un código de un solo uso a tu email.",
+      "request": "Enviarme un código",
+      "sentTo": "Si existe una cuenta con {email}, te enviamos un código. Ingresalo para entrar.",
+      "codeLabel": "Código de acceso",
+      "submit": "Entrar",
+      "requestNew": "Pedir un código nuevo"
+    },
+    "forgotPassword": {
+      "title": "Recuperar la contraseña",
+      "intro": "Te enviamos un código para definir una contraseña nueva.",
+      "request": "Enviarme un código",
+      "sentTo": "Si existe una cuenta con {email}, te enviamos un código.",
+      "codeLabel": "Código",
+      "newPassword": "Contraseña nueva",
+      "submit": "Guardar y entrar"
+    },
+    "google": {
+      "button": "Entrar con Google",
+      "cancelled": "Cancelaste el inicio con Google. Podés intentarlo de nuevo cuando quieras."
+    },
+    "logout": "Logout",
+    "sessionExpired": "Tu sesión venció. Volvé a entrar para seguir."
+  },
+  "validation": {
+    "emailInvalid": "Ingresá un email válido.",
+    "passwordTooShort": "La contraseña debe tener al menos 8 caracteres.",
+    "passwordTooLong": "La contraseña puede tener como máximo 128 caracteres.",
+    "passwordEqualsEmail": "La contraseña no puede ser igual al email.",
+    "nameTooLong": "Como máximo 60 caracteres.",
+    "codeInvalid": "El código tiene 6 dígitos."
+  },
+  "errors": {
+    "validation_error": "Revisá los datos ingresados.",
+    "rate_limited": "Demasiados pedidos. Probá de nuevo en unos minutos.",
+    "email_unavailable": "No pudimos enviar el email. Probá de nuevo.",
+    "invalid_code": "El código es incorrecto o venció. Pedí uno nuevo.",
+    "invalid_credentials": "El email o la contraseña no son correctos.",
+    "password_login_locked": "El inicio con contraseña está bloqueado por unos minutos.",
+    "invalid_google_token": "No pudimos validar tu cuenta de Google.",
+    "google_email_not_verified": "Google no confirmó tu email. Entrá con tu contraseña o con un código.",
+    "invalid_refresh_token": "Tu sesión venció. Volvé a iniciar sesión.",
+    "unauthorized": "Tenés que iniciar sesión.",
+    "email_taken": "Ese email ya no está disponible.",
+    "network_error": "No pudimos conectarnos. Revisá tu conexión.",
+    "internal_error": "Ocurrió un error inesperado. Probá de nuevo."
+  },
+  "onboarding": {
+    "title": "Elegí tu moneda",
+    "intro": "Es la moneda que vamos a proponer al crear cuentas nuevas. Podés cambiarla después en tu perfil.",
+    "currency": "Moneda por defecto",
+    "placeholder": "Elegí una moneda",
+    "suggested": "Sugerida según tu región"
+  },
+  "dashboard": {
+    "title": "Hola, {name}",
+    "empty": "Todavía no tenés cuentas compartidas. Muy pronto vas a poder crearlas desde acá."
+  },
+  "profile": {
+    "title": "Perfil",
+    "personal": "Datos personales",
+    "firstName": "Nombre",
+    "lastName": "Apellido",
+    "saved": "Cambios guardados.",
+    "preferences": "Preferencias",
+    "language": "Idioma",
+    "theme": "Tema",
+    "currency": "Moneda por defecto",
+    "languages": {
+      "es": "Español",
+      "en": "English"
+    },
+    "themes": {
+      "light": "Claro",
+      "dark": "Oscuro",
+      "system": "Según el dispositivo"
+    },
+    "email": "Email",
+    "currentEmail": "Email actual",
+    "changeEmail": "Cambiar email",
+    "newEmail": "Email nuevo",
+    "sendCode": "Enviar código",
+    "codeSentTo": "Si {email} puede usarse, te enviamos un código. Ingresalo para confirmar el cambio.",
+    "codeLabel": "Código",
+    "confirm": "Confirmar cambio",
+    "emailChanged": "Tu email ahora es {email}.",
+    "pendingEmail": "Cambio pendiente a {email}"
+  }
+}

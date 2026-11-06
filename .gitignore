@@ -19,6 +19,7 @@ yarn-error.log*
 pnpm-debug.log*
 
 # Python
+backend/.dev-outbox/
 __pycache__/
 *.py[cod]
 .venv/
@@ -32,3 +33,7 @@ venv/
 Thumbs.db
 .vscode/
 .idea/
+
+# Expo native builds (development build)
+mobile/android/
+mobile/ios/

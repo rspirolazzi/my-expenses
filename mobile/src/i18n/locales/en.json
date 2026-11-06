@@ -1,0 +1,174 @@
+{
+  "common": {
+    "appName": "Mis Gastos",
+    "continue": "Continue",
+    "save": "Save",
+    "saving": "Saving…",
+    "cancel": "Cancel",
+    "email": "Email",
+    "password": "Password",
+    "or": "or",
+    "back": "Back"
+  },
+  "nav": {
+    "home": "Home",
+    "howItWorks": "How it works",
+    "about": "About us",
+    "contact": "Contact",
+    "loginRegister": "Sign in / Sign up",
+    "userMenu": "User menu",
+    "accounts": "Accounts",
+    "profile": "Profile",
+    "logout": "Logout",
+    "accountsSoon": "Coming soon"
+  },
+  "footer": {
+    "rights": "Mis Gastos. Split expenses with friends, hassle-free.",
+    "privacy": "Privacy",
+    "terms": "Terms"
+  },
+  "home": {
+    "title": "Split expenses with friends, hassle-free",
+    "subtitle": "Add the group's expenses and Mis Gastos tells you who owes whom.",
+    "cta": "Get started"
+  },
+  "pages": {
+    "howItWorks": {
+      "title": "How it works",
+      "body": "Create a shared account, add expenses and check the balances. This page will be completed in an upcoming version."
+    },
+    "about": {
+      "title": "About us",
+      "body": "Mis Gastos is a project to make splitting expenses between friends simple and transparent."
+    },
+    "contact": {
+      "title": "Contact",
+      "body": "Soon you will be able to reach us from here."
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "Sign in",
+      "submit": "Sign in",
+      "noAccount": "No account yet?",
+      "register": "Sign up",
+      "useCode": "Sign in with an email code",
+      "forgot": "I forgot my password",
+      "lockedMinutes_one": "Too many attempts. Try again in {count} minute or sign in with an email code.",
+      "lockedMinutes_other": "Too many attempts. Try again in {count} minutes or sign in with an email code."
+    },
+    "register": {
+      "title": "Create account",
+      "firstName": "First name (optional)",
+      "lastName": "Last name (optional)",
+      "submit": "Create account",
+      "haveAccount": "Already have an account?",
+      "login": "Sign in",
+      "passwordHint": "At least 8 characters, different from your email."
+    },
+    "verifyEmail": {
+      "title": "Confirm your email",
+      "sentTo": "If {email} can be used, we sent you a 6-digit code. Enter it to continue.",
+      "codeLabel": "Verification code",
+      "submit": "Confirm",
+      "correctEmail": "Fix the email"
+    },
+    "code": {
+      "resend": "Resend code",
+      "resendIn": "Resend in {seconds} s",
+      "resent": "We sent you a new code."
+    },
+    "loginCode": {
+      "title": "Sign in with a code",
+      "intro": "We will send a one-time code to your email.",
+      "request": "Send me a code",
+      "sentTo": "If an account exists for {email}, we sent you a code. Enter it to sign in.",
+      "codeLabel": "Sign-in code",
+      "submit": "Sign in",
+      "requestNew": "Request a new code"
+    },
+    "forgotPassword": {
+      "title": "Reset your password",
+      "intro": "We will send you a code to set a new password.",
+      "request": "Send me a code",
+      "sentTo": "If an account exists for {email}, we sent you a code.",
+      "codeLabel": "Code",
+      "newPassword": "New password",
+      "submit": "Save and sign in"
+    },
+    "google": {
+      "button": "Sign in with Google",
+      "cancelled": "You cancelled the Google sign-in. You can try again whenever you want."
+    },
+    "logout": "Logout",
+    "sessionExpired": "Your session has expired. Sign in again to continue."
+  },
+  "validation": {
+    "emailInvalid": "Enter a valid email.",
+    "passwordTooShort": "The password must have at least 8 characters.",
+    "passwordTooLong": "The password can have at most 128 characters.",
+    "passwordEqualsEmail": "The password cannot be the same as the email.",
+    "nameTooLong": "At most 60 characters.",
+    "codeInvalid": "The code has 6 digits."
+  },
+  "errors": {
+    "validation_error": "Check the data you entered.",
+    "rate_limited": "Too many requests. Try again in a few minutes.",
+    "email_unavailable": "We could not send the email. Please try again.",
+    "invalid_code": "The code is wrong or has expired. Request a new one.",
+    "invalid_credentials": "The email or password is not correct.",
+    "password_login_locked": "Password sign-in is locked for a few minutes.",
+    "invalid_google_token": "We could not validate your Google account.",
+    "google_email_not_verified": "Google did not confirm your email. Sign in with your password or a code.",
+    "invalid_refresh_token": "Your session has expired. Please sign in again.",
+    "unauthorized": "You need to sign in.",
+    "email_taken": "That email is no longer available.",
+    "network_error": "We could not connect. Check your connection.",
+    "internal_error": "An unexpected error occurred. Please try again."
+  },
+  "onboarding": {
+    "title": "Choose your currency",
+    "intro": "We will suggest it when you create new accounts. You can change it later in your profile.",
+    "currency": "Default currency",
+    "placeholder": "Choose a currency",
+    "suggested": "Suggested for your region"
+  },
+  "dashboard": {
+    "title": "Hi, {name}",
+    "empty": "You have no shared accounts yet. Soon you will be able to create them from here."
+  },
+  "profile": {
+    "title": "Profile",
+    "personal": "Personal details",
+    "firstName": "First name",
+    "lastName": "Last name",
+    "saved": "Changes saved.",
+    "preferences": "Preferences",
+    "language": "Language",
+    "theme": "Theme",
+    "currency": "Default currency",
+    "languages": {
+      "es": "Español",
+      "en": "English"
+    },
+    "themes": {
+      "light": "Light",
+      "dark": "Dark",
+      "system": "Match device"
+    },
+    "email": "Email",
+    "currentEmail": "Current email",
+    "changeEmail": "Change email",
+    "newEmail": "New email",
+    "sendCode": "Send code",
+    "codeSentTo": "If {email} can be used, we sent you a code. Enter it to confirm the change.",
+    "codeLabel": "Code",
+    "confirm": "Confirm change",
+    "emailChanged": "Your email is now {email}.",
+    "pendingEmail": "Pending change to {email}"
+  },
+  "mobile": {
+    "loading": "Loading…",
+    "orUseEmail": "or with your email"
+  }
+}
