@@ -179,18 +179,20 @@ Rationale: una herramienta entre amigos se adopta por ser confiable y rápida, n
 | Node.js | v22.13.0 LTS | Base para Expo SDK 56 y Next.js 16 |
 | Frontend Web: Next.js | ^16.4.0 | Con React 19 y TypeScript |
 | Mobile App: Expo SDK | ^56.0.0 | React Native 0.85 y React 19, con TypeScript |
-| UI Mobile: React Native Paper | — | Componentes y theming Light/Dark de la App |
+| UI Mobile: React Native Paper | — | Componentes y theming Light/Dark/System de la App |
 | React | ^19.0.0 | Versión compartida entre Next.js y Expo |
-| Backend API: Python (FastAPI) | — | Versión a definir en el primer plan |
+| Backend API: Python (FastAPI) | Python 3.13.x | Dependencias gestionadas con uv |
 | Base de Datos: MongoDB | 8.0.x | Requiere CPU con soporte AVX en el host |
 | Docker Engine | 24.0.x | Imágenes oficiales de MongoDB 8.0 |
 | Docker Compose | v2.22.x | Orquestación local |
+| JDK (build nativo Android) | 17 | Requerido por React Native 0.85 (Gradle `jvmToolchain(17)`) |
 
 - Web y Mobile MUST usar TypeScript con tipado estricto (`strict`) para los contratos de API y los
   modelos de datos compartidos; MUST NOT agregarse archivos `.js` / `.jsx` de aplicación.
 - Web y Mobile MUST usar la misma versión major de React.
 - La versión de Node.js MUST fijarse en el repositorio (ej. `.nvmrc` y `engines` en
-  `package.json`).
+  `package.json`), y la de Python también (ej. `.python-version` y `requires-python` en
+  `pyproject.toml`).
 
 Cambiar cualquier componente del stack o su versión major requiere una enmienda a esta
 constitución.
@@ -267,7 +269,8 @@ constitución.
 
 - **Dashboard / Home:** resumen visual de cuentas activas y saldos consolidados.
 - **Accounts ("Mis Cuentas"):** listado de cuentas compartidas.
-- **Profile:** Nombre, Apellido, Idioma, Moneda por defecto y Theme (Light/Dark).
+- **Profile:** Nombre, Apellido, Idioma, Moneda por defecto y Theme (Light/Dark/System, donde
+  System sigue el modo claro u oscuro del dispositivo).
 
 ## Fuera de Alcance (esta versión)
 
@@ -296,4 +299,4 @@ constitución.
 - El cumplimiento se revisa en el Constitution Check de cada plan y en la revisión de cada cambio;
   toda complejidad adicional MUST justificarse por escrito.
 
-**Version**: 4.2.0 | **Ratified**: 2026-11-04 | **Last Amended**: 2026-11-06
+**Version**: 4.3.0 | **Ratified**: 2026-11-04 | **Last Amended**: 2026-11-06
