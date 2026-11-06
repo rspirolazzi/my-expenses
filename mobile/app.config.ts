@@ -37,7 +37,9 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     [
       "@react-native-google-signin/google-signin",
       {
-        iosUrlScheme: process.env.GOOGLE_IOS_URL_SCHEME ?? "com.googleusercontent.apps.placeholder",
+        // The plugin validates this even for Android builds, and an empty value counts as missing.
+        // It only matters for iOS, where it must be the real reversed iOS client ID.
+        iosUrlScheme: process.env.GOOGLE_IOS_URL_SCHEME || "com.googleusercontent.apps.placeholder",
       },
     ],
     "expo-secure-store",
