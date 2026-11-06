@@ -106,6 +106,7 @@ backend/app/
 ├── schemas/account.py              # AccountCreate, AccountUpdate, AccountResponse, ParticipantResponse, ...
 ├── repositories/accounts.py
 ├── services/account_service.py     # alta, edición, participantes, salida, cierre, baja, regeneración
+├── services/account_permissions.py # miembro / Owner / Cuenta abierta y armado de respuestas
 ├── services/invitation_service.py  # vista previa y aceptación de invitaciones
 ├── services/audit_service.py       # + acciones account.*
 ├── api/v1/accounts.py
@@ -124,6 +125,7 @@ web/src/
 ├── lib/accountIcons.ts
 ├── components/SiteHeader.tsx                 # "Accounts" deja de estar deshabilitado
 ├── proxy.ts                                  # /accounts y /invite como rutas privadas
+├── lib/pendingRedirect.ts                    # destino tras registro o login por código (FR-009)
 ├── i18n/messages/{es,en}.json                # + accounts.*, invite.*
 └── __tests__/
 
@@ -131,7 +133,7 @@ mobile/
 ├── app/(app)/accounts/index.tsx              # Mis Cuentas
 ├── app/(app)/accounts/new.tsx
 ├── app/(app)/accounts/[accountId].tsx
-├── app/(app)/invite/[code].tsx               # deep link myexpenses://invite/<code>
+├── app/invite/[code].tsx                     # deep link myexpenses://invite/<code>, fuera de los grupos protegidos
 ├── app/(app)/join.tsx                        # unirse pegando el código
 └── src/
     ├── screens/accounts/                     # pantallas reutilizadas por las rutas
