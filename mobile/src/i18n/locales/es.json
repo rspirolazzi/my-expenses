@@ -124,7 +124,16 @@
     "unauthorized": "Tenés que iniciar sesión.",
     "email_taken": "Ese email ya no está disponible.",
     "network_error": "No pudimos conectarnos. Revisá tu conexión.",
-    "internal_error": "Ocurrió un error inesperado. Probá de nuevo."
+    "internal_error": "Ocurrió un error inesperado. Probá de nuevo.",
+    "not_found": "No encontramos esa Cuenta.",
+    "account_closed": "La Cuenta está cerrada: es de solo lectura.",
+    "owner_only": "Solo el dueño de la Cuenta puede hacer esto.",
+    "owner_cannot_leave": "El dueño no puede salir de su Cuenta. Puede darla de baja.",
+    "owner_participant": "El participante del dueño no se puede quitar.",
+    "duplicate_participant_name": "Ya hay un participante con ese nombre.",
+    "invalid_invitation": "La invitación no es válida.",
+    "already_member": "Ya sos miembro de esta Cuenta.",
+    "participant_taken": "Ese participante ya no está disponible. Elegí otro."
   },
   "onboarding": {
     "title": "Elegí tu moneda",
@@ -170,5 +179,104 @@
   "mobile": {
     "loading": "Cargando…",
     "orUseEmail": "o con tu email"
+  },
+  "accounts": {
+    "title": "Mis Cuentas",
+    "empty": "Todavía no tenés Cuentas. Creá una o unite con un enlace de invitación.",
+    "new": "Nueva Cuenta",
+    "join": "Unirme con un código",
+    "closedBadge": "Cerrada",
+    "ownerBadge": "Sos el dueño",
+    "updatedAt": "Actualizada {date}",
+    "recent": "Tus Cuentas",
+    "seeAll": "Ver todas",
+    "form": {
+      "name": "Nombre",
+      "description": "Descripción (opcional)",
+      "icon": "Ícono",
+      "currency": "Moneda",
+      "currencyHint": "No se puede cambiar después de crear la Cuenta.",
+      "me": "Tu nombre en esta Cuenta",
+      "others": "Otros participantes",
+      "addParticipant": "Agregar participante",
+      "participantPlaceholder": "Nombre",
+      "removeRow": "Quitar fila",
+      "create": "Crear Cuenta",
+      "duplicateNames": "Hay nombres repetidos. Cada participante necesita un nombre distinto.",
+      "nameRequired": "Ingresá un nombre de 1 a 80 caracteres.",
+      "participantInvalid": "Cada participante necesita un nombre de 1 a 40 caracteres.",
+      "save": "Guardar cambios",
+      "saved": "Cambios guardados."
+    },
+    "icons": {
+      "group": "Grupo",
+      "home": "Casa",
+      "car": "Auto",
+      "hotel": "Hotel",
+      "beach": "Playa",
+      "food": "Comida",
+      "money": "Dinero",
+      "travel": "Viaje",
+      "party": "Fiesta",
+      "shopping": "Compras",
+      "work": "Trabajo",
+      "sports": "Deportes"
+    },
+    "detail": {
+      "currency": "Moneda: {currency}",
+      "participants": "Participantes",
+      "you": "vos",
+      "owner": "dueño",
+      "linked": "vinculado",
+      "rename": "Renombrar",
+      "remove": "Quitar",
+      "add": "Agregar",
+      "edit": "Editar Cuenta",
+      "closedNotice": "Esta Cuenta está cerrada: es de solo lectura."
+    },
+    "invite": {
+      "title": "Invitar",
+      "hint": "Compartí este enlace para que se unan a la Cuenta.",
+      "copy": "Copiar enlace",
+      "copied": "Enlace copiado.",
+      "share": "Compartir",
+      "code": "Código: {code}",
+      "regenerate": "Generar enlace nuevo"
+    },
+    "actions": {
+      "leave": "Salir de la Cuenta",
+      "close": "Cerrar Cuenta",
+      "delete": "Dar de baja la Cuenta"
+    },
+    "dialogs": {
+      "continue": "Continuar",
+      "cancel": "Cancelar",
+      "removeTitle": "¿Quitar a {name}?",
+      "removeBody": "Deja de figurar en la Cuenta. Si estaba vinculado a un usuario, esa persona deja de ser miembro.",
+      "leaveTitle": "¿Salir de la Cuenta?",
+      "leaveBody": "Deja de figurar en tu panel. Tu participante sigue en la Cuenta para el resto del grupo.",
+      "closeTitle": "¿Cerrar la Cuenta?",
+      "closeBody": "El cierre es definitivo: la Cuenta queda de solo lectura y no se puede reabrir.",
+      "deleteTitle": "¿Dar de baja la Cuenta?",
+      "deleteBody": "La Cuenta y todos sus gastos dejan de estar disponibles para todos los miembros. ¿Querés continuar?",
+      "regenerateTitle": "¿Generar un enlace nuevo?",
+      "regenerateBody": "El enlace actual deja de funcionar. Vas a tener que compartir el nuevo."
+    },
+    "participantCount_one": "{count} participante",
+    "participantCount_other": "{count} participantes"
+  },
+  "invite": {
+    "title": "Invitación a {name}",
+    "currency": "Moneda: {currency}",
+    "choose": "¿Quién sos en esta Cuenta?",
+    "noneAvailable": "No quedan participantes libres. Agregate con tu nombre.",
+    "orNew": "¿No estás en la lista? Agregate:",
+    "newName": "Tu nombre",
+    "join": "Unirme",
+    "joinAsNew": "Agregarme",
+    "alreadyMember": "Ya sos miembro de esta Cuenta.",
+    "open": "Ir a la Cuenta",
+    "codeLabel": "Código o enlace de invitación",
+    "continue": "Continuar"
   }
 }

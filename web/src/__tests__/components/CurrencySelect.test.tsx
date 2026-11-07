@@ -1,11 +1,14 @@
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { NextIntlClientProvider } from "next-intl";
+import { renderToString } from "react-dom/server";
 
 import { updateMeAction } from "@/app/actions/profile";
+import { CurrencySelect } from "@/components/CurrencySelect";
 import { OnboardingCurrencyForm } from "@/components/OnboardingCurrencyForm";
 
 import { router } from "../support/mocks";
-import { renderWithIntl, userResponse } from "../support/render";
+import { messages, renderWithIntl, userResponse } from "../support/render";
 
 jest.mock("next/navigation", () => ({ useRouter: () => require("../support/mocks").router }));
 jest.mock("@/app/actions/profile", () => ({ updateMeAction: jest.fn() }));
@@ -38,4 +41,34 @@ it("saves the currency and goes to the dashboard", async () => {
   await userEvent.click(screen.getByRole("button", { name: "Continuar" }));
   expect(updateMock).toHaveBeenCalledWith({ preferences: { defaultCurrency: "BRL" } });
   expect(router.replace).toHaveBeenCalledWith("/dashboard");
+});
+
+describe("CurrencySelect server render", () => {
+  // The currency list comes from ICU data, which differs between the server and the browser, so
+  // the server must render only the selected code or hydration fails (and React re-renders the
+  // whole page on the client).
+  function serverHtml(value: string) {
+    return renderToString(
+      <NextIntlClientProvider locale="es" messages={messages.es} timeZone="UTC">
+        <CurrencySelect id="c" label="Moneda" value={value} onChange={() => {}} />
+      </NextIntlClientProvider>,
+    );
+  }
+
+  it("renders only the selected currency on the server", () => {
+    const html = serverHtml("USD");
+    expect(html.match(/<option/g)).toHaveLength(2);
+    expect(html).toContain('value="USD"');
+  });
+
+  it("renders only the placeholder when nothing is selected", () => {
+    expect(serverHtml("").match(/<option/g)).toHaveLength(1);
+  });
+
+  it("shows the full localized list once hydrated", () => {
+    renderWithIntl(<CurrencySelect id="c" label="Moneda" value="USD" onChange={() => {}} />);
+    const select = screen.getByLabelText("Moneda") as HTMLSelectElement;
+    expect(select.options.length).toBeGreaterThan(10);
+    expect(select).toHaveValue("USD");
+  });
 });

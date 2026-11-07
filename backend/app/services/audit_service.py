@@ -18,6 +18,16 @@ AuditAction = Literal[
     "user.email_changed",
     "user.profile_updated",
     "user.logged_out",
+    "account.created",
+    "account.updated",
+    "account.participant_added",
+    "account.participant_renamed",
+    "account.participant_removed",
+    "account.member_joined",
+    "account.member_left",
+    "account.invite_regenerated",
+    "account.closed",
+    "account.deleted",
 ]
 
 # Never stored in audit entries (FR-014, Principle VI).
@@ -33,6 +43,7 @@ SENSITIVE_KEYS = frozenset(
         "refreshToken",
         "accessToken",
         "idToken",
+        "inviteCode",
     }
 )
 
@@ -53,9 +64,11 @@ async def record(
     changes: dict[str, Any] | None = None,
     metadata: dict[str, Any] | None = None,
     session: AsyncClientSession | None = None,
+    entity_type: str = "user",
 ) -> None:
     await audit_logs.insert(
         action=action,
+        entity_type=entity_type,
         actor_user_id=actor_user_id,
         entity_id=entity_id,
         changes=_scrub(changes or {}),

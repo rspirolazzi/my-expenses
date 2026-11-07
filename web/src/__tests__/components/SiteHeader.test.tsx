@@ -17,7 +17,7 @@ it("shows the public navigation without a session", () => {
 it("shows the user menu with Accounts, Profile and Logout when signed in", () => {
   renderWithIntl(<SiteHeader user={{ ...userResponse, firstName: "Ana" }} />);
   expect(screen.getByText("Ana")).toBeInTheDocument();
-  expect(screen.getByText("Accounts")).toHaveAttribute("aria-disabled", "true");
+  expect(screen.getByRole("link", { name: "Accounts" })).toHaveAttribute("href", "/accounts");
   expect(screen.getByRole("link", { name: "Profile" })).toHaveAttribute("href", "/profile");
   expect(screen.getByRole("button", { name: "Logout" })).toBeInTheDocument();
   expect(screen.queryByRole("link", { name: "Login / Registro" })).not.toBeInTheDocument();

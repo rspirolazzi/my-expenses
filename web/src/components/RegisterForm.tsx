@@ -8,6 +8,7 @@ import { type FormEvent, useState, useSyncExternalStore } from "react";
 import { registerAction } from "@/app/actions/auth";
 import type { ApiErrorCode } from "@/lib/api/errors";
 import { pendingEmailStore, savePendingEmail } from "@/lib/pendingEmail";
+import { savePendingRedirect } from "@/lib/pendingRedirect";
 import {
   type ValidationKey,
   validateEmail,
@@ -17,7 +18,7 @@ import {
 
 import { ErrorMessage } from "./FormMessage";
 
-export function RegisterForm() {
+export function RegisterForm({ callbackUrl }: { callbackUrl?: string } = {}) {
   const t = useTranslations();
   const router = useRouter();
   // "Fix the email" comes back here with the previous email filled in.
@@ -50,6 +51,7 @@ export function RegisterForm() {
       return;
     }
     savePendingEmail(email.trim());
+    savePendingRedirect(callbackUrl);
     router.push("/verify-email");
   }
 

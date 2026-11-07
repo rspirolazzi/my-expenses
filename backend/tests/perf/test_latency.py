@@ -44,3 +44,16 @@ async def test_get_me_p95_under_200ms(client, create_user):
         assert (await client.get("/users/me", headers=headers)).status_code == 200
 
     assert await _measure(get_me) < 200
+
+
+async def test_my_accounts_p95_under_200ms(client, create_user, create_account):
+    user = await create_user()
+    for i in range(100):
+        await create_account(user, name=f"Account {i}")
+    headers = auth_headers(user["_id"])
+
+    async def list_accounts():
+        response = await client.get("/accounts", headers=headers)
+        assert response.status_code == 200 and len(response.json()) == 100
+
+    assert await _measure(list_accounts) < 200

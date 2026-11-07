@@ -10,6 +10,7 @@ import {
   requestPasswordResetAction,
 } from "@/app/actions/auth";
 import type { ApiErrorCode } from "@/lib/api/errors";
+import { savePendingRedirect, takePendingRedirect } from "@/lib/pendingRedirect";
 import { type ValidationKey, validateEmail, validatePassword } from "@/lib/validation";
 
 import { CodeInput, ResendButton } from "./CodeInput";
@@ -18,10 +19,11 @@ import { ErrorMessage } from "./FormMessage";
 interface CodeSignInFlowProps {
   /** `login-code` (US3) or `password-reset` (US4, also asks for the new password). */
   kind: "login-code" | "password-reset";
+  callbackUrl?: string;
 }
 
 /** Two steps: ask for the email and send a code; then sign in with the code. */
-export function CodeSignInFlow({ kind }: CodeSignInFlowProps) {
+export function CodeSignInFlow({ kind, callbackUrl }: CodeSignInFlowProps) {
   const t = useTranslations();
   const ns = kind === "login-code" ? "auth.loginCode" : "auth.forgotPassword";
   const router = useRouter();
@@ -48,6 +50,7 @@ export function CodeSignInFlow({ kind }: CodeSignInFlowProps) {
       setError(result.code);
       return;
     }
+    savePendingRedirect(callbackUrl);
     setStep("code");
   }
 
@@ -70,7 +73,7 @@ export function CodeSignInFlow({ kind }: CodeSignInFlowProps) {
       setError(result.code);
       return;
     }
-    router.replace("/dashboard");
+    router.replace(takePendingRedirect("/dashboard"));
     router.refresh();
   }
 

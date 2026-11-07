@@ -42,6 +42,17 @@ INDEXES: dict[str, list[IndexModel]] = {
         IndexModel([("familyId", ASCENDING)], name="family_id"),
         IndexModel([("expiresAt", ASCENDING)], expireAfterSeconds=0, name="expires_ttl"),
     ],
+    "accounts": [
+        IndexModel([("inviteCode", ASCENDING)], unique=True, name="invite_code_unique"),
+        IndexModel(
+            [
+                ("participants.userId", ASCENDING),
+                ("isDeleted", ASCENDING),
+                ("updatedAt", DESCENDING),
+            ],
+            name="member_accounts",
+        ),
+    ],
     "audit_logs": [
         IndexModel(
             [("entityType", ASCENDING), ("entityId", ASCENDING), ("createdAt", DESCENDING)],

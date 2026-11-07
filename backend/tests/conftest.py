@@ -152,3 +152,50 @@ def auth_headers(user_id: ObjectId | str) -> dict[str, str]:
 async def actions(db, entity_id: ObjectId | None = None) -> list[str]:
     query = {} if entity_id is None else {"entityId": entity_id}
     return [doc["action"] async for doc in db.audit_logs.find(query).sort("createdAt", 1)]
+
+
+@pytest.fixture
+def create_account(db):
+    """Insert an account whose owner participant is linked to `owner`."""
+    from app.repositories import accounts as accounts_repo
+
+    async def _create(
+        owner: dict[str, Any],
+        name: str = "Viaje",
+        currency: str = "ARS",
+        others: tuple[str, ...] = ("Leandro", "Javier"),
+        closed: bool = False,
+        deleted: bool = False,
+        owner_name: str = "Ana",
+    ) -> dict[str, Any]:
+        participants = [accounts_repo.new_participant(owner_name, owner["_id"])]
+        participants += [accounts_repo.new_participant(other) for other in others]
+        doc = accounts_repo.new_account_document(
+            name=name,
+            description=None,
+            icon="group",
+            currency=currency,
+            owner_id=owner["_id"],
+            participants=participants,
+        )
+        doc["isClosed"] = closed
+        doc["isDeleted"] = deleted
+        doc["_id"] = await accounts_repo.insert(doc)
+        return doc
+
+    return _create
+
+
+async def link(db, account: dict[str, Any], participant_name: str, user: dict[str, Any]) -> str:
+    """Link `user` to the participant called `participant_name`; returns the participant id."""
+    doc = await db.accounts.find_one({"_id": account["_id"]})
+    participant = next(p for p in doc["participants"] if p["name"] == participant_name)
+    await db.accounts.update_one(
+        {"_id": account["_id"], "participants.id": participant["id"]},
+        {"$set": {"participants.$.userId": user["_id"]}},
+    )
+    return participant["id"]
+
+
+def participant_id(account: dict[str, Any], name: str) -> str:
+    return next(p["id"] for p in account["participants"] if p["name"] == name)

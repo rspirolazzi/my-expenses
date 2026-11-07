@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 
 import { auth } from "@/auth";
 
-const PRIVATE_PREFIXES = ["/dashboard", "/profile", "/onboarding"];
+const PRIVATE_PREFIXES = ["/dashboard", "/profile", "/onboarding", "/accounts", "/invite", "/join"];
 const AUTH_PAGES = ["/login", "/register", "/verify-email", "/login-code", "/forgot-password"];
 const ONBOARDING = "/onboarding/currency";
 

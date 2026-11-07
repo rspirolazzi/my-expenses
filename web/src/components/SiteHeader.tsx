@@ -25,9 +25,7 @@ export function SiteHeader({ user }: { user: UserResponse | null }) {
             <summary aria-label={t("userMenu")}>{displayName(user)}</summary>
             <ul>
               <li>
-                <span aria-disabled="true" title={t("accountsSoon")}>
-                  {t("accounts")}
-                </span>
+                <Link href="/accounts">{t("accounts")}</Link>
               </li>
               <li>
                 <Link href="/profile">{t("profile")}</Link>

@@ -39,6 +39,15 @@ docker compose up -d --build
   `EXPO_PUBLIC_API_BASE_URL=http://10.0.2.2:8000/api/v1` in `mobile/.env`, or keep `localhost` and
   run `adb reverse tcp:8000 tcp:8000` after starting the emulator.
 
+## Accounts and invitations (feature 002)
+
+- Web: "My Accounts" at `/accounts`, a new account at `/accounts/new`, invitations at
+  `/invite/<code>` (signing in or up from there comes back to the invitation) and `/join` to paste a
+  code.
+- Mobile: the same screens under "Mis Cuentas"; invitations open with the deep link
+  `myexpenses://invite/<code>` or by pasting the code in "Join with a code". Shared links use
+  `EXPO_PUBLIC_WEB_BASE_URL`.
+
 ## Tests
 
 ```bash

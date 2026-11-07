@@ -1,6 +1,6 @@
 """MongoDB client lifecycle and transaction helper (R9)."""
 
-from collections.abc import AsyncIterator
+from collections.abc import AsyncIterator, Awaitable, Callable
 from contextlib import asynccontextmanager
 
 from pymongo import AsyncMongoClient
@@ -42,3 +42,13 @@ async def transaction() -> AsyncIterator[AsyncClientSession]:
     async with get_client().start_session() as session:
         async with await session.start_transaction():
             yield session
+
+
+async def run_in_transaction[T](callback: Callable[[AsyncClientSession], Awaitable[T]]) -> T:
+    """Run `callback` in a transaction, retrying it on transient errors such as write conflicts.
+
+    Concurrent conditional updates on the same document (e.g. two users linking the same
+    participant) conflict; on retry the losing callback sees the new state and fails cleanly.
+    """
+    async with get_client().start_session() as session:
+        return await session.with_transaction(callback)

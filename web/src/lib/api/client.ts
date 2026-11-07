@@ -2,7 +2,7 @@ import "server-only";
 
 import { ApiError, type ApiErrorCode } from "./errors";
 
-type Method = "GET" | "POST" | "PATCH";
+type Method = "GET" | "POST" | "PATCH" | "DELETE";
 
 interface ApiFetchOptions {
   method?: Method;

@@ -13,6 +13,14 @@ UNAUTHORIZED = "unauthorized"
 EMAIL_TAKEN = "email_taken"
 NOT_FOUND = "not_found"
 INTERNAL_ERROR = "internal_error"
+ACCOUNT_CLOSED = "account_closed"
+OWNER_ONLY = "owner_only"
+OWNER_CANNOT_LEAVE = "owner_cannot_leave"
+OWNER_PARTICIPANT = "owner_participant"
+DUPLICATE_PARTICIPANT_NAME = "duplicate_participant_name"
+INVALID_INVITATION = "invalid_invitation"
+ALREADY_MEMBER = "already_member"
+PARTICIPANT_TAKEN = "participant_taken"
 
 ERROR_CODES = (
     VALIDATION_ERROR,
@@ -28,6 +36,14 @@ ERROR_CODES = (
     EMAIL_TAKEN,
     NOT_FOUND,
     INTERNAL_ERROR,
+    ACCOUNT_CLOSED,
+    OWNER_ONLY,
+    OWNER_CANNOT_LEAVE,
+    OWNER_PARTICIPANT,
+    DUPLICATE_PARTICIPANT_NAME,
+    INVALID_INVITATION,
+    ALREADY_MEMBER,
+    PARTICIPANT_TAKEN,
 )
 
 

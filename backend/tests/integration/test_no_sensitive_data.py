@@ -71,3 +71,44 @@ async def test_flows_leave_no_sensitive_data(
 
     attempts_dump = str([doc async for doc in db.auth_attempts.find({})])
     assert "@" not in attempts_dump
+
+
+async def test_account_flows_leave_no_invite_codes_or_names_in_logs(
+    client, db, create_user, caplog
+):
+    caplog.set_level(logging.INFO)
+    owner = await create_user()
+    guest = await create_user(email="guest@mail.com")
+    headers = auth_headers(owner["_id"])
+    created = (
+        await client.post(
+            "/accounts",
+            json={
+                "name": "Secret Trip",
+                "currency": "ARS",
+                "myParticipantName": "Owner Person",
+                "otherParticipants": ["Hidden Friend"],
+            },
+            headers=headers,
+        )
+    ).json()
+    codes = {created["inviteCode"]}
+    regenerated = (
+        await client.post(f"/accounts/{created['id']}/invite-code", headers=headers)
+    ).json()
+    codes.add(regenerated["inviteCode"])
+    friend = next(p["id"] for p in regenerated["participants"] if p["name"] == "Hidden Friend")
+    await client.post(
+        f"/invitations/{regenerated['inviteCode']}/accept",
+        json={"participantId": friend},
+        headers=auth_headers(guest["_id"]),
+    )
+    await client.post(f"/accounts/{created['id']}/close", headers=headers)
+    await client.delete(f"/accounts/{created['id']}", headers=headers)
+
+    audit_dump = str([doc async for doc in db.audit_logs.find({"entityType": "account"})])
+    for code in codes:
+        assert code not in audit_dump
+        assert code not in caplog.text.replace(f"/invitations/{code}", "")
+    for name in ("Secret Trip", "Owner Person", "Hidden Friend"):
+        assert name not in caplog.text

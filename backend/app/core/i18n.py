@@ -83,6 +83,38 @@ ERROR_MESSAGES: dict[str, dict[Language, str]] = {
         "es": "Ocurrió un error inesperado.",
         "en": "An unexpected error occurred.",
     },
+    errors.ACCOUNT_CLOSED: {
+        "es": "La Cuenta está cerrada: es de solo lectura.",
+        "en": "The account is closed: it is read-only.",
+    },
+    errors.OWNER_ONLY: {
+        "es": "Solo el dueño de la Cuenta puede hacer esto.",
+        "en": "Only the account owner can do this.",
+    },
+    errors.OWNER_CANNOT_LEAVE: {
+        "es": "El dueño no puede salir de su Cuenta. Puede darla de baja.",
+        "en": "The owner cannot leave the account. They can delete it instead.",
+    },
+    errors.OWNER_PARTICIPANT: {
+        "es": "El participante del dueño no se puede quitar.",
+        "en": "The owner's participant cannot be removed.",
+    },
+    errors.DUPLICATE_PARTICIPANT_NAME: {
+        "es": "Ya hay un participante con ese nombre.",
+        "en": "There is already a participant with that name.",
+    },
+    errors.INVALID_INVITATION: {
+        "es": "La invitación no es válida.",
+        "en": "The invitation is not valid.",
+    },
+    errors.ALREADY_MEMBER: {
+        "es": "Ya sos miembro de esta Cuenta.",
+        "en": "You are already a member of this account.",
+    },
+    errors.PARTICIPANT_TAKEN: {
+        "es": "Ese participante ya no está disponible. Elegí otro.",
+        "en": "That participant is no longer available. Choose another one.",
+    },
 }
 
 

@@ -7,7 +7,7 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
-from app.api.v1 import auth, users
+from app.api.v1 import accounts, auth, invitations, users
 from app.core import errors
 from app.core.errors import AppError
 from app.core.i18n import error_message, resolve_language
@@ -67,6 +67,8 @@ def create_app() -> FastAPI:
     api = APIRouter(prefix="/api/v1")
     api.include_router(auth.router)
     api.include_router(users.router)
+    api.include_router(accounts.router)
+    api.include_router(invitations.router)
     app.include_router(api)
     return app
 

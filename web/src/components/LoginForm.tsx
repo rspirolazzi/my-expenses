@@ -7,6 +7,7 @@ import { type FormEvent, useState } from "react";
 
 import { credentialsSignInAction } from "@/app/actions/auth";
 import type { ApiErrorCode } from "@/lib/api/errors";
+import { withCallback } from "@/lib/pendingRedirect";
 import { safeCallbackUrl } from "@/lib/safeCallbackUrl";
 import { validateEmail } from "@/lib/validation";
 
@@ -90,7 +91,7 @@ export function LoginForm({ callbackUrl, initialErrorKey }: LoginFormProps) {
       {lockedMinutes !== null && (
         <p role="alert" className="form-error">
           {t("auth.login.lockedMinutes", { minutes: lockedMinutes })}{" "}
-          <Link href="/login-code">{t("auth.login.useCode")}</Link>
+          <Link href={withCallback("/login-code", callbackUrl)}>{t("auth.login.useCode")}</Link>
         </p>
       )}
       <ErrorMessage code={error} />
@@ -98,10 +99,11 @@ export function LoginForm({ callbackUrl, initialErrorKey }: LoginFormProps) {
         {t("auth.login.submit")}
       </button>
       <nav className="form-links">
-        <Link href="/login-code">{t("auth.login.useCode")}</Link>
+        <Link href={withCallback("/login-code", callbackUrl)}>{t("auth.login.useCode")}</Link>
         <Link href="/forgot-password">{t("auth.login.forgot")}</Link>
         <span>
-          {t("auth.login.noAccount")} <Link href="/register">{t("auth.login.register")}</Link>
+          {t("auth.login.noAccount")}{" "}
+          <Link href={withCallback("/register", callbackUrl)}>{t("auth.login.register")}</Link>
         </span>
       </nav>
     </form>

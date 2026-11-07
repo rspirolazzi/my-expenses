@@ -11,6 +11,15 @@ export type ApiErrorCode =
   | "invalid_refresh_token"
   | "unauthorized"
   | "email_taken"
+  | "not_found"
+  | "account_closed"
+  | "owner_only"
+  | "owner_cannot_leave"
+  | "owner_participant"
+  | "duplicate_participant_name"
+  | "invalid_invitation"
+  | "already_member"
+  | "participant_taken"
   | "network_error"
   | "internal_error";
 

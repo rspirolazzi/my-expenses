@@ -2,7 +2,7 @@ import { clearTokens, getTokens, saveTokens } from "../auth/tokenStorage";
 
 import { ApiError, type ApiErrorCode, type TokenPair } from "./types";
 
-type Method = "GET" | "POST" | "PATCH";
+type Method = "GET" | "POST" | "PATCH" | "DELETE";
 
 interface RequestOptions {
   method?: Method;

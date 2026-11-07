@@ -123,7 +123,16 @@
     "unauthorized": "You need to sign in.",
     "email_taken": "That email is no longer available.",
     "network_error": "We could not connect. Check your connection.",
-    "internal_error": "An unexpected error occurred. Please try again."
+    "internal_error": "An unexpected error occurred. Please try again.",
+    "not_found": "We could not find that account.",
+    "account_closed": "The account is closed: it is read-only.",
+    "owner_only": "Only the account owner can do this.",
+    "owner_cannot_leave": "The owner cannot leave the account. They can delete it instead.",
+    "owner_participant": "The owner's participant cannot be removed.",
+    "duplicate_participant_name": "There is already a participant with that name.",
+    "invalid_invitation": "The invitation is not valid.",
+    "already_member": "You are already a member of this account.",
+    "participant_taken": "That participant is no longer available. Choose another one."
   },
   "onboarding": {
     "title": "Choose your currency",
@@ -165,5 +174,103 @@
     "confirm": "Confirm change",
     "emailChanged": "Your email is now {email}.",
     "pendingEmail": "Pending change to {email}"
+  },
+  "accounts": {
+    "title": "My Accounts",
+    "empty": "You have no accounts yet. Create one or join with an invitation link.",
+    "new": "New account",
+    "join": "Join with a code",
+    "closedBadge": "Closed",
+    "ownerBadge": "You are the owner",
+    "participantCount": "{count, plural, one {# participant} other {# participants}}",
+    "updatedAt": "Updated {date}",
+    "recent": "Your accounts",
+    "seeAll": "See all",
+    "form": {
+      "name": "Name",
+      "description": "Description (optional)",
+      "icon": "Icon",
+      "currency": "Currency",
+      "currencyHint": "It cannot be changed after the account is created.",
+      "me": "Your name in this account",
+      "others": "Other participants",
+      "addParticipant": "Add participant",
+      "participantPlaceholder": "Name",
+      "removeRow": "Remove row",
+      "create": "Create account",
+      "duplicateNames": "There are repeated names. Each participant needs a different name.",
+      "nameRequired": "Enter a name with 1 to 80 characters.",
+      "participantInvalid": "Each participant needs a name with 1 to 40 characters.",
+      "save": "Save changes",
+      "saved": "Changes saved."
+    },
+    "icons": {
+      "group": "Group",
+      "home": "Home",
+      "car": "Car",
+      "hotel": "Hotel",
+      "beach": "Beach",
+      "food": "Food",
+      "money": "Money",
+      "travel": "Travel",
+      "party": "Party",
+      "shopping": "Shopping",
+      "work": "Work",
+      "sports": "Sports"
+    },
+    "detail": {
+      "currency": "Currency: {currency}",
+      "participants": "Participants",
+      "you": "you",
+      "owner": "owner",
+      "linked": "linked",
+      "rename": "Rename",
+      "remove": "Remove",
+      "add": "Add",
+      "edit": "Edit account",
+      "closedNotice": "This account is closed: it is read-only."
+    },
+    "invite": {
+      "title": "Invite",
+      "hint": "Share this link so others can join the account.",
+      "copy": "Copy link",
+      "copied": "Link copied.",
+      "share": "Share",
+      "code": "Code: {code}",
+      "regenerate": "Generate a new link"
+    },
+    "actions": {
+      "leave": "Leave account",
+      "close": "Close account",
+      "delete": "Delete account"
+    },
+    "dialogs": {
+      "continue": "Continue",
+      "cancel": "Cancel",
+      "removeTitle": "Remove {name}?",
+      "removeBody": "They will no longer appear in the account. If they were linked to a user, that person stops being a member.",
+      "leaveTitle": "Leave the account?",
+      "leaveBody": "It will no longer appear in your dashboard. Your participant stays in the account for the rest of the group.",
+      "closeTitle": "Close the account?",
+      "closeBody": "Closing is final: the account becomes read-only and cannot be reopened.",
+      "deleteTitle": "Delete the account?",
+      "deleteBody": "The account and all its expenses will no longer be available to any member. Do you want to continue?",
+      "regenerateTitle": "Generate a new link?",
+      "regenerateBody": "The current link stops working. You will need to share the new one."
+    }
+  },
+  "invite": {
+    "title": "Invitation to {name}",
+    "currency": "Currency: {currency}",
+    "choose": "Who are you in this account?",
+    "noneAvailable": "There are no free participants left. Add yourself with your name.",
+    "orNew": "Not on the list? Add yourself:",
+    "newName": "Your name",
+    "join": "Join",
+    "joinAsNew": "Add me",
+    "alreadyMember": "You are already a member of this account.",
+    "open": "Go to the account",
+    "codeLabel": "Invitation code or link",
+    "continue": "Continue"
   }
 }

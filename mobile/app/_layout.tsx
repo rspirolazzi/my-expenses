@@ -6,6 +6,7 @@ import { ActivityIndicator, View } from "react-native";
 import { PaperProvider } from "react-native-paper";
 
 import { AuthProvider, useAuth } from "../src/hooks/useAuth";
+import { usePendingInvite } from "../src/hooks/usePendingInvite";
 import { useAppTheme } from "../src/theme";
 
 function RootNavigator() {
@@ -14,6 +15,7 @@ function RootNavigator() {
   const pathname = usePathname();
   const router = useRouter();
   const returnTo = useRef<string | null>(null);
+  usePendingInvite();
 
   // Edge case: the session expires while the app is in use. Remember the screen and come back
   // to it after signing in again.
@@ -61,6 +63,8 @@ function RootNavigator() {
         <Stack.Protected guard={!signedIn}>
           <Stack.Screen name="(auth)" />
         </Stack.Protected>
+        {/* Invitation deep link: reachable with and without a session. */}
+        <Stack.Screen name="invite/[code]" />
       </Stack>
     </PaperProvider>
   );

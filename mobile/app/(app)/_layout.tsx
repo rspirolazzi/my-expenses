@@ -17,6 +17,10 @@ export default function AppLayout() {
       <Stack.Protected guard={!needsCurrency}>
         <Stack.Screen name="index" options={{ title: t("common.appName") }} />
         <Stack.Screen name="profile" options={{ title: t("nav.profile") }} />
+        <Stack.Screen name="accounts/index" options={{ title: t("accounts.title") }} />
+        <Stack.Screen name="accounts/new" options={{ title: t("accounts.new") }} />
+        <Stack.Screen name="accounts/[accountId]" options={{ title: "" }} />
+        <Stack.Screen name="join" options={{ title: t("accounts.join") }} />
       </Stack.Protected>
     </Stack>
   );

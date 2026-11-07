@@ -7,6 +7,7 @@ import { useState, useSyncExternalStore } from "react";
 import { updateMeAction } from "@/app/actions/profile";
 import type { ApiErrorCode } from "@/lib/api/errors";
 import { suggestCurrency } from "@/lib/currencySuggestion";
+import { takePendingRedirect } from "@/lib/pendingRedirect";
 
 import { CurrencySelect } from "./CurrencySelect";
 import { ErrorMessage } from "./FormMessage";
@@ -41,7 +42,7 @@ export function OnboardingCurrencyForm({ languages }: OnboardingCurrencyFormProp
       setError(result.code);
       return;
     }
-    router.replace("/dashboard");
+    router.replace(takePendingRedirect("/dashboard"));
     router.refresh();
   }
 

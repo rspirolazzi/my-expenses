@@ -1,9 +1,20 @@
 "use client";
 
 import { useLocale, useTranslations } from "next-intl";
-import { useMemo } from "react";
+import { useMemo, useSyncExternalStore } from "react";
 
 import { currencyOptions } from "@/lib/currencies";
+
+const noopSubscribe = () => () => {};
+
+/** False on the server and during hydration, true afterwards. */
+function useHydrated(): boolean {
+  return useSyncExternalStore(
+    noopSubscribe,
+    () => true,
+    () => false,
+  );
+}
 
 interface CurrencySelectProps {
   id: string;
@@ -15,7 +26,15 @@ interface CurrencySelectProps {
 export function CurrencySelect({ id, label, value, onChange }: CurrencySelectProps) {
   const t = useTranslations("onboarding");
   const locale = useLocale();
-  const options = useMemo(() => currencyOptions(locale), [locale]);
+  const hydrated = useHydrated();
+  // The currency list and names come from the runtime's ICU data, which differs between the
+  // server's Node and the user's browser (e.g. "SLL" vs "SLE"). Rendering it on the server made
+  // hydration fail and React re-render the whole page on the client. Until hydrated, render only
+  // the selected code, which is identical on both sides.
+  const options = useMemo(
+    () => (hydrated ? currencyOptions(locale) : value ? [{ code: value, label: value }] : []),
+    [hydrated, locale, value],
+  );
 
   return (
     <div className="field">
