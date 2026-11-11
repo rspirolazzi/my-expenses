@@ -132,7 +132,9 @@
     "duplicate_participant_name": "There is already a participant with that name.",
     "invalid_invitation": "The invitation is not valid.",
     "already_member": "You are already a member of this account.",
-    "participant_taken": "That participant is no longer available. Choose another one."
+    "participant_taken": "That participant is no longer available. Choose another one.",
+    "expense_conflict": "Another member changed this expense while you were editing it.",
+    "invalid_participant": "The payer and the participants must be active participants of the account."
   },
   "onboarding": {
     "title": "Choose your currency",
@@ -256,8 +258,11 @@
       "deleteTitle": "Delete the account?",
       "deleteBody": "The account and all its expenses will no longer be available to any member. Do you want to continue?",
       "regenerateTitle": "Generate a new link?",
-      "regenerateBody": "The current link stops working. You will need to share the new one."
-    }
+      "regenerateBody": "The current link stops working. You will need to share the new one.",
+      "removeImpact": "{count, plural, =0 {They have no expenses.} one {# expense will change: it loses its payer or their share is split among the others.} other {# expenses will change: they lose their payer or their share is split among the others.}}",
+      "removeImpactUnknown": "We could not count the affected expenses. Their expenses lose their payer or their share is split among the others."
+    },
+    "settings": "Settings"
   },
   "invite": {
     "title": "Invitation to {name}",
@@ -272,5 +277,97 @@
     "open": "Go to the account",
     "codeLabel": "Invitation code or link",
     "continue": "Continue"
+  },
+  "expenses": {
+    "title": "Expenses",
+    "settings": "Settings",
+    "new": "New expense",
+    "total": "Total spent",
+    "count": "{count, plural, one {# expense} other {# expenses}}",
+    "empty": "There are no expenses in this account yet.",
+    "emptyCta": "Add the first one with “New expense”.",
+    "pending": "Pending assignment",
+    "paidBy": "{name} paid",
+    "noPayer": "No payer",
+    "refresh": "Refresh",
+    "loadMore": "Load more",
+    "loading": "Loading…",
+    "back": "Back to the account",
+    "form": {
+      "newTitle": "New expense",
+      "editTitle": "Edit expense",
+      "date": "Date",
+      "title": "Title",
+      "amount": "Amount ({currency})",
+      "currencyHint": "Expenses use the account currency.",
+      "paidBy": "Paid by",
+      "participants": "Shared by",
+      "category": "Category",
+      "description": "Description (optional)",
+      "save": "Save expense",
+      "saving": "Saving…",
+      "choosePayer": "Choose who paid"
+    },
+    "validation": {
+      "titleRequired": "Enter a title of 1 to 80 characters.",
+      "amountEmpty": "Enter an amount.",
+      "amountInvalid": "Enter a valid amount.",
+      "amountTooManyDecimals": "This currency allows at most {decimals, plural, =0 {no decimals} one {# decimal} other {# decimals}}.",
+      "amountNotPositive": "The amount must be greater than zero.",
+      "amountTooLarge": "The amount is too large.",
+      "payerRequired": "Choose who paid.",
+      "participantsRequired": "Choose at least one participant.",
+      "descriptionTooLong": "The description allows up to 500 characters.",
+      "dateRequired": "Choose a date."
+    },
+    "detail": {
+      "amount": "Amount",
+      "date": "Date",
+      "category": "Category",
+      "paidBy": "Paid by",
+      "shares": "Each one's share",
+      "description": "Description",
+      "edit": "Edit",
+      "delete": "Delete",
+      "pendingHint": "Choose a payer and participants by editing the expense."
+    },
+    "conflict": "Another member changed this expense while you were editing it. You now see the current version: check it and save again.",
+    "gone": "This expense no longer exists: another member deleted it.",
+    "dialogs": {
+      "deleteTitle": "Delete this expense?",
+      "deleteBody": "It stops showing for every member of the account."
+    },
+    "categories": {
+      "other": "Other",
+      "home": "Home",
+      "car": "Car",
+      "hotel": "Hotel",
+      "beach": "Beach",
+      "food": "Food",
+      "money": "Money",
+      "travel": "Travel",
+      "party": "Party",
+      "shopping": "Shopping",
+      "sports": "Sports"
+    }
+  },
+  "history": {
+    "title": "History",
+    "empty": "No changes yet.",
+    "created": "{name} added the expense",
+    "updated": "{name} changed the expense",
+    "deleted": "{name} deleted the expense",
+    "someone": "A member",
+    "automatic": "Automatic adjustment after removing a participant",
+    "none": "(empty)",
+    "fields": {
+      "date": "Date",
+      "title": "Title",
+      "description": "Description",
+      "amount": "Amount",
+      "paidBy": "Paid by",
+      "participants": "Shared by",
+      "categoryIcon": "Category"
+    }
   }
 }

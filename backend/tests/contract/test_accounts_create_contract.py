@@ -9,6 +9,7 @@ ACCOUNT_FIELDS = {
     "description",
     "icon",
     "currency",
+    "currencyDecimals",
     "isClosed",
     "closedAt",
     "isOwner",
@@ -50,6 +51,15 @@ async def test_create_returns_account_response(client, create_user):
     assert body["isOwner"] is True
     assert body["myParticipantId"] == next(p["id"] for p in body["participants"] if p["isMe"])
     assert set(body["participants"][0]) == {"id", "name", "isLinked", "isMe", "isOwner"}
+    assert body["currencyDecimals"] == 2
+
+
+async def test_currency_decimals_follow_the_currency(client, create_user):
+    user = await create_user()
+    headers = auth_headers(user["_id"])
+    yen = await client.post("/accounts", json=_payload(currency="JPY"), headers=headers)
+    dinar = await client.post("/accounts", json=_payload(currency="KWD"), headers=headers)
+    assert (yen.json()["currencyDecimals"], dinar.json()["currencyDecimals"]) == (0, 3)
 
 
 @pytest.mark.parametrize(

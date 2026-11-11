@@ -104,6 +104,31 @@ async def list_for_member(user_id: ObjectId) -> list[dict[str, Any]]:
     return [doc async for doc in cursor]
 
 
+async def guard_expense_write(
+    account_id: ObjectId, participant_ids: list[str], session: AsyncClientSession
+) -> bool:
+    """Conditional write on the account inside an expense transaction (research R10).
+
+    It only matches while the account is open and every given participant is active. Removing a
+    participant or closing the account also writes this document, so the two transactions
+    conflict and one is retried; on retry this filter no longer matches. `updatedAt` is left alone
+    so "My accounts" keeps its order.
+    """
+    conditions = [
+        {"participants": {"$elemMatch": {"id": pid, "removedAt": None}}}
+        for pid in dict.fromkeys(participant_ids)
+    ]
+    query: dict[str, Any] = {"_id": account_id, "isClosed": False, "isDeleted": False}
+    if conditions:
+        query["$and"] = conditions
+    result = await _collection().update_one(
+        query,
+        {"$inc": {"expenseWriteSeq": 1}},
+        session=session,
+    )
+    return result.matched_count == 1
+
+
 async def update(
     account_id: ObjectId,
     update_doc: dict[str, Any],

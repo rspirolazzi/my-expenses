@@ -9,6 +9,7 @@ from app.schemas.account import (
     ParticipantName,
 )
 from app.schemas.common import ErrorResponse
+from app.schemas.expense import ParticipantImpact
 from app.services import account_service
 
 router = APIRouter(prefix="/accounts", tags=["accounts"])
@@ -75,6 +76,17 @@ async def rename_participant(
     return await account_service.rename_participant(
         account_id, user_id, participant_id, body.name, client
     )
+
+
+@router.get(
+    "/{account_id}/participants/{participant_id}/impact",
+    response_model=ParticipantImpact,
+    responses=_errors,
+)
+async def participant_impact(
+    account_id: str, participant_id: str, user_id: CurrentUserId
+) -> ParticipantImpact:
+    return await account_service.participant_impact(account_id, user_id, participant_id)
 
 
 @router.delete(

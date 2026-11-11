@@ -7,6 +7,7 @@ import { Button, Divider, List, Text, TextInput } from "react-native-paper";
 import { AccountIcon, ConfirmDialog, IconPicker } from "../../components/accounts/AccountBits";
 import { ErrorText, formStyles } from "../../components/FormBits";
 import { accountsApi } from "../../services/api/accounts";
+import { expensesApi } from "../../services/api/expenses";
 import {
   type AccountIcon as Icon,
   type AccountResponse,
@@ -23,7 +24,7 @@ import {
 } from "../../utils/accountIcons";
 
 type Dialog =
-  | { kind: "remove"; participant: ParticipantResponse }
+  | { kind: "remove"; participant: ParticipantResponse; affected: number | null }
   | { kind: "leave" | "close" | "delete" | "regenerate" }
   | null;
 
@@ -99,12 +100,30 @@ export default function AccountDetailScreen() {
     }
   }
 
+  // How many expenses the removal changes (FR-022); null if it could not be counted.
+  function removeImpactText(): string {
+    if (dialog?.kind !== "remove") return "";
+    const { affected } = dialog;
+    if (affected === null) return t("accounts.dialogs.removeImpactUnknown");
+    if (affected === 0) return t("accounts.dialogs.removeImpact_zero");
+    return t("accounts.dialogs.removeImpact", { count: affected });
+  }
+
+  async function askRemove(participant: ParticipantResponse) {
+    if (!account) return;
+    const affected = await expensesApi
+      .participantImpact(account.id, participant.id)
+      .then((impact) => impact.affectedExpenses)
+      .catch(() => null);
+    setDialog({ kind: "remove", participant, affected });
+  }
+
   const dialogText: Record<string, [string, string]> = {
     remove: [
       t("accounts.dialogs.removeTitle", {
         name: dialog?.kind === "remove" ? dialog.participant.name : "",
       }),
-      t("accounts.dialogs.removeBody"),
+      `${t("accounts.dialogs.removeBody")} ${removeImpactText()}`,
     ],
     leave: [t("accounts.dialogs.leaveTitle"), t("accounts.dialogs.leaveBody")],
     close: [t("accounts.dialogs.closeTitle"), t("accounts.dialogs.closeBody")],
@@ -167,7 +186,7 @@ export default function AccountDetailScreen() {
                     {t("accounts.detail.rename")}
                   </Button>
                   {!p.isOwner && (
-                    <Button compact onPress={() => setDialog({ kind: "remove", participant: p })}>
+                    <Button compact onPress={() => askRemove(p)}>
                       {t("accounts.detail.remove")}
                     </Button>
                   )}

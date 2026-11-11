@@ -139,6 +139,7 @@ class AccountResponse(CamelModel):
     description: str | None
     icon: AccountIcon
     currency: str
+    currency_decimals: int
     is_closed: bool
     closed_at: datetime | None
     is_owner: bool

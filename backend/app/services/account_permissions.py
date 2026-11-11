@@ -6,6 +6,7 @@ from bson import ObjectId
 
 from app.core import errors
 from app.core.errors import AppError
+from app.core.money import currency_decimals
 from app.repositories import accounts
 from app.schemas.account import AccountResponse, AccountSummary, ParticipantResponse
 
@@ -57,6 +58,7 @@ def to_account_response(doc: dict[str, Any], user_id: ObjectId) -> AccountRespon
         description=doc.get("description"),
         icon=doc["icon"],
         currency=doc["currency"],
+        currency_decimals=currency_decimals(doc["currency"]),
         is_closed=bool(doc.get("isClosed")),
         closed_at=doc.get("closedAt"),
         is_owner=is_owner(doc, user_id),

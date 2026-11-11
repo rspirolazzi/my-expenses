@@ -6,6 +6,7 @@ import {
   removeParticipantAction,
   renameParticipantAction,
 } from "@/app/actions/accounts";
+import { participantImpactAction } from "@/app/actions/expenses";
 import { ParticipantList } from "@/components/accounts/ParticipantList";
 
 import { makeAccount } from "../support/accounts";
@@ -17,7 +18,14 @@ jest.mock("@/app/actions/accounts", () => ({
   renameParticipantAction: jest.fn(),
 }));
 
-beforeEach(() => jest.clearAllMocks());
+jest.mock("@/app/actions/expenses", () => ({ participantImpactAction: jest.fn() }));
+
+const impact = participantImpactAction as jest.Mock;
+
+beforeEach(() => {
+  jest.clearAllMocks();
+  impact.mockResolvedValue({ ok: true, data: { affectedExpenses: 0 } });
+});
 
 function row(name: string) {
   return screen.getByText(name).closest("li") as HTMLElement;
@@ -81,4 +89,28 @@ it("closed accounts are read-only", () => {
   );
   expect(screen.queryByRole("button", { name: "Quitar" })).not.toBeInTheDocument();
   expect(screen.queryByRole("button", { name: "Agregar" })).not.toBeInTheDocument();
+});
+
+it("the removal dialog says how many expenses change", async () => {
+  impact.mockResolvedValue({ ok: true, data: { affectedExpenses: 2 } });
+  renderWithIntl(
+    <ParticipantList account={makeAccount()} onChange={jest.fn()} onRemovedSelf={jest.fn()} />,
+  );
+  await userEvent.click(within(row("Javier")).getByRole("button", { name: "Quitar" }));
+  expect(impact).toHaveBeenCalledWith("acc1", "p-javier");
+  expect(screen.getByRole("dialog")).toHaveTextContent("Se verán afectados 2 gastos");
+});
+
+it("without expenses the dialog has no warning, and a failed count still lets you continue", async () => {
+  renderWithIntl(
+    <ParticipantList account={makeAccount()} onChange={jest.fn()} onRemovedSelf={jest.fn()} />,
+  );
+  await userEvent.click(within(row("Javier")).getByRole("button", { name: "Quitar" }));
+  expect(screen.getByRole("dialog")).toHaveTextContent("No tiene gastos asociados.");
+  await userEvent.click(screen.getByRole("button", { name: "Cancelar" }));
+
+  impact.mockResolvedValue({ ok: false, code: "network_error" });
+  await userEvent.click(within(row("Javier")).getByRole("button", { name: "Quitar" }));
+  expect(screen.getByRole("dialog")).toHaveTextContent("No pudimos calcular");
+  expect(screen.getByRole("button", { name: "Continuar" })).toBeEnabled();
 });

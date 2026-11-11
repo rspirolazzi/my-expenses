@@ -9,7 +9,7 @@ from pymongo.asynchronous.client_session import AsyncClientSession
 from app.core import errors
 from app.core.errors import AppError
 from app.db.client import run_in_transaction
-from app.repositories import accounts
+from app.repositories import accounts, expenses
 from app.schemas.account import (
     MAX_PARTICIPANTS,
     AccountCreate,
@@ -18,7 +18,8 @@ from app.schemas.account import (
     AccountUpdate,
     name_key,
 )
-from app.services import audit_service
+from app.schemas.expense import ParticipantImpact
+from app.services import audit_service, expense_service
 from app.services.account_permissions import (
     active_participants,
     is_owner,
@@ -50,6 +51,7 @@ async def _audit(
         metadata={"client": client},
         session=session,
         entity_type="account",
+        account_id=account_id,
     )
 
 
@@ -275,6 +277,10 @@ async def remove_participant(
             await _audit(
                 "account.participant_removed", user_id, doc["_id"], changes, client, session
             )
+            # Its expenses are adjusted in the same transaction (FR-020 to FR-023, research R9).
+            await expense_service.adjust_for_removed_participant(
+                doc, participant_id, user_id, client, session
+            )
         return updated
 
     updated = await run_in_transaction(write)
@@ -285,6 +291,17 @@ async def remove_participant(
     if my_participant(updated, user_id) is None:
         raise AppError(404, errors.NOT_FOUND)
     return to_account_response(updated, user_id)
+
+
+async def participant_impact(
+    account_id: str, user_id: ObjectId, participant_id: str
+) -> ParticipantImpact:
+    """How many active expenses removing this participant would change (FR-022)."""
+    doc = await require_member(account_id, user_id)
+    _find_active(doc, participant_id)
+    return ParticipantImpact(
+        affected_expenses=await expenses.count_affected_by_participant(doc["_id"], participant_id)
+    )
 
 
 # --- US4 ----------------------------------------------------------------------------------------

@@ -28,6 +28,9 @@ AuditAction = Literal[
     "account.invite_regenerated",
     "account.closed",
     "account.deleted",
+    "expense.created",
+    "expense.updated",
+    "expense.deleted",
 ]
 
 # Never stored in audit entries (FR-014, Principle VI).
@@ -65,6 +68,7 @@ async def record(
     metadata: dict[str, Any] | None = None,
     session: AsyncClientSession | None = None,
     entity_type: str = "user",
+    account_id: ObjectId | None = None,
 ) -> None:
     await audit_logs.insert(
         action=action,
@@ -73,5 +77,6 @@ async def record(
         entity_id=entity_id,
         changes=_scrub(changes or {}),
         metadata=_scrub(metadata or {}),
+        account_id=account_id,
         session=session,
     )

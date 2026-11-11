@@ -2,7 +2,7 @@ import "server-only";
 
 import { ApiError, type ApiErrorCode } from "./errors";
 
-type Method = "GET" | "POST" | "PATCH" | "DELETE";
+type Method = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
 
 interface ApiFetchOptions {
   method?: Method;
@@ -44,10 +44,19 @@ export async function apiFetch<T>(path: string, options: ApiFetchOptions = {}): 
   if (response.status === 204) return undefined as T;
   const payload = (await response.json().catch(() => null)) as {
     error?: { code?: string; retryAfterSeconds?: number };
+    [extra: string]: unknown;
   } | null;
   if (!response.ok) {
     const code = (payload?.error?.code ?? "internal_error") as ApiErrorCode;
-    throw new ApiError(response.status, code, payload?.error?.retryAfterSeconds);
+    const details = Object.fromEntries(
+      Object.entries(payload ?? {}).filter(([key]) => key !== "error"),
+    );
+    throw new ApiError(
+      response.status,
+      code,
+      payload?.error?.retryAfterSeconds,
+      Object.keys(details).length ? details : undefined,
+    );
   }
   return payload as T;
 }

@@ -48,6 +48,18 @@ docker compose up -d --build
   `myexpenses://invite/<code>` or by pasting the code in "Join with a code". Shared links use
   `EXPO_PUBLIC_WEB_BASE_URL`.
 
+## Expenses (feature 003)
+
+- Web: opening an account (`/accounts/<id>`) shows its expenses: the total on top and the list
+  grouped by day, 50 at a time, with a "Refresh" button. The account settings from feature 002
+  (data, participants, invitation, close, delete) moved to `/accounts/<id>/settings`. Expenses live
+  at `/accounts/<id>/expenses/new`, `/accounts/<id>/expenses/<expenseId>` (detail with each share
+  and the change history) and `/accounts/<id>/expenses/<expenseId>/edit`.
+- Mobile: the same screens under each account; pull down to refresh. The date picker uses
+  `@react-native-community/datetimepicker`, a native module: rebuild the development build after
+  pulling this feature (`npx expo run:android` or `npx expo run:ios`).
+- Amounts are exact: integer minor units in MongoDB and decimal text (`"100.50"`) in the API.
+
 ## Tests
 
 ```bash
@@ -72,4 +84,6 @@ cd mobile && npm run gen:api
 
 ## Feature validation
 
-End-to-end scenarios: [specs/001-user-auth-profile/quickstart.md](specs/001-user-auth-profile/quickstart.md).
+End-to-end scenarios: [001](specs/001-user-auth-profile/quickstart.md),
+[002](specs/002-account-management/quickstart.md) and
+[003](specs/003-expense-management/quickstart.md).

@@ -21,6 +21,8 @@ DUPLICATE_PARTICIPANT_NAME = "duplicate_participant_name"
 INVALID_INVITATION = "invalid_invitation"
 ALREADY_MEMBER = "already_member"
 PARTICIPANT_TAKEN = "participant_taken"
+EXPENSE_CONFLICT = "expense_conflict"
+INVALID_PARTICIPANT = "invalid_participant"
 
 ERROR_CODES = (
     VALIDATION_ERROR,
@@ -44,12 +46,22 @@ ERROR_CODES = (
     INVALID_INVITATION,
     ALREADY_MEMBER,
     PARTICIPANT_TAKEN,
+    EXPENSE_CONFLICT,
+    INVALID_PARTICIPANT,
 )
 
 
 class AppError(Exception):
-    def __init__(self, status_code: int, code: str, retry_after_seconds: int | None = None):
+    def __init__(
+        self,
+        status_code: int,
+        code: str,
+        retry_after_seconds: int | None = None,
+        extra: dict | None = None,
+    ):
         super().__init__(code)
         self.status_code = status_code
         self.code = code
         self.retry_after_seconds = retry_after_seconds
+        # Extra top-level fields next to `error`, e.g. `current` for expense_conflict.
+        self.extra = extra

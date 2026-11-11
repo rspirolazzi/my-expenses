@@ -20,6 +20,8 @@ export type ApiErrorCode =
   | "invalid_invitation"
   | "already_member"
   | "participant_taken"
+  | "expense_conflict"
+  | "invalid_participant"
   | "network_error"
   | "internal_error";
 
@@ -28,6 +30,8 @@ export class ApiError extends Error {
     public readonly status: number,
     public readonly code: ApiErrorCode,
     public readonly retryAfterSeconds?: number,
+    /** Extra top-level fields of the error body, e.g. `current` for expense_conflict. */
+    public readonly details?: Record<string, unknown>,
   ) {
     super(code);
     this.name = "ApiError";
@@ -37,15 +41,26 @@ export class ApiError extends Error {
 /** Result returned by Server Actions to client components (never contains tokens). */
 export type ActionResult<T = undefined> =
   | ({ ok: true } & (T extends undefined ? object : { data: T }))
-  | { ok: false; code: ApiErrorCode; retryAfterSeconds?: number };
+  | {
+      ok: false;
+      code: ApiErrorCode;
+      retryAfterSeconds?: number;
+      details?: Record<string, unknown>;
+    };
 
 export function failure(error: unknown): {
   ok: false;
   code: ApiErrorCode;
   retryAfterSeconds?: number;
+  details?: Record<string, unknown>;
 } {
   if (error instanceof ApiError) {
-    return { ok: false, code: error.code, retryAfterSeconds: error.retryAfterSeconds };
+    return {
+      ok: false,
+      code: error.code,
+      retryAfterSeconds: error.retryAfterSeconds,
+      ...(error.details ? { details: error.details } : {}),
+    };
   }
   return { ok: false, code: "internal_error" };
 }

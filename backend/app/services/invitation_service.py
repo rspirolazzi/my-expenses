@@ -113,6 +113,7 @@ async def accept(
                 metadata={"client": client},
                 session=session,
                 entity_type="account",
+                account_id=doc["_id"],
             )
         return updated
 

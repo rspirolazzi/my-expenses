@@ -93,3 +93,17 @@ async def test_concurrent_edits_keep_both_changes(client, db, create_user, creat
     doc = await db.accounts.find_one({"_id": account["_id"]})
     assert (doc["name"], doc["icon"]) == ("Brasil", "beach")
     assert await db.audit_logs.count_documents({"action": "account.updated"}) == 2
+
+
+async def test_new_account_audit_entries_carry_the_account_id(
+    client, db, create_user, create_account
+):
+    owner = await create_user()
+    account = await create_account(owner)
+    response = await client.patch(
+        f"/accounts/{account['_id']}", json={"name": "Brasil"}, headers=auth_headers(owner["_id"])
+    )
+    assert response.status_code == 200
+    entry = await db.audit_logs.find_one({"action": "account.updated"})
+    assert entry["accountId"] == account["_id"]
+    assert entry["entityId"] == account["_id"]

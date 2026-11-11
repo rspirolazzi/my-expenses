@@ -11,13 +11,13 @@ APP_DIR = Path(__file__).resolve().parents[2] / "app"
 MUTATIONS = re.compile(r"\b(update_\w+|delete_\w+|replace_\w+|find_one_and_\w+|bulk_write|drop)\b")
 
 
-def test_repository_exposes_only_insert():
+def test_repository_exposes_only_insert_and_reads():
     functions = [
         name
         for name, obj in inspect.getmembers(audit_logs, inspect.isfunction)
         if obj.__module__ == audit_logs.__name__
     ]
-    assert functions == ["insert"]
+    assert sorted(functions) == ["insert", "list_for_entity"]
 
 
 def test_no_module_mutates_audit_logs():

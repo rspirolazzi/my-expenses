@@ -14,6 +14,14 @@ export type AccountSummary = Schemas["AccountSummary"];
 export type ParticipantResponse = Schemas["ParticipantResponse"];
 export type InvitationPreview = Schemas["InvitationPreview"];
 export type AccountIcon = AccountResponse["icon"];
+export type ExpenseResponse = Schemas["ExpenseResponse"];
+export type ExpenseListItem = Schemas["ExpenseListItem"];
+export type ExpensePage = Schemas["ExpensePage"];
+export type ParticipantRef = Schemas["ParticipantRef"];
+export type HistoryEntry = Schemas["HistoryEntry"];
+export type HistoryChange = Schemas["HistoryChange"];
+export type ParticipantImpact = Schemas["ParticipantImpact"];
+export type CategoryIcon = ExpenseResponse["categoryIcon"];
 
 export type ApiErrorCode =
   | "validation_error"
@@ -36,6 +44,8 @@ export type ApiErrorCode =
   | "invalid_invitation"
   | "already_member"
   | "participant_taken"
+  | "expense_conflict"
+  | "invalid_participant"
   | "network_error"
   | "internal_error";
 
@@ -44,6 +54,8 @@ export class ApiError extends Error {
     public readonly status: number,
     public readonly code: ApiErrorCode,
     public readonly retryAfterSeconds?: number,
+    /** Extra top-level fields of the error body, e.g. `current` for expense_conflict. */
+    public readonly details?: Record<string, unknown>,
   ) {
     super(code);
     this.name = "ApiError";

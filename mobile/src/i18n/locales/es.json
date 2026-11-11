@@ -133,7 +133,9 @@
     "duplicate_participant_name": "Ya hay un participante con ese nombre.",
     "invalid_invitation": "La invitación no es válida.",
     "already_member": "Ya sos miembro de esta Cuenta.",
-    "participant_taken": "Ese participante ya no está disponible. Elegí otro."
+    "participant_taken": "Ese participante ya no está disponible. Elegí otro.",
+    "expense_conflict": "Otro miembro cambió este gasto mientras lo editabas.",
+    "invalid_participant": "El pagador y los participantes tienen que ser participantes activos de la Cuenta."
   },
   "onboarding": {
     "title": "Elegí tu moneda",
@@ -260,10 +262,15 @@
       "deleteTitle": "¿Dar de baja la Cuenta?",
       "deleteBody": "La Cuenta y todos sus gastos dejan de estar disponibles para todos los miembros. ¿Querés continuar?",
       "regenerateTitle": "¿Generar un enlace nuevo?",
-      "regenerateBody": "El enlace actual deja de funcionar. Vas a tener que compartir el nuevo."
+      "regenerateBody": "El enlace actual deja de funcionar. Vas a tener que compartir el nuevo.",
+      "removeImpact_zero": "No tiene gastos asociados.",
+      "removeImpact_one": "Se verá afectado {count} gasto: queda sin pagador o se reparte su parte entre los demás.",
+      "removeImpact_other": "Se verán afectados {count} gastos: quedan sin pagador o se reparte su parte entre los demás.",
+      "removeImpactUnknown": "No pudimos calcular cuántos gastos se verán afectados. Sus gastos quedan sin pagador o se reparte su parte entre los demás."
     },
     "participantCount_one": "{count} participante",
-    "participantCount_other": "{count} participantes"
+    "participantCount_other": "{count} participantes",
+    "settings": "Configuración"
   },
   "invite": {
     "title": "Invitación a {name}",
@@ -278,5 +285,98 @@
     "open": "Ir a la Cuenta",
     "codeLabel": "Código o enlace de invitación",
     "continue": "Continuar"
+  },
+  "expenses": {
+    "title": "Gastos",
+    "settings": "Configuración",
+    "new": "Nuevo gasto",
+    "total": "Total gastado",
+    "empty": "Todavía no hay gastos en esta Cuenta.",
+    "emptyCta": "Cargá el primero con «Nuevo gasto».",
+    "pending": "Pendiente de asignación",
+    "paidBy": "Pagó {name}",
+    "noPayer": "Sin pagador",
+    "refresh": "Actualizar",
+    "loadMore": "Cargar más",
+    "loading": "Cargando…",
+    "back": "Volver a la Cuenta",
+    "form": {
+      "newTitle": "Nuevo gasto",
+      "editTitle": "Editar gasto",
+      "date": "Fecha",
+      "title": "Concepto",
+      "amount": "Importe ({currency})",
+      "currencyHint": "Los gastos usan la moneda de la Cuenta.",
+      "paidBy": "Pagó",
+      "participants": "Lo comparten",
+      "category": "Categoría",
+      "description": "Descripción (opcional)",
+      "save": "Guardar gasto",
+      "saving": "Guardando…",
+      "choosePayer": "Elegí quién pagó"
+    },
+    "validation": {
+      "titleRequired": "Ingresá un concepto de 1 a 80 caracteres.",
+      "amountEmpty": "Ingresá un importe.",
+      "amountInvalid": "Ingresá un importe válido.",
+      "amountTooManyDecimals": "Esta moneda admite como máximo {decimals} decimales.",
+      "amountNotPositive": "El importe tiene que ser mayor a cero.",
+      "amountTooLarge": "El importe es demasiado grande.",
+      "payerRequired": "Elegí quién pagó.",
+      "participantsRequired": "Elegí al menos un participante.",
+      "descriptionTooLong": "La descripción admite hasta 500 caracteres.",
+      "dateRequired": "Elegí una fecha."
+    },
+    "detail": {
+      "amount": "Importe",
+      "date": "Fecha",
+      "category": "Categoría",
+      "paidBy": "Pagó",
+      "shares": "Parte de cada uno",
+      "description": "Descripción",
+      "edit": "Editar",
+      "delete": "Eliminar",
+      "pendingHint": "Elegí pagador y participantes editando el gasto."
+    },
+    "conflict": "Otro miembro cambió este gasto mientras lo editabas. Ahora ves la versión actual: revisala y volvé a guardar.",
+    "gone": "Este gasto ya no existe: lo eliminó otro miembro.",
+    "dialogs": {
+      "deleteTitle": "¿Eliminar este gasto?",
+      "deleteBody": "Deja de figurar para todos los miembros de la Cuenta."
+    },
+    "categories": {
+      "other": "Otros",
+      "home": "Casa",
+      "car": "Auto",
+      "hotel": "Hotel",
+      "beach": "Playa",
+      "food": "Comida",
+      "money": "Dinero",
+      "travel": "Viaje",
+      "party": "Fiesta",
+      "shopping": "Compras",
+      "sports": "Deportes"
+    },
+    "count_one": "{count} gasto",
+    "count_other": "{count} gastos"
+  },
+  "history": {
+    "title": "Historial",
+    "empty": "Todavía no hay cambios.",
+    "created": "{name} cargó el gasto",
+    "updated": "{name} modificó el gasto",
+    "deleted": "{name} eliminó el gasto",
+    "someone": "Un miembro",
+    "automatic": "Ajuste automático al quitar a un participante",
+    "none": "(vacío)",
+    "fields": {
+      "date": "Fecha",
+      "title": "Concepto",
+      "description": "Descripción",
+      "amount": "Importe",
+      "paidBy": "Pagó",
+      "participants": "Lo comparten",
+      "categoryIcon": "Categoría"
+    }
   }
 }

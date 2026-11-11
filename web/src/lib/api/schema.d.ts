@@ -315,6 +315,23 @@ export interface paths {
         patch: operations["rename_participant_api_v1_accounts__account_id__participants__participant_id__patch"];
         trace?: never;
     };
+    "/api/v1/accounts/{account_id}/participants/{participant_id}/impact": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Participant Impact */
+        get: operations["participant_impact_api_v1_accounts__account_id__participants__participant_id__impact_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/accounts/{account_id}/leave": {
         parameters: {
             query?: never;
@@ -360,6 +377,60 @@ export interface paths {
         put?: never;
         /** Close Account */
         post: operations["close_account_api_v1_accounts__account_id__close_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/accounts/{account_id}/expenses": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Expenses */
+        get: operations["list_expenses_api_v1_accounts__account_id__expenses_get"];
+        put?: never;
+        /** Create Expense */
+        post: operations["create_expense_api_v1_accounts__account_id__expenses_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/accounts/{account_id}/expenses/{expense_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Expense */
+        get: operations["get_expense_api_v1_accounts__account_id__expenses__expense_id__get"];
+        /** Update Expense */
+        put: operations["update_expense_api_v1_accounts__account_id__expenses__expense_id__put"];
+        post?: never;
+        /** Delete Expense */
+        delete: operations["delete_expense_api_v1_accounts__account_id__expenses__expense_id__delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/accounts/{account_id}/expenses/{expense_id}/history": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Expense History Entries */
+        get: operations["expense_history_entries_api_v1_accounts__account_id__expenses__expense_id__history_get"];
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -454,6 +525,8 @@ export interface components {
             icon: "group" | "home" | "car" | "hotel" | "beach" | "food" | "money" | "travel" | "party" | "shopping" | "work" | "sports";
             /** Currency */
             currency: string;
+            /** Currencydecimals */
+            currencyDecimals: number;
             /** Isclosed */
             isClosed: boolean;
             /** Closedat */
@@ -554,6 +627,138 @@ export interface components {
         ErrorResponse: {
             error: components["schemas"]["ErrorBody"];
         };
+        /** ExpenseCreate */
+        ExpenseCreate: {
+            /**
+             * Date
+             * Format: date
+             */
+            date: string;
+            /** Title */
+            title: string;
+            /** Description */
+            description?: string | null;
+            /** Amount */
+            amount: string;
+            /** Paidbyid */
+            paidById: string;
+            /** Participantids */
+            participantIds: string[];
+            /**
+             * Categoryicon
+             * @default other
+             * @enum {string}
+             */
+            categoryIcon: "other" | "home" | "car" | "hotel" | "beach" | "food" | "money" | "travel" | "party" | "shopping" | "sports";
+            /**
+             * Clientrequestid
+             * Format: uuid
+             */
+            clientRequestId: string;
+        };
+        /** ExpenseListItem */
+        ExpenseListItem: {
+            /** Id */
+            id: string;
+            /**
+             * Date
+             * Format: date
+             */
+            date: string;
+            /** Title */
+            title: string;
+            /**
+             * Categoryicon
+             * @enum {string}
+             */
+            categoryIcon: "other" | "home" | "car" | "hotel" | "beach" | "food" | "money" | "travel" | "party" | "shopping" | "sports";
+            /** Amount */
+            amount: string;
+            paidBy: components["schemas"]["ParticipantRef"] | null;
+            /** Ispending */
+            isPending: boolean;
+        };
+        /** ExpensePage */
+        ExpensePage: {
+            /** Items */
+            items: components["schemas"]["ExpenseListItem"][];
+            /** Nextcursor */
+            nextCursor: string | null;
+            /** Total */
+            total: string | null;
+            /** Count */
+            count: number | null;
+        };
+        /** ExpenseResponse */
+        ExpenseResponse: {
+            /** Id */
+            id: string;
+            /** Accountid */
+            accountId: string;
+            /**
+             * Date
+             * Format: date
+             */
+            date: string;
+            /** Title */
+            title: string;
+            /** Description */
+            description: string | null;
+            /** Amount */
+            amount: string;
+            /** Currency */
+            currency: string;
+            /**
+             * Categoryicon
+             * @enum {string}
+             */
+            categoryIcon: "other" | "home" | "car" | "hotel" | "beach" | "food" | "money" | "travel" | "party" | "shopping" | "sports";
+            paidBy: components["schemas"]["ParticipantRef"] | null;
+            /** Participants */
+            participants: components["schemas"]["ParticipantRef"][];
+            /** Shares */
+            shares: components["schemas"]["ShareResponse"][];
+            /** Ispending */
+            isPending: boolean;
+            /** Version */
+            version: number;
+            /**
+             * Createdat
+             * Format: date-time
+             */
+            createdAt: string;
+            /**
+             * Updatedat
+             * Format: date-time
+             */
+            updatedAt: string;
+        };
+        /** ExpenseUpdate */
+        ExpenseUpdate: {
+            /**
+             * Date
+             * Format: date
+             */
+            date: string;
+            /** Title */
+            title: string;
+            /** Description */
+            description?: string | null;
+            /** Amount */
+            amount: string;
+            /** Paidbyid */
+            paidById: string;
+            /** Participantids */
+            participantIds: string[];
+            /**
+             * Categoryicon
+             * @default other
+             * @enum {string}
+             */
+            categoryIcon: "other" | "home" | "car" | "hotel" | "beach" | "food" | "money" | "travel" | "party" | "shopping" | "sports";
+            /** Version */
+            version: number;
+        };
         /** GoogleLoginRequest */
         GoogleLoginRequest: {
             /** Idtoken */
@@ -563,6 +768,39 @@ export interface components {
         HTTPValidationError: {
             /** Detail */
             detail?: components["schemas"]["ValidationError"][];
+        };
+        /** HistoryChange */
+        HistoryChange: {
+            /**
+             * Field
+             * @enum {string}
+             */
+            field: "date" | "title" | "description" | "amount" | "paidBy" | "participants" | "categoryIcon";
+            /** Before */
+            before: string | components["schemas"]["ParticipantRef"] | components["schemas"]["ParticipantRef"][] | null;
+            /** After */
+            after: string | components["schemas"]["ParticipantRef"] | components["schemas"]["ParticipantRef"][] | null;
+        };
+        /** HistoryEntry */
+        HistoryEntry: {
+            /** Id */
+            id: string;
+            /**
+             * Action
+             * @enum {string}
+             */
+            action: "created" | "updated" | "deleted";
+            /** Actorname */
+            actorName: string | null;
+            /** Reason */
+            reason: "participant_removed" | null;
+            /**
+             * At
+             * Format: date-time
+             */
+            at: string;
+            /** Changes */
+            changes: components["schemas"]["HistoryChange"][];
         };
         /** InvitationPreview */
         InvitationPreview: {
@@ -605,8 +843,20 @@ export interface components {
             /** Refreshtoken */
             refreshToken: string;
         };
+        /** ParticipantImpact */
+        ParticipantImpact: {
+            /** Affectedexpenses */
+            affectedExpenses: number;
+        };
         /** ParticipantName */
         ParticipantName: {
+            /** Name */
+            name: string;
+        };
+        /** ParticipantRef */
+        ParticipantRef: {
+            /** Id */
+            id: string;
             /** Name */
             name: string;
         };
@@ -701,6 +951,12 @@ export interface components {
              * Format: email
              */
             email: string;
+        };
+        /** ShareResponse */
+        ShareResponse: {
+            participant: components["schemas"]["ParticipantRef"];
+            /** Amount */
+            amount: string;
         };
         /** TokenPair */
         TokenPair: {
@@ -2431,6 +2687,76 @@ export interface operations {
             };
         };
     };
+    participant_impact_api_v1_accounts__account_id__participants__participant_id__impact_get: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                account_id: string;
+                participant_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ParticipantImpact"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
     leave_account_api_v1_accounts__account_id__leave_post: {
         parameters: {
             query?: never;
@@ -2603,6 +2929,384 @@ export interface operations {
             };
             /** @description Forbidden */
             403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    list_expenses_api_v1_accounts__account_id__expenses_get: {
+        parameters: {
+            query?: {
+                limit?: number;
+                cursor?: string | null;
+            };
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                account_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ExpensePage"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    create_expense_api_v1_accounts__account_id__expenses_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+                "x-client"?: string | null;
+            };
+            path: {
+                account_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ExpenseCreate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ExpenseResponse"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    get_expense_api_v1_accounts__account_id__expenses__expense_id__get: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                account_id: string;
+                expense_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ExpenseResponse"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    update_expense_api_v1_accounts__account_id__expenses__expense_id__put: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+                "x-client"?: string | null;
+            };
+            path: {
+                account_id: string;
+                expense_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ExpenseUpdate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ExpenseResponse"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    delete_expense_api_v1_accounts__account_id__expenses__expense_id__delete: {
+        parameters: {
+            query: {
+                version: number;
+            };
+            header?: {
+                authorization?: string | null;
+                "x-client"?: string | null;
+            };
+            path: {
+                account_id: string;
+                expense_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    expense_history_entries_api_v1_accounts__account_id__expenses__expense_id__history_get: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                account_id: string;
+                expense_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HistoryEntry"][];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
                 headers: {
                     [name: string]: unknown;
                 };

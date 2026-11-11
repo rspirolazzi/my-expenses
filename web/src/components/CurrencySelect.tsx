@@ -1,20 +1,10 @@
 "use client";
 
 import { useLocale, useTranslations } from "next-intl";
-import { useMemo, useSyncExternalStore } from "react";
+import { useMemo } from "react";
 
 import { currencyOptions } from "@/lib/currencies";
-
-const noopSubscribe = () => () => {};
-
-/** False on the server and during hydration, true afterwards. */
-function useHydrated(): boolean {
-  return useSyncExternalStore(
-    noopSubscribe,
-    () => true,
-    () => false,
-  );
-}
+import { useHydrated } from "@/lib/useHydrated";
 
 interface CurrencySelectProps {
   id: string;

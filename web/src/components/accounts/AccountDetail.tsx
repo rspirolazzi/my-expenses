@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
@@ -14,6 +15,7 @@ import { ParticipantList } from "./ParticipantList";
 
 export function AccountDetail({ initialAccount }: { initialAccount: AccountResponse }) {
   const t = useTranslations("accounts");
+  const tExpenses = useTranslations("expenses");
   const router = useRouter();
   const [account, setAccount] = useState(initialAccount);
 
@@ -31,6 +33,7 @@ export function AccountDetail({ initialAccount }: { initialAccount: AccountRespo
           <small>{t("detail.currency", { currency: account.currency })}</small>
         </div>
       </header>
+      <Link href={`/accounts/${account.id}`}>{tExpenses("back")}</Link>
       {account.description && <p>{account.description}</p>}
       {account.isClosed && (
         <p role="status" className="badge">

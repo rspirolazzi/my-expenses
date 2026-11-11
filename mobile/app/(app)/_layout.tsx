@@ -19,7 +19,23 @@ export default function AppLayout() {
         <Stack.Screen name="profile" options={{ title: t("nav.profile") }} />
         <Stack.Screen name="accounts/index" options={{ title: t("accounts.title") }} />
         <Stack.Screen name="accounts/new" options={{ title: t("accounts.new") }} />
-        <Stack.Screen name="accounts/[accountId]" options={{ title: "" }} />
+        <Stack.Screen name="accounts/[accountId]/index" options={{ title: t("expenses.title") }} />
+        <Stack.Screen
+          name="accounts/[accountId]/settings"
+          options={{ title: t("expenses.settings") }}
+        />
+        <Stack.Screen
+          name="accounts/[accountId]/expenses/new"
+          options={{ title: t("expenses.form.newTitle") }}
+        />
+        <Stack.Screen
+          name="accounts/[accountId]/expenses/[expenseId]/index"
+          options={{ title: "" }}
+        />
+        <Stack.Screen
+          name="accounts/[accountId]/expenses/[expenseId]/edit"
+          options={{ title: t("expenses.form.editTitle") }}
+        />
         <Stack.Screen name="join" options={{ title: t("accounts.join") }} />
       </Stack.Protected>
     </Stack>

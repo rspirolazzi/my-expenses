@@ -8,6 +8,7 @@ import {
   removeParticipantAction,
   renameParticipantAction,
 } from "@/app/actions/accounts";
+import { participantImpactAction } from "@/app/actions/expenses";
 import { ErrorMessage } from "@/components/FormMessage";
 import type { ApiErrorCode } from "@/lib/api/errors";
 import type { AccountResponse, ParticipantResponse } from "@/lib/api/types";
@@ -28,6 +29,8 @@ export function ParticipantList({ account, onChange, onRemovedSelf }: Participan
   const [draft, setDraft] = useState("");
   const [newName, setNewName] = useState("");
   const [toRemove, setToRemove] = useState<ParticipantResponse | null>(null);
+  // Affected expenses for the removal dialog (FR-022): a number, or null if it could not be read.
+  const [impact, setImpact] = useState<number | null>(null);
   const [error, setError] = useState<ApiErrorCode | null>(null);
   const [pending, setPending] = useState(false);
   const readOnly = account.isClosed;
@@ -59,6 +62,12 @@ export function ParticipantList({ account, onChange, onRemovedSelf }: Participan
     if (await apply(() => renameParticipantAction(account.id, participant.id, draft.trim()))) {
       setEditingId(null);
     }
+  }
+
+  async function askRemove(participant: ParticipantResponse) {
+    const result = await participantImpactAction(account.id, participant.id);
+    setImpact(result.ok ? result.data.affectedExpenses : null);
+    setToRemove(participant);
   }
 
   async function confirmRemove() {
@@ -107,7 +116,7 @@ export function ParticipantList({ account, onChange, onRemovedSelf }: Participan
                   {t("detail.rename")}
                 </button>
                 {!p.isOwner && (
-                  <button type="button" className="link-button" onClick={() => setToRemove(p)}>
+                  <button type="button" className="link-button" onClick={() => askRemove(p)}>
                     {t("detail.remove")}
                   </button>
                 )}
@@ -134,7 +143,11 @@ export function ParticipantList({ account, onChange, onRemovedSelf }: Participan
       <ConfirmDialog
         open={toRemove !== null}
         title={t("dialogs.removeTitle", { name: toRemove?.name ?? "" })}
-        message={t("dialogs.removeBody")}
+        message={`${t("dialogs.removeBody")} ${
+          impact === null
+            ? t("dialogs.removeImpactUnknown")
+            : t("dialogs.removeImpact", { count: impact })
+        }`}
         onCancel={() => setToRemove(null)}
         onConfirm={confirmRemove}
       />

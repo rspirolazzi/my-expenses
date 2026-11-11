@@ -199,3 +199,45 @@ async def link(db, account: dict[str, Any], participant_name: str, user: dict[st
 
 def participant_id(account: dict[str, Any], name: str) -> str:
     return next(p["id"] for p in account["participants"] if p["name"] == name)
+
+
+@pytest.fixture
+def create_expense(db):
+    """Insert an expense directly; by default paid by `by_user` and shared by all active ones."""
+    from app.repositories import expenses as expenses_repo
+
+    async def _create(
+        account: dict[str, Any],
+        by_user: dict[str, Any],
+        title: str = "Cena",
+        amount_minor: int = 10000,
+        paid_by: str | None = None,
+        participants: list[str] | None = None,
+        date: str | None = None,
+        deleted: bool = False,
+        created_at: datetime | None = None,
+    ) -> dict[str, Any]:
+        current = await db.accounts.find_one({"_id": account["_id"]})
+        active = [p for p in current["participants"] if p.get("removedAt") is None]
+        mine = next((p["id"] for p in active if p.get("userId") == by_user["_id"]), None)
+        doc = expenses_repo.new_expense_document(
+            account=current,
+            expense_date=datetime.now(UTC).date(),
+            title=title,
+            description=None,
+            amount_minor=amount_minor,
+            paid_by_id=paid_by or mine,
+            participant_ids=participants if participants is not None else [p["id"] for p in active],
+            category_icon="food",
+            created_by=by_user["_id"],
+            client_request_id=None,
+        )
+        if date is not None:
+            doc["date"] = date
+        if created_at is not None:
+            doc["createdAt"] = created_at
+        doc["isDeleted"] = deleted
+        doc["_id"] = await expenses_repo.insert(doc)
+        return doc
+
+    return _create

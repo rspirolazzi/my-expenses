@@ -2,7 +2,7 @@ import { clearTokens, getTokens, saveTokens } from "../auth/tokenStorage";
 
 import { ApiError, type ApiErrorCode, type TokenPair } from "./types";
 
-type Method = "GET" | "POST" | "PATCH" | "DELETE";
+type Method = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
 
 interface RequestOptions {
   method?: Method;
@@ -72,10 +72,19 @@ async function parse<T>(response: Response): Promise<T> {
   if (response.status === 204) return undefined as T;
   const payload = (await response.json().catch(() => null)) as {
     error?: { code?: string; retryAfterSeconds?: number };
+    [extra: string]: unknown;
   } | null;
   if (!response.ok) {
     const code = (payload?.error?.code ?? "internal_error") as ApiErrorCode;
-    throw new ApiError(response.status, code, payload?.error?.retryAfterSeconds);
+    const details = Object.fromEntries(
+      Object.entries(payload ?? {}).filter(([key]) => key !== "error"),
+    );
+    throw new ApiError(
+      response.status,
+      code,
+      payload?.error?.retryAfterSeconds,
+      Object.keys(details).length ? details : undefined,
+    );
   }
   return payload as T;
 }

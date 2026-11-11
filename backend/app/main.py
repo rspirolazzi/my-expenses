@@ -7,7 +7,7 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
-from app.api.v1 import accounts, auth, invitations, users
+from app.api.v1 import accounts, auth, expenses, invitations, users
 from app.core import errors
 from app.core.errors import AppError
 from app.core.i18n import error_message, resolve_language
@@ -25,13 +25,21 @@ async def lifespan(_: FastAPI) -> AsyncIterator[None]:
     await mongo.close()
 
 
-def _error_response(request: Request, status_code: int, code: str, retry_after: int | None = None):
+def _error_response(
+    request: Request,
+    status_code: int,
+    code: str,
+    retry_after: int | None = None,
+    extra: dict | None = None,
+):
     language = resolve_language(request.headers.get("accept-language"))
     body: dict = {"error": {"code": code, "message": error_message(code, language)}}
     headers: dict[str, str] = {}
     if retry_after is not None:
         body["error"]["retryAfterSeconds"] = retry_after
         headers["Retry-After"] = str(retry_after)
+    if extra:
+        body.update(extra)
     return JSONResponse(status_code=status_code, content=body, headers=headers)
 
 
@@ -47,7 +55,9 @@ def create_app() -> FastAPI:
 
     @app.exception_handler(AppError)
     async def _app_error(request: Request, exc: AppError):
-        return _error_response(request, exc.status_code, exc.code, exc.retry_after_seconds)
+        return _error_response(
+            request, exc.status_code, exc.code, exc.retry_after_seconds, exc.extra
+        )
 
     @app.exception_handler(RequestValidationError)
     async def _validation_error(request: Request, _: RequestValidationError):
@@ -68,6 +78,7 @@ def create_app() -> FastAPI:
     api.include_router(auth.router)
     api.include_router(users.router)
     api.include_router(accounts.router)
+    api.include_router(expenses.router)
     api.include_router(invitations.router)
     app.include_router(api)
     return app

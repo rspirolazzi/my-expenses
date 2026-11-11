@@ -4,6 +4,7 @@ import { Share } from "react-native";
 import i18n from "@/i18n";
 import AccountDetailScreen from "@/screens/accounts/AccountDetailScreen";
 import { accountsApi } from "@/services/api/accounts";
+import { expensesApi } from "@/services/api/expenses";
 
 import { makeAccount, memberView } from "../support/accounts";
 import { renderScreen } from "../support/render";
@@ -28,8 +29,13 @@ jest.mock("@/services/api/accounts", () => ({
   },
 }));
 
+jest.mock("@/services/api/expenses", () => ({
+  expensesApi: { participantImpact: jest.fn() },
+}));
+
 beforeEach(async () => {
   jest.clearAllMocks();
+  (expensesApi.participantImpact as jest.Mock).mockResolvedValue({ affectedExpenses: 0 });
   await i18n.changeLanguage("es");
 });
 
@@ -88,5 +94,24 @@ describe("leave (US4)", () => {
     await waitFor(() => expect(accountsApi.leave).toHaveBeenCalledWith("acc1"));
     expect(mockRouter.replace).toHaveBeenCalledWith("/accounts");
     expect(screen.queryByText("Generar enlace nuevo")).toBeNull();
+  });
+});
+
+describe("removal impact (US4)", () => {
+  it("the dialog says how many expenses change, or that it could not count them", async () => {
+    (accountsApi.get as jest.Mock).mockResolvedValue(makeAccount());
+    (expensesApi.participantImpact as jest.Mock).mockResolvedValueOnce({ affectedExpenses: 2 });
+    renderScreen(<AccountDetailScreen />);
+    await screen.findByText("Leandro");
+    fireEvent.press(screen.getByText("Quitar"));
+    expect(await screen.findByText(/Se verán afectados 2 gastos/)).toBeOnTheScreen();
+    expect(expensesApi.participantImpact).toHaveBeenCalledWith("acc1", "p-leandro");
+    fireEvent.press(screen.getByText("Cancelar"));
+    await new Promise((resolve) => setTimeout(resolve, 300));
+
+    (expensesApi.participantImpact as jest.Mock).mockRejectedValueOnce(new Error("offline"));
+    fireEvent.press(screen.getByText("Quitar"));
+    expect(await screen.findByText(/No pudimos calcular/)).toBeOnTheScreen();
+    expect(screen.getByText("Continuar")).toBeOnTheScreen();
   });
 });

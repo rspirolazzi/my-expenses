@@ -115,6 +115,17 @@ ERROR_MESSAGES: dict[str, dict[Language, str]] = {
         "es": "Ese participante ya no está disponible. Elegí otro.",
         "en": "That participant is no longer available. Choose another one.",
     },
+    errors.EXPENSE_CONFLICT: {
+        "es": "Otro miembro cambió este gasto mientras lo editabas. Revisá la versión actual.",
+        "en": (
+            "Another member changed this expense while you were editing it. "
+            "Check the current version."
+        ),
+    },
+    errors.INVALID_PARTICIPANT: {
+        "es": "El pagador y los participantes tienen que ser participantes activos de la Cuenta.",
+        "en": "The payer and the participants must be active participants of the account.",
+    },
 }
 
 
