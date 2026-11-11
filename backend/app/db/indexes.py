@@ -76,6 +76,24 @@ INDEXES: dict[str, list[IndexModel]] = {
             name="client_request_unique",
         ),
     ],
+    "settlements": [
+        IndexModel(
+            [
+                ("accountId", ASCENDING),
+                ("isDeleted", ASCENDING),
+                ("date", DESCENDING),
+                ("createdAt", DESCENDING),
+                ("_id", DESCENDING),
+            ],
+            name="account_list",
+        ),
+        IndexModel(
+            [("accountId", ASCENDING), ("clientRequestId", ASCENDING)],
+            unique=True,
+            partialFilterExpression={"clientRequestId": {"$type": "string"}},
+            name="client_request_unique",
+        ),
+    ],
     "audit_logs": [
         IndexModel(
             [("entityType", ASCENDING), ("entityId", ASCENDING), ("createdAt", DESCENDING)],

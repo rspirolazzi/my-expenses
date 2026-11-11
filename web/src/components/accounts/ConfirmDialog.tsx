@@ -10,6 +10,10 @@ interface ConfirmDialogProps {
   confirmLabel?: string;
   cancelLabel?: string;
   pending?: boolean;
+  /** "danger" for destructive actions (default), "" for a plain confirmation. */
+  confirmClassName?: string;
+  /** Extra content under the message, such as an error. */
+  children?: React.ReactNode;
   onConfirm: () => void;
   onCancel: () => void;
 }
@@ -22,6 +26,8 @@ export function ConfirmDialog({
   confirmLabel,
   cancelLabel,
   pending,
+  confirmClassName = "danger",
+  children,
   onConfirm,
   onCancel,
 }: ConfirmDialogProps) {
@@ -44,11 +50,12 @@ export function ConfirmDialog({
       <div role="dialog" aria-modal="true" aria-labelledby="confirm-title" className="dialog card">
         <h2 id="confirm-title">{title}</h2>
         <p>{message}</p>
+        {children}
         <div className="dialog-actions">
           <button ref={cancelRef} type="button" className="secondary" onClick={onCancel}>
             {cancelLabel ?? t("cancel")}
           </button>
-          <button type="button" className="danger" disabled={pending} onClick={onConfirm}>
+          <button type="button" className={confirmClassName} disabled={pending} onClick={onConfirm}>
             {confirmLabel ?? t("continue")}
           </button>
         </div>

@@ -36,6 +36,14 @@ export default function AppLayout() {
           name="accounts/[accountId]/expenses/[expenseId]/edit"
           options={{ title: t("expenses.form.editTitle") }}
         />
+        <Stack.Screen
+          name="accounts/[accountId]/balances"
+          options={{ title: t("balances.title") }}
+        />
+        <Stack.Screen
+          name="accounts/[accountId]/settlements/new"
+          options={{ title: t("settlements.newTitle") }}
+        />
         <Stack.Screen name="join" options={{ title: t("accounts.join") }} />
       </Stack.Protected>
     </Stack>

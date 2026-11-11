@@ -9,10 +9,12 @@ const summary = {
   name: "Vacaciones",
   icon: "beach" as const,
   currency: "BRL",
+  currencyDecimals: 2,
   isClosed: true,
   isOwner: true,
   participantCount: 3,
   updatedAt: "2026-11-06T12:00:00Z",
+  myBalance: "-12.50",
 };
 
 it("shows count, closed badge and a date formatted in the user's language", () => {
@@ -31,4 +33,10 @@ it("formats the date in English too", () => {
 it("shows the empty state", () => {
   renderWithIntl(<AccountList accounts={[]} />);
   expect(screen.getByText(/Todavía no tenés Cuentas/)).toBeInTheDocument();
+});
+
+it("shows my balance in each account with its currency", () => {
+  renderWithIntl(<AccountList accounts={[summary, { ...summary, id: "a2", myBalance: "0.00" }]} />);
+  expect(screen.getByText(/Debés 12,50 BRL/)).toBeInTheDocument();
+  expect(screen.getByText("Estás al día")).toBeInTheDocument();
 });

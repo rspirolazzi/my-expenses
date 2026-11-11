@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { ScrollView } from "react-native";
 import { Button, Text } from "react-native-paper";
 
+import { BalanceSummary } from "../components/balances/BalanceSummary";
 import { formStyles } from "../components/FormBits";
 import { useAuth } from "../hooks/useAuth";
 import { accountsApi } from "../services/api/accounts";
@@ -12,7 +13,7 @@ import { displayName } from "../utils/displayName";
 import { AccountListItems } from "./accounts/AccountsScreen";
 
 export default function DashboardScreen() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const router = useRouter();
   const { user } = useAuth();
   const [accounts, setAccounts] = useState<AccountSummary[] | null>(null);
@@ -35,6 +36,9 @@ export default function DashboardScreen() {
       <Text variant="headlineMedium">
         {t("dashboard.title", { name: user ? displayName(user) : "" })}
       </Text>
+      {accounts && accounts.length > 0 && (
+        <BalanceSummary accounts={accounts} locale={i18n.language} />
+      )}
       <Text variant="titleMedium">{t("accounts.recent")}</Text>
       {accounts && <AccountListItems accounts={accounts.slice(0, 5)} />}
       <Button mode="contained" onPress={() => router.push("/accounts/new")}>

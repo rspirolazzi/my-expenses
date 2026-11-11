@@ -28,6 +28,7 @@ import {
 import { DEFAULT_CATEGORY } from "../../utils/categoryIcons";
 import { formatDay, today } from "../../utils/expenseGroups";
 import { type AmountError, amountToInput, parseAmountInput } from "../../utils/money";
+import { newRequestId } from "../../utils/requestId";
 
 const TITLE_MAX = 80;
 const DESCRIPTION_MAX = 500;
@@ -62,12 +63,6 @@ function initialState(
     categoryIcon: expense?.categoryIcon ?? DEFAULT_CATEGORY,
     description: expense?.description ?? "",
   };
-}
-
-function newRequestId(): string {
-  const random = () => Math.random().toString(16).slice(2, 10).padEnd(8, "0");
-  const hex = `${random()}${random()}${random()}${random()}`;
-  return `${hex.slice(0, 8)}-${hex.slice(8, 12)}-4${hex.slice(13, 16)}-a${hex.slice(17, 20)}-${hex.slice(20, 32)}`;
 }
 
 /** Create (no expenseId) or edit an expense. */

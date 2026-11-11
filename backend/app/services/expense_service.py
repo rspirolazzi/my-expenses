@@ -3,18 +3,15 @@
 Application logs never include titles, descriptions, amounts or names (Principle VI).
 """
 
-import base64
-import binascii
-import json
 from datetime import datetime
 from typing import Any
 
 from bson import ObjectId
-from bson.errors import InvalidId
 from pymongo.asynchronous.client_session import AsyncClientSession
 from pymongo.errors import DuplicateKeyError
 
 from app.core import errors
+from app.core.cursor import decode_cursor, encode_cursor
 from app.core.errors import AppError
 from app.core.money import InvalidAmount, format_amount, parse_amount, split_equal
 from app.db.client import run_in_transaction
@@ -131,7 +128,7 @@ def _validated_fields(request: ExpenseWrite, account: dict[str, Any]) -> dict[st
 
 
 async def _guard(account_id: ObjectId, fields: dict[str, Any], session: AsyncClientSession) -> bool:
-    return await accounts.guard_expense_write(
+    return await accounts.guard_money_write(
         account_id, [fields["paidById"], *fields["participantIds"]], session
     )
 
@@ -280,25 +277,11 @@ async def get_expense(account_id: str, expense_id: str, user_id: ObjectId) -> Ex
 # --- List -----------------------------------------------------------------------------------------
 
 
-def _encode_cursor(doc: dict[str, Any]) -> str:
-    raw = json.dumps([doc["date"], doc["createdAt"].isoformat(), str(doc["_id"])])
-    return base64.urlsafe_b64encode(raw.encode()).decode().rstrip("=")
-
-
-def _decode_cursor(cursor: str) -> tuple[str, datetime, ObjectId]:
-    try:
-        padded = cursor + "=" * (-len(cursor) % 4)
-        day, created_at, oid = json.loads(base64.urlsafe_b64decode(padded.encode()))
-        return str(day), datetime.fromisoformat(created_at), ObjectId(oid)
-    except (ValueError, TypeError, binascii.Error, InvalidId) as exc:
-        raise AppError(422, errors.VALIDATION_ERROR) from exc
-
-
 async def list_expenses(
     account_id: str, user_id: ObjectId, limit: int, cursor: str | None
 ) -> ExpensePage:
     account = await require_member(account_id, user_id)
-    after = _decode_cursor(cursor) if cursor else None
+    after = decode_cursor(cursor) if cursor else None
     docs = await expenses.page(account["_id"], limit + 1, after)
     has_more = len(docs) > limit
     docs = docs[:limit]
@@ -309,7 +292,7 @@ async def list_expenses(
         total = format_amount(total_minor, account["currency"])
     return ExpensePage(
         items=[to_list_item(doc, account) for doc in docs],
-        next_cursor=_encode_cursor(docs[-1]) if has_more and docs else None,
+        next_cursor=encode_cursor(docs[-1]) if has_more and docs else None,
         total=total,
         count=count,
     )
@@ -378,7 +361,7 @@ async def delete_expense(
         raise AppError(404, errors.NOT_FOUND)
 
     async def write(session: AsyncClientSession) -> str:
-        if not await accounts.guard_expense_write(account["_id"], [], session):
+        if not await accounts.guard_money_write(account["_id"], [], session):
             return "guard"
         deleted = await expenses.update_versioned(
             account["_id"],

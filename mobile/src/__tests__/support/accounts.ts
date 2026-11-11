@@ -1,9 +1,12 @@
 import type {
+  AccountBalances,
   AccountResponse,
+  AccountSummary,
   ExpenseListItem,
   ExpenseResponse,
   HistoryEntry,
   InvitationPreview,
+  SettlementResponse,
 } from "@/services/api/types";
 
 export function makeAccount(overrides: Partial<AccountResponse> = {}): AccountResponse {
@@ -112,4 +115,61 @@ export function makeHistory(): HistoryEntry[] {
       changes: [],
     },
   ];
+}
+
+export function makeBalances(overrides: Partial<AccountBalances> = {}): AccountBalances {
+  return {
+    currency: "ARS",
+    currencyDecimals: 2,
+    balances: [
+      { participant: { id: "p-ana", name: "Ana" }, amount: "60.00", isMe: true },
+      { participant: { id: "p-leandro", name: "Leandro" }, amount: "-30.00", isMe: false },
+      { participant: { id: "p-javier", name: "Javier" }, amount: "-30.00", isMe: false },
+    ],
+    suggestions: [
+      {
+        from: { id: "p-leandro", name: "Leandro" },
+        to: { id: "p-ana", name: "Ana" },
+        amount: "30.00",
+      },
+      {
+        from: { id: "p-javier", name: "Javier" },
+        to: { id: "p-ana", name: "Ana" },
+        amount: "30.00",
+      },
+    ],
+    pendingExpenses: 0,
+    ...overrides,
+  };
+}
+
+export function makeSettlement(overrides: Partial<SettlementResponse> = {}): SettlementResponse {
+  return {
+    id: "s1",
+    accountId: "acc1",
+    date: "2026-11-11",
+    from: { id: "p-leandro", name: "Leandro" },
+    to: { id: "p-ana", name: "Ana" },
+    amount: "30.00",
+    currency: "ARS",
+    isExcluded: false,
+    createdAt: "2026-11-11T12:00:00Z",
+    ...overrides,
+  };
+}
+
+export function makeSummary(overrides: Partial<AccountSummary> = {}): AccountSummary {
+  return {
+    id: "acc1",
+    name: "Viaje",
+    icon: "group",
+    currency: "ARS",
+    currencyDecimals: 2,
+    isClosed: false,
+    isOwner: true,
+    participantCount: 3,
+    updatedAt: "2026-11-06T00:00:00Z",
+    myBalance: "0.00",
+    ...overrides,
+  };
 }

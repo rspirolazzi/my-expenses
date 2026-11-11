@@ -6,7 +6,7 @@ from bson import ObjectId
 
 from app.core import errors
 from app.core.errors import AppError
-from app.core.money import currency_decimals
+from app.core.money import currency_decimals, format_amount
 from app.repositories import accounts
 from app.schemas.account import AccountResponse, AccountSummary, ParticipantResponse
 
@@ -79,14 +79,18 @@ def to_account_response(doc: dict[str, Any], user_id: ObjectId) -> AccountRespon
     )
 
 
-def to_account_summary(doc: dict[str, Any], user_id: ObjectId) -> AccountSummary:
+def to_account_summary(
+    doc: dict[str, Any], user_id: ObjectId, my_balance_minor: int = 0
+) -> AccountSummary:
     return AccountSummary(
         id=str(doc["_id"]),
         name=doc["name"],
         icon=doc["icon"],
         currency=doc["currency"],
+        currency_decimals=currency_decimals(doc["currency"]),
         is_closed=bool(doc.get("isClosed")),
         is_owner=is_owner(doc, user_id),
         participant_count=len(active_participants(doc)),
         updated_at=doc["updatedAt"],
+        my_balance=format_amount(my_balance_minor, doc["currency"]),
     )

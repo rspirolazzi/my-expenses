@@ -437,6 +437,58 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/accounts/{account_id}/balances": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Balances */
+        get: operations["get_balances_api_v1_accounts__account_id__balances_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/accounts/{account_id}/settlements": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Settlements */
+        get: operations["list_settlements_api_v1_accounts__account_id__settlements_get"];
+        put?: never;
+        /** Create Settlement */
+        post: operations["create_settlement_api_v1_accounts__account_id__settlements_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/accounts/{account_id}/settlements/{settlement_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Delete Settlement */
+        delete: operations["delete_settlement_api_v1_accounts__account_id__settlements__settlement_id__delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/invitations/{code}": {
         parameters: {
             query?: never;
@@ -490,6 +542,19 @@ export interface components {
              * @constant
              */
             status: "accepted";
+        };
+        /** AccountBalances */
+        AccountBalances: {
+            /** Currency */
+            currency: string;
+            /** Currencydecimals */
+            currencyDecimals: number;
+            /** Balances */
+            balances: components["schemas"]["BalanceEntry"][];
+            /** Suggestions */
+            suggestions: components["schemas"]["SuggestedTransfer"][];
+            /** Pendingexpenses */
+            pendingExpenses: number;
         };
         /** AccountCreate */
         AccountCreate: {
@@ -563,6 +628,8 @@ export interface components {
             icon: "group" | "home" | "car" | "hotel" | "beach" | "food" | "money" | "travel" | "party" | "shopping" | "work" | "sports";
             /** Currency */
             currency: string;
+            /** Currencydecimals */
+            currencyDecimals: number;
             /** Isclosed */
             isClosed: boolean;
             /** Isowner */
@@ -574,6 +641,8 @@ export interface components {
              * Format: date-time
              */
             updatedAt: string;
+            /** Mybalance */
+            myBalance: string;
         };
         /**
          * AccountUpdate
@@ -600,6 +669,14 @@ export interface components {
             id: string;
             /** Name */
             name: string;
+        };
+        /** BalanceEntry */
+        BalanceEntry: {
+            participant: components["schemas"]["ParticipantRef"];
+            /** Amount */
+            amount: string;
+            /** Isme */
+            isMe: boolean;
         };
         /** EmailChangeConfirmRequest */
         EmailChangeConfirmRequest: {
@@ -952,9 +1029,76 @@ export interface components {
              */
             email: string;
         };
+        /**
+         * SettlementCreate
+         * @description Unknown fields (currency included) give 422; the currency is always the account's.
+         */
+        SettlementCreate: {
+            /** Fromparticipantid */
+            fromParticipantId: string;
+            /** Toparticipantid */
+            toParticipantId: string;
+            /** Amount */
+            amount: string;
+            /**
+             * Date
+             * Format: date
+             */
+            date: string;
+            /**
+             * Clientrequestid
+             * Format: uuid
+             */
+            clientRequestId: string;
+            /**
+             * Source
+             * @default manual
+             * @enum {string}
+             */
+            source: "suggestion" | "manual";
+        };
+        /** SettlementPage */
+        SettlementPage: {
+            /** Items */
+            items: components["schemas"]["SettlementResponse"][];
+            /** Nextcursor */
+            nextCursor: string | null;
+        };
+        /** SettlementResponse */
+        SettlementResponse: {
+            /** Id */
+            id: string;
+            /** Accountid */
+            accountId: string;
+            /**
+             * Date
+             * Format: date
+             */
+            date: string;
+            from: components["schemas"]["ParticipantRef"];
+            to: components["schemas"]["ParticipantRef"];
+            /** Amount */
+            amount: string;
+            /** Currency */
+            currency: string;
+            /** Isexcluded */
+            isExcluded: boolean;
+            /**
+             * Createdat
+             * Format: date-time
+             */
+            createdAt: string;
+        };
         /** ShareResponse */
         ShareResponse: {
             participant: components["schemas"]["ParticipantRef"];
+            /** Amount */
+            amount: string;
+        };
+        /** SuggestedTransfer */
+        SuggestedTransfer: {
+            from: components["schemas"]["ParticipantRef"];
+            to: components["schemas"]["ParticipantRef"];
             /** Amount */
             amount: string;
         };
@@ -3304,6 +3448,245 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["HistoryEntry"][];
                 };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    get_balances_api_v1_accounts__account_id__balances_get: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                account_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AccountBalances"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_settlements_api_v1_accounts__account_id__settlements_get: {
+        parameters: {
+            query?: {
+                limit?: number;
+                cursor?: string | null;
+            };
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                account_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SettlementPage"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    create_settlement_api_v1_accounts__account_id__settlements_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+                "x-client"?: string | null;
+            };
+            path: {
+                account_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SettlementCreate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SettlementResponse"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    delete_settlement_api_v1_accounts__account_id__settlements__settlement_id__delete: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+                "x-client"?: string | null;
+            };
+            path: {
+                account_id: string;
+                settlement_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
             /** @description Unauthorized */
             401: {

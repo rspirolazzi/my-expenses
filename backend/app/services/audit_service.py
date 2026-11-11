@@ -31,6 +31,8 @@ AuditAction = Literal[
     "expense.created",
     "expense.updated",
     "expense.deleted",
+    "settlement.created",
+    "settlement.deleted",
 ]
 
 # Never stored in audit entries (FR-014, Principle VI).

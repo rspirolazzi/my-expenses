@@ -47,10 +47,12 @@ describe("Mis Cuentas (US1)", () => {
         name: "Viaje",
         icon: "beach",
         currency: "BRL",
+        currencyDecimals: 2,
         isClosed: true,
         isOwner: true,
         participantCount: 3,
         updatedAt: "2026-11-06T00:00:00Z",
+        myBalance: "0.00",
       },
     ]);
     renderScreen(<AccountsScreen />);

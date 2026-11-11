@@ -19,7 +19,7 @@ from app.schemas.account import (
     name_key,
 )
 from app.schemas.expense import ParticipantImpact
-from app.services import audit_service, expense_service
+from app.services import audit_service, balance_service, expense_service
 from app.services.account_permissions import (
     active_participants,
     is_owner,
@@ -126,7 +126,9 @@ async def create_account(user_id: ObjectId, request: AccountCreate, client: str)
 
 
 async def list_my_accounts(user_id: ObjectId) -> list[AccountSummary]:
-    return [to_account_summary(doc, user_id) for doc in await accounts.list_for_member(user_id)]
+    docs = await accounts.list_for_member(user_id)
+    mine = await balance_service.my_balances(docs, user_id)
+    return [to_account_summary(doc, user_id, mine.get(doc["_id"], 0)) for doc in docs]
 
 
 async def get_account(account_id: str, user_id: ObjectId) -> AccountResponse:

@@ -2,6 +2,9 @@
 module.exports = {
   preset: "jest-expo",
   setupFiles: ["<rootDir>/jest.setup.ts"],
+  setupFilesAfterEnv: ["<rootDir>/jest.setupAfterEnv.ts"],
+  // Paper dialog animations and slow renders time out when every core runs a suite at once.
+  maxWorkers: "50%",
   testMatch: ["<rootDir>/src/__tests__/**/*.test.ts?(x)"],
   testPathIgnorePatterns: ["/node_modules/", "<rootDir>/src/__tests__/support/"],
   moduleNameMapper: {

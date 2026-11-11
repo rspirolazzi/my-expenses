@@ -45,6 +45,10 @@ interface ConfirmDialogProps {
   visible: boolean;
   title: string;
   message: string;
+  confirmLabel?: string;
+  cancelLabel?: string;
+  /** Extra content under the message, such as an error. */
+  children?: React.ReactNode;
   onConfirm: () => void;
   onCancel: () => void;
 }
@@ -54,6 +58,9 @@ export function ConfirmDialog({
   visible,
   title,
   message,
+  confirmLabel,
+  cancelLabel,
+  children,
   onConfirm,
   onCancel,
 }: ConfirmDialogProps) {
@@ -64,10 +71,11 @@ export function ConfirmDialog({
         <Dialog.Title>{title}</Dialog.Title>
         <Dialog.Content>
           <Text>{message}</Text>
+          {children}
         </Dialog.Content>
         <Dialog.Actions>
-          <Button onPress={onCancel}>{t("accounts.dialogs.cancel")}</Button>
-          <Button onPress={onConfirm}>{t("accounts.dialogs.continue")}</Button>
+          <Button onPress={onCancel}>{cancelLabel ?? t("accounts.dialogs.cancel")}</Button>
+          <Button onPress={onConfirm}>{confirmLabel ?? t("accounts.dialogs.continue")}</Button>
         </Dialog.Actions>
       </Dialog>
     </Portal>

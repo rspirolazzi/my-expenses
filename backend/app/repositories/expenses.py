@@ -7,6 +7,7 @@ from bson import ObjectId
 from pymongo import DESCENDING, ReturnDocument
 from pymongo.asynchronous.client_session import AsyncClientSession
 
+from app.core.cursor import keyset_after
 from app.db.client import get_database
 from app.repositories.users import to_object_id
 
@@ -98,12 +99,7 @@ async def page(
     """Keyset page: the expenses strictly after `after` in LIST_SORT order (research R5)."""
     query: dict[str, Any] = {"accountId": account_id, "isDeleted": False}
     if after is not None:
-        day, created_at, oid = after
-        query["$or"] = [
-            {"date": {"$lt": day}},
-            {"date": day, "createdAt": {"$lt": created_at}},
-            {"date": day, "createdAt": created_at, "_id": {"$lt": oid}},
-        ]
+        query.update(keyset_after(after))
     cursor = _collection().find(query).sort(LIST_SORT).limit(limit)
     return [doc async for doc in cursor]
 
@@ -171,3 +167,12 @@ async def apply_participant_removal(
         session=session,
         return_document=ReturnDocument.AFTER,
     )
+
+
+async def active_for_balances(account_ids: list[ObjectId]) -> list[dict[str, Any]]:
+    """Active expenses of the given accounts, projected to what the balances need (R1)."""
+    cursor = _collection().find(
+        {"accountId": {"$in": account_ids}, "isDeleted": False},
+        {"accountId": 1, "amountMinor": 1, "paidById": 1, "participantIds": 1},
+    )
+    return [doc async for doc in cursor]

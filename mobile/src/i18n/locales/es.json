@@ -146,7 +146,13 @@
   },
   "dashboard": {
     "title": "Hola, {name}",
-    "empty": "Todavía no tenés cuentas compartidas. Muy pronto vas a poder crearlas desde acá."
+    "empty": "Todavía no tenés cuentas compartidas. Muy pronto vas a poder crearlas desde acá.",
+    "balances": {
+      "title": "Tus saldos",
+      "owedToYou": "Te deben",
+      "youOwe": "Debés",
+      "allSettled": "Estás al día en todas tus Cuentas."
+    }
   },
   "profile": {
     "title": "Perfil",
@@ -377,6 +383,68 @@
       "paidBy": "Pagó",
       "participants": "Lo comparten",
       "categoryIcon": "Categoría"
+    }
+  },
+  "tabs": {
+    "label": "Secciones de la Cuenta",
+    "expenses": "Gastos",
+    "balances": "Saldos"
+  },
+  "balances": {
+    "title": "Saldos",
+    "refresh": "Actualizar",
+    "owedToYou": "Te deben {amount}",
+    "youOwe": "Debés {amount}",
+    "youSettled": "Estás al día",
+    "owed": "Le deben {amount}",
+    "owes": "Debe {amount}",
+    "settled": "Al día",
+    "you": "Vos",
+    "noDebts": "No hay deudas: todos están al día.",
+    "pending_one": "{count} gasto pendiente",
+    "pending_other": "{count} gastos pendientes",
+    "pendingHint": "No cuentan en los saldos hasta que se completen.",
+    "pendingLink": "Completarlos en Gastos",
+    "suggestions": "Reembolsos sugeridos",
+    "nothingPending": "No hay nada pendiente.",
+    "transfer": "{from} → {to}",
+    "markPaid": "Marcar como pagado",
+    "dialogTitle": "¿Registrar este pago?",
+    "dialogBody": "{from} le pagó {amount} a {to} el {date}.",
+    "dialogHint": "Si el importe o la fecha fueron otros, registralo con «Registrar reembolso».",
+    "confirm": "Confirmar",
+    "cancel": "Cancelar",
+    "saved": "Reembolso registrado."
+  },
+  "settlements": {
+    "title": "Reembolsos",
+    "empty": "Todavía no hay reembolsos registrados.",
+    "new": "Registrar reembolso",
+    "newTitle": "Nuevo reembolso",
+    "back": "Volver a Saldos",
+    "from": "Pagó",
+    "to": "Recibió",
+    "chooseFrom": "Elegí quién pagó",
+    "chooseTo": "Elegí quién recibió",
+    "amount": "Importe ({currency})",
+    "currencyHint": "Los reembolsos usan la moneda de la Cuenta.",
+    "date": "Fecha",
+    "save": "Guardar reembolso",
+    "saving": "Guardando…",
+    "row": "{from} le pagó a {to}",
+    "removed": "Participante quitado",
+    "removedHint": "No cuenta en los saldos.",
+    "delete": "Eliminar",
+    "deleteTitle": "¿Eliminar este reembolso?",
+    "deleteBody": "Deja de contar en los saldos para todos los miembros de la Cuenta.",
+    "gone": "Este reembolso ya no existe: lo eliminó otro miembro.",
+    "loadMore": "Cargar más",
+    "loading": "Cargando…",
+    "validation": {
+      "fromRequired": "Elegí quién pagó.",
+      "toRequired": "Elegí quién recibió.",
+      "sameParticipant": "Quien paga y quien recibe tienen que ser distintos.",
+      "dateRequired": "Elegí una fecha."
     }
   }
 }

@@ -104,10 +104,10 @@ async def list_for_member(user_id: ObjectId) -> list[dict[str, Any]]:
     return [doc async for doc in cursor]
 
 
-async def guard_expense_write(
+async def guard_money_write(
     account_id: ObjectId, participant_ids: list[str], session: AsyncClientSession
 ) -> bool:
-    """Conditional write on the account inside an expense transaction (research R10).
+    """Conditional write on the account inside an expense or settlement transaction.
 
     It only matches while the account is open and every given participant is active. Removing a
     participant or closing the account also writes this document, so the two transactions

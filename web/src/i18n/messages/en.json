@@ -145,7 +145,13 @@
   },
   "dashboard": {
     "title": "Hi, {name}",
-    "empty": "You have no shared accounts yet. Soon you will be able to create them from here."
+    "empty": "You have no shared accounts yet. Soon you will be able to create them from here.",
+    "balances": {
+      "title": "Your balances",
+      "owedToYou": "You are owed",
+      "youOwe": "You owe",
+      "allSettled": "You are settled up in all your accounts."
+    }
   },
   "profile": {
     "title": "Profile",
@@ -368,6 +374,67 @@
       "paidBy": "Paid by",
       "participants": "Shared by",
       "categoryIcon": "Category"
+    }
+  },
+  "tabs": {
+    "label": "Account sections",
+    "expenses": "Expenses",
+    "balances": "Balances"
+  },
+  "balances": {
+    "title": "Balances",
+    "refresh": "Refresh",
+    "owedToYou": "You are owed {amount}",
+    "youOwe": "You owe {amount}",
+    "youSettled": "You are settled up",
+    "owed": "Is owed {amount}",
+    "owes": "Owes {amount}",
+    "settled": "Settled up",
+    "you": "You",
+    "noDebts": "No debts: everyone is settled up.",
+    "pending": "{count, plural, one {# pending expense} other {# pending expenses}}",
+    "pendingHint": "They do not count in the balances until they are completed.",
+    "pendingLink": "Complete them in Expenses",
+    "suggestions": "Suggested settlements",
+    "nothingPending": "Nothing left to settle.",
+    "transfer": "{from} → {to}",
+    "markPaid": "Mark as paid",
+    "dialogTitle": "Record this payment?",
+    "dialogBody": "{from} paid {amount} to {to} on {date}.",
+    "dialogHint": "If the amount or the date were different, use «Record settlement».",
+    "confirm": "Confirm",
+    "cancel": "Cancel",
+    "saved": "Settlement recorded."
+  },
+  "settlements": {
+    "title": "Settlements",
+    "empty": "No settlements recorded yet.",
+    "new": "Record settlement",
+    "newTitle": "New settlement",
+    "back": "Back to Balances",
+    "from": "Paid by",
+    "to": "Received by",
+    "chooseFrom": "Choose who paid",
+    "chooseTo": "Choose who received",
+    "amount": "Amount ({currency})",
+    "currencyHint": "Settlements use the account currency.",
+    "date": "Date",
+    "save": "Save settlement",
+    "saving": "Saving…",
+    "row": "{from} paid {to}",
+    "removed": "Removed participant",
+    "removedHint": "It does not count in the balances.",
+    "delete": "Delete",
+    "deleteTitle": "Delete this settlement?",
+    "deleteBody": "It stops counting in the balances for every member of the account.",
+    "gone": "This settlement no longer exists: another member deleted it.",
+    "loadMore": "Load more",
+    "loading": "Loading…",
+    "validation": {
+      "fromRequired": "Choose who paid.",
+      "toRequired": "Choose who received.",
+      "sameParticipant": "The payer and the receiver must be different.",
+      "dateRequired": "Choose a date."
     }
   }
 }

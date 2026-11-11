@@ -1,10 +1,11 @@
 import { useFocusEffect, useRouter } from "expo-router";
 import { useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { ScrollView, View } from "react-native";
+import { ScrollView, StyleSheet, View } from "react-native";
 import { Button, Chip, List, Text } from "react-native-paper";
 
 import { AccountIcon } from "../../components/accounts/AccountBits";
+import { balanceText } from "../../components/balances/BalanceList";
 import { ErrorText, formStyles } from "../../components/FormBits";
 import { accountsApi } from "../../services/api/accounts";
 import { type AccountSummary, type ApiErrorCode, errorCodeOf } from "../../services/api/types";
@@ -28,7 +29,20 @@ export function AccountListItems({ accounts }: { accounts: AccountSummary[] }) {
             count: account.participantCount,
           })} · ${t("accounts.updatedAt", { date: formatDate(account.updatedAt, i18n.language) })}`}
           left={() => <AccountIcon icon={account.icon} />}
-          right={() => (account.isClosed ? <Chip compact>{t("accounts.closedBadge")}</Chip> : null)}
+          right={() => (
+            <View style={styles.right}>
+              <Text variant="bodyMedium">
+                {balanceText(
+                  t,
+                  { amount: account.myBalance, isMe: true },
+                  account.currency,
+                  account.currencyDecimals,
+                  i18n.language,
+                )}
+              </Text>
+              {account.isClosed && <Chip compact>{t("accounts.closedBadge")}</Chip>}
+            </View>
+          )}
           onPress={() =>
             router.push({ pathname: "/accounts/[accountId]", params: { accountId: account.id } })
           }
@@ -71,3 +85,7 @@ export default function AccountsScreen() {
     </ScrollView>
   );
 }
+
+const styles = StyleSheet.create({
+  right: { alignItems: "flex-end", justifyContent: "center", gap: 4 },
+});

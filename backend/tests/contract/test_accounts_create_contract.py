@@ -28,6 +28,8 @@ SUMMARY_FIELDS = {
     "isOwner",
     "participantCount",
     "updatedAt",
+    "currencyDecimals",
+    "myBalance",
 }
 
 

@@ -60,6 +60,24 @@ docker compose up -d --build
   pulling this feature (`npx expo run:android` or `npx expo run:ios`).
 - Amounts are exact: integer minor units in MongoDB and decimal text (`"100.50"`) in the API.
 
+## Balances and settlements (feature 004)
+
+- Each account has two tabs: "Gastos" (`/accounts/<id>`) and "Saldos"
+  (`/accounts/<id>/balances`). The balances tab shows each participant's balance, the suggested
+  settlements with "Mark as paid" (a fixed confirmation dialog) and the settlements list, 50 at a
+  time. Manual settlements live at `/accounts/<id>/settlements/new`. Mobile has the same screens.
+- API: `GET /api/v1/accounts/{id}/balances` (balances, suggestions and the pending expenses
+  count), and `GET`, `POST` and `DELETE /api/v1/accounts/{id}/settlements`. `GET /accounts` adds
+  `myBalance` and `currencyDecimals` to each account; the dashboard adds "You are owed" and "You
+  owe" per currency, closed accounts included.
+- Balances are computed on every read (`backend/app/services/balance_math.py`) and always add up
+  to zero. Pending expenses and settlements of a removed participant do not count.
+- Suggestions: exact-amount pairs first, then the largest debtor pays the largest creditor; ties
+  follow the account's participant order. At most N−1 transfers, always the same for the same
+  balances.
+- Settlements are not edited: a wrong one is deleted (logical delete, audited) and recorded again.
+  A closed account is read only.
+
 ## Tests
 
 ```bash
@@ -85,5 +103,6 @@ cd mobile && npm run gen:api
 ## Feature validation
 
 End-to-end scenarios: [001](specs/001-user-auth-profile/quickstart.md),
-[002](specs/002-account-management/quickstart.md) and
-[003](specs/003-expense-management/quickstart.md).
+[002](specs/002-account-management/quickstart.md),
+[003](specs/003-expense-management/quickstart.md) and
+[004](specs/004-balances-settlements/quickstart.md).

@@ -52,7 +52,7 @@ separado.
 
 **Purpose**: confirmar el punto de partida.
 
-- [ ] T001 Confirmar que se trabaja en la rama `004-balances-settlements`, creada desde `003-expense-management`. Verificar que antes de empezar pasan `uv run pytest` en `backend/` y `npm test` en `web/` y en `mobile/`.
+- [X] T001 Confirmar que se trabaja en la rama `004-balances-settlements`, creada desde `003-expense-management`. Verificar que antes de empezar pasan `uv run pytest` en `backend/` y `npm test` en `web/` y en `mobile/`.
 
 ---
 
@@ -65,7 +65,7 @@ compartido y las pestañas de la Cuenta en los clientes.
 
 ### Backend
 
-- [ ] T002 Escribir tests unitarios de `compute_balances` en `backend/tests/unit/test_balance_math.py`. Se escriben primero y tienen que fallar. Casos:
+- [X] T002 Escribir tests unitarios de `compute_balances` en `backend/tests/unit/test_balance_math.py`. Se escriben primero y tienen que fallar. Casos:
   - Ejemplo base: +6000 / −3000 / −3000.
   - Centavos no divisibles: 100,00 entre tres. El centavo va al primero según el orden de la Cuenta y la suma da 0.
   - Un solo participante: saldo 0.
@@ -78,7 +78,7 @@ compartido y las pestañas de la Cuenta en los clientes.
   - Participante quitado: no aparece en el resultado.
   - Moneda JPY: el cálculo da enteros.
   - Test de propiedades con `random.Random(seed)`: 500 Cuentas con 2 a 10 participantes, gastos y reembolsos aleatorios. La suma siempre es 0.
-- [ ] T003 Escribir tests unitarios de `suggest_transfers` en `backend/tests/unit/test_balance_math.py`. Se escriben primero y tienen que fallar. Casos:
+- [X] T003 Escribir tests unitarios de `suggest_transfers` en `backend/tests/unit/test_balance_math.py`. Se escriben primero y tienen que fallar. Casos:
   - Ejemplo base: Leandro → Ana 3000 y Javier → Ana 3000, en ese orden.
   - Todos en cero: `[]`.
   - Pares exactos primero: {A:+50, B:+30, C:−30, D:−50} da 2 transferencias (C→B 30, D→A 50).
@@ -86,10 +86,10 @@ compartido y las pestañas de la Cuenta en los clientes.
   - Empates resueltos por el orden de la Cuenta.
   - Ningún importe es 0 ni negativo.
   - Test de propiedades con los saldos aleatorios de T002: aplicar las sugerencias deja todo en 0 y su cantidad es ≤ N−1, con N la cantidad de saldos distintos de cero.
-- [ ] T004 Crear `backend/app/services/balance_math.py` sin I/O, hasta que pasen T002 y T003. Contenido (research R1–R3):
+- [X] T004 Crear `backend/app/services/balance_math.py` sin I/O, hasta que pasen T002 y T003. Contenido (research R1–R3):
   - `compute_balances(account, expenses, settlements) -> BalanceResult(balances: dict[str, int], pending: int)`, con los participantes activos en el orden de la Cuenta y usando `money.split_equal`.
   - `suggest_transfers(balances, order) -> list[Transfer(from_id, to_id, amount_minor)]`: pares exactos primero, después greedy mayor deudor → mayor acreedor, con empates por el orden de la Cuenta.
-- [ ] T005 [P] Crear `backend/app/schemas/settlement.py` según `contracts/api.md`:
+- [X] T005 [P] Crear `backend/app/schemas/settlement.py` según `contracts/api.md`:
   - `SettlementCreate` con `extra="forbid"` y los campos:
     - `fromParticipantId` y `toParticipantId`, obligatorios y distintos entre sí; si son iguales, `validation_error`.
     - `amount: str`, que se valida contra la moneda en el servicio.
@@ -99,36 +99,36 @@ compartido y las pestañas de la Cuenta en los clientes.
   - `SettlementResponse` con `isExcluded`, y `SettlementPage`.
   - `BalanceEntry`, `SuggestedTransfer` y `AccountBalances`.
   - Se reutiliza `ParticipantRef` de `backend/app/schemas/expense.py`.
-- [ ] T006 [P] Agregar en `backend/app/db/indexes.py` la colección `settlements` con dos índices:
+- [X] T006 [P] Agregar en `backend/app/db/indexes.py` la colección `settlements` con dos índices:
   - `account_list`: `{accountId: 1, isDeleted: 1, date: -1, createdAt: -1, _id: -1}`.
   - `client_request_unique`: `{accountId: 1, clientRequestId: 1}`, único, con `partialFilterExpression: {clientRequestId: {$type: "string"}}`.
-- [ ] T007 [P] Extender la auditoría en `backend/app/services/audit_service.py`:
+- [X] T007 [P] Extender la auditoría en `backend/app/services/audit_service.py`:
   - `AuditAction` agrega `settlement.created` y `settlement.deleted`.
   - `entityType` acepta `"settlement"`.
   - `metadata.source` se guarda tal cual.
   - El test `backend/tests/unit/test_audit_immutability.py` sigue pasando: no hay `update` ni `delete` sobre `audit_logs`.
-- [ ] T008 Renombrar `guard_expense_write` a `guard_money_write` en `backend/app/repositories/accounts.py`:
+- [X] T008 Renombrar `guard_expense_write` a `guard_money_write` en `backend/app/repositories/accounts.py`:
   - El contador de la base sigue siendo `expenseWriteSeq`, sin migración (research R4).
   - Actualizar las llamadas en `backend/app/services/expense_service.py` y en los tests de la 003.
   - Llamarlo sin participantes solo exige que la Cuenta esté abierta.
-- [ ] T009 Crear `backend/app/repositories/settlements.py`. Todas las funciones aceptan `session` opcional:
+- [X] T009 Crear `backend/app/repositories/settlements.py`. Todas las funciones aceptan `session` opcional:
   - `new_settlement_document(account, request, amount_minor, user_id)`, con `isDeleted: False`, la `currency` de la Cuenta y `createdAt` en UTC.
   - `insert`, `find_active(account_id, settlement_id)` y `find_by_client_request`.
   - `page(account_id, limit, after)`: paginación por clave sobre `(date, createdAt, _id)` descendentes, solo con `isDeleted: False`. Reutiliza el cursor de los gastos: mover `_encode_cursor` y `_decode_cursor` de `backend/app/services/expense_service.py` a `backend/app/core/cursor.py` como `encode_cursor` y `decode_cursor`, y usarlos desde los dos servicios sin cambiar el formato del cursor.
   - `soft_delete(account_id, settlement_id, user_id, session)`: `update_one` con `isDeleted: False` en el filtro; devuelve si actualizó.
   - `active_for_accounts(account_ids)`: proyección `{accountId, fromParticipantId, toParticipantId, amountMinor}`.
-- [ ] T010 [P] Agregar `active_for_balances(account_ids)` en `backend/app/repositories/expenses.py`:
+- [X] T010 [P] Agregar `active_for_balances(account_ids)` en `backend/app/repositories/expenses.py`:
   - Proyección `{accountId, amountMinor, paidById, participantIds}`.
   - Solo gastos con `isDeleted: False`, filtrados con `$in`.
-- [ ] T011 Agregar en `backend/tests/conftest.py` la fábrica `create_settlement(account, by_user, from_participant, to_participant, amount_minor=1000, date=None, deleted=False)`, que inserta el documento directamente para preparar escenarios.
+- [X] T011 Agregar en `backend/tests/conftest.py` la fábrica `create_settlement(account, by_user, from_participant, to_participant, amount_minor=1000, date=None, deleted=False)`, que inserta el documento directamente para preparar escenarios.
 
 ### Web
 
-- [ ] T012 Crear `web/src/components/accounts/AccountTabs.tsx`:
+- [X] T012 Crear `web/src/components/accounts/AccountTabs.tsx`:
   - Enlaces "Gastos" (`/accounts/[accountId]`) y "Saldos" (`/accounts/[accountId]/balances`), con `aria-current="page"` en la activa.
   - Usarlo en `web/src/app/(private)/accounts/[accountId]/page.tsx` y crear `web/src/app/(private)/accounts/[accountId]/balances/page.tsx` con el encabezado de la Cuenta y las pestañas (contenido vacío por ahora).
   - Test en `web/src/__tests__/components/AccountTabs.test.tsx`.
-- [ ] T013 [P] Agregar en `web/src/i18n/messages/es.json` y `en.json` las claves:
+- [X] T013 [P] Agregar en `web/src/i18n/messages/es.json` y `en.json` las claves:
   - `tabs.*`.
   - `balances.*`: te deben, debés, al día, sin deudas, gastos pendientes con plural, sugerencias, nada pendiente, marcar como pagado, diálogo, actualizar.
   - `settlements.*`: lista, vacío, campos, participante quitado, nuevo, eliminar, diálogo con "Continuar"/"Cancelar", ya no existe, validaciones.
@@ -136,13 +136,13 @@ compartido y las pestañas de la Cuenta en los clientes.
 
 ### Mobile
 
-- [ ] T014 Crear `mobile/src/components/accounts/AccountTabs.tsx`:
+- [X] T014 Crear `mobile/src/components/accounts/AccountTabs.tsx`:
   - Usa `SegmentedButtons` de React Native Paper y cambia de pestaña con `router.replace`.
   - Mostrarlo en `mobile/src/screens/expenses/AccountExpensesScreen.tsx`.
   - Crear la ruta `mobile/app/(app)/accounts/[accountId]/balances.tsx` con `mobile/src/screens/balances/AccountBalancesScreen.tsx` (vacía por ahora) y registrarla en `mobile/app/(app)/_layout.tsx`.
   - Regenerar las rutas tipadas con `expo start`.
   - Test en `mobile/src/__tests__/components/accountTabs.test.tsx`.
-- [ ] T015 [P] Agregar las mismas claves que T013 en `mobile/src/i18n/locales/es.json` y `en.json`, con interpolación con llaves simples y plurales `_one`/`_other`.
+- [X] T015 [P] Agregar las mismas claves que T013 en `mobile/src/i18n/locales/es.json` y `en.json`, con interpolación con llaves simples y plurales `_one`/`_other`.
 
 **Checkpoint**: el backend tiene el cálculo puro probado, el modelo y la auditoría. Los clientes
 tienen las pestañas "Gastos" y "Saldos", con "Saldos" vacía.
@@ -159,10 +159,10 @@ Leandro −30,00 y Javier −30,00, en Web y en Mobile (quickstart, escenarios 1
 
 ### Tests for User Story 1 ⚠️
 
-- [ ] T016 [P] [US1] Test de contrato en `backend/tests/contract/test_balances_contract.py`:
+- [X] T016 [P] [US1] Test de contrato en `backend/tests/contract/test_balances_contract.py`:
   - `GET /api/v1/accounts/{id}/balances` da `200 AccountBalances`: `currency`, `currencyDecimals`, `balances` con `isMe` solo en el participante del usuario, importes como texto, `pendingExpenses` y `suggestions`.
   - Responde `404 not_found` a quien no es miembro, a una Cuenta inexistente y a una dada de baja, siempre con el mismo cuerpo.
-- [ ] T017 [P] [US1] Test de integración en `backend/tests/integration/test_balances.py`:
+- [X] T017 [P] [US1] Test de integración en `backend/tests/integration/test_balances.py`:
   - La suma de `balances` es `"0.00"`.
   - Gasto eliminado: no cuenta.
   - Gasto pendiente por remoción del participante: no cuenta y suma 1 a `pendingExpenses`; al completarlo con `PUT`, vuelve a contar.
@@ -174,21 +174,21 @@ Leandro −30,00 y Javier −30,00, en Web y en Mobile (quickstart, escenarios 1
 
 ### Implementation for User Story 1
 
-- [ ] T018 [US1] Crear `backend/app/services/balance_service.py` con `get_account_balances(account_id, user_id)`:
+- [X] T018 [US1] Crear `backend/app/services/balance_service.py` con `get_account_balances(account_id, user_id)`:
   - Exige ser miembro.
   - Lee los gastos y los reembolsos activos de la Cuenta, aplica `compute_balances` y `suggest_transfers`, y arma `AccountBalances`.
   - Los nombres salen de los participantes de la Cuenta y los importes se formatean con `format_amount`.
   - No escribe importes ni nombres en los logs.
-- [ ] T019 [US1] Crear `backend/app/api/v1/balances.py` con `GET /accounts/{account_id}/balances` e incluir el router en `backend/app/main.py`.
-- [ ] T020 [US1] Regenerar `web/src/lib/api/schema.d.ts` y `mobile/src/services/api/schema.d.ts` con `npm run gen:api`, y agregar los alias de tipos en `web/src/lib/api/types.ts` y `mobile/src/services/api/types.ts`.
-- [ ] T021 [P] [US1] Test unitario en `web/src/__tests__/components/BalanceList.test.tsx`. Se escribe primero y tiene que fallar. Casos:
+- [X] T019 [US1] Crear `backend/app/api/v1/balances.py` con `GET /accounts/{account_id}/balances` e incluir el router en `backend/app/main.py`.
+- [X] T020 [US1] Regenerar `web/src/lib/api/schema.d.ts` y `mobile/src/services/api/schema.d.ts` con `npm run gen:api`, y agregar los alias de tipos en `web/src/lib/api/types.ts` y `mobile/src/services/api/types.ts`.
+- [X] T021 [P] [US1] Test unitario en `web/src/__tests__/components/BalanceList.test.tsx`. Se escribe primero y tiene que fallar. Casos:
   - Positivo, negativo y cero con `formatMoney` en `es` y en `en`.
   - Fila propia destacada con "Te deben 60,00", "Debés 30,00" o "Estás al día".
   - Aviso "1 gasto pendiente" que enlaza a la pestaña "Gastos".
   - Todos en cero: "No hay deudas".
-- [ ] T022 [US1] Crear `web/src/lib/balancesServer.ts` (`getBalances`) y `web/src/components/balances/BalanceList.tsx`. Mostrar la lista en `web/src/app/(private)/accounts/[accountId]/balances/page.tsx`, que llama a `notFound()` ante un `404`, con un botón "Actualizar" (`router.refresh()`).
-- [ ] T023 [P] [US1] Test unitario en `mobile/src/__tests__/screens/balances.test.tsx`. Se escribe primero y tiene que fallar. Mismas reglas que T021, más la recarga al volver a la pantalla (`useFocusEffect`) y con `RefreshControl`.
-- [ ] T024 [US1] Crear:
+- [X] T022 [US1] Crear `web/src/lib/balancesServer.ts` (`getBalances`) y `web/src/components/balances/BalanceList.tsx`. Mostrar la lista en `web/src/app/(private)/accounts/[accountId]/balances/page.tsx`, que llama a `notFound()` ante un `404`, con un botón "Actualizar" (`router.refresh()`).
+- [X] T023 [P] [US1] Test unitario en `mobile/src/__tests__/screens/balances.test.tsx`. Se escribe primero y tiene que fallar. Mismas reglas que T021, más la recarga al volver a la pantalla (`useFocusEffect`) y con `RefreshControl`.
+- [X] T024 [US1] Crear:
   - `mobile/src/services/api/settlements.ts` con `balances`.
   - `mobile/src/components/balances/BalanceList.tsx`.
   - El contenido de `mobile/src/screens/balances/AccountBalancesScreen.tsx`, con `RefreshControl` y `useFocusEffect`.
@@ -207,12 +207,12 @@ pagada, Leandro queda en 0,00 y queda una sola sugerencia (quickstart, escenario
 
 ### Tests for User Story 2 ⚠️
 
-- [ ] T025 [P] [US2] Test de contrato en `backend/tests/contract/test_settlements_create_contract.py`. `POST /api/v1/accounts/{id}/settlements`:
+- [X] T025 [P] [US2] Test de contrato en `backend/tests/contract/test_settlements_create_contract.py`. `POST /api/v1/accounts/{id}/settlements`:
   - Da `201 SettlementResponse` con `amount` como texto e `isExcluded: false`.
   - Da `422 validation_error` con: importe `"0"`, `"-1"`, `"10.555"` o `"1000000000"` (texto, para probar el máximo y no el tipo); importe como número (`10`); la misma persona en las dos puntas; fecha inválida; `currency` en el cuerpo; un campo desconocido; sin `clientRequestId`.
   - Da `422 invalid_participant` con una punta inexistente, quitada o de otra Cuenta.
   - Da `404` a quien no es miembro.
-- [ ] T026 [P] [US2] Test de integración en `backend/tests/integration/test_settlement_creation.py`:
+- [X] T026 [P] [US2] Test de integración en `backend/tests/integration/test_settlement_creation.py`:
   - `amountMinor` es entero y `currency` es la de la Cuenta.
   - Un participante desvinculado puede pagar y recibir.
   - Un importe mayor que la deuda se acepta e invierte el saldo.
@@ -226,7 +226,7 @@ pagada, Leandro queda en 0,00 y queda una sola sugerencia (quickstart, escenario
 
 ### Implementation for User Story 2
 
-- [ ] T027 [US2] Crear `backend/app/services/settlement_service.py` con `create_settlement(account_id, user_id, request, client)`:
+- [X] T027 [US2] Crear `backend/app/services/settlement_service.py` con `create_settlement(account_id, user_id, request, client)`:
   - Exige ser miembro y que la Cuenta esté abierta.
   - Las dos puntas tienen que ser participantes activos de la Cuenta; si no, `422 invalid_participant`.
   - Convierte el importe con `parse_amount` según la moneda de la Cuenta.
@@ -235,8 +235,8 @@ pagada, Leandro queda en 0,00 y queda una sola sugerencia (quickstart, escenario
     - Llama a `guard_money_write` con las dos puntas. Si no actualiza, relee la Cuenta y responde `409`, `404` o `422`.
     - Inserta el reembolso y registra `settlement.created` con `account_id` y `source`.
   - Agregar también `to_settlement_response(doc, account)`, con `isExcluded` y los nombres desde el arreglo completo de participantes.
-- [ ] T028 [US2] Crear `backend/app/api/v1/settlements.py` con `POST /accounts/{account_id}/settlements` (201) e incluir el router en `backend/app/main.py`. Después, regenerar los tipos en Web y en Mobile.
-- [ ] T029 [P] [US2] Test unitario en `web/src/__tests__/components/SuggestionList.test.tsx`. Se escribe primero y tiene que fallar. Casos:
+- [X] T028 [US2] Crear `backend/app/api/v1/settlements.py` con `POST /accounts/{account_id}/settlements` (201) e incluir el router en `backend/app/main.py`. Después, regenerar los tipos en Web y en Mobile.
+- [X] T029 [P] [US2] Test unitario en `web/src/__tests__/components/SuggestionList.test.tsx`. Se escribe primero y tiene que fallar. Casos:
   - Cada sugerencia muestra quién paga, a quién y el importe.
   - Sin sugerencias: "No hay nada pendiente".
   - "Marcar como pagado" abre un diálogo con los datos y la fecha de hoy, calculada después de hidratar, sin campos editables.
@@ -244,9 +244,9 @@ pagada, Leandro queda en 0,00 y queda una sola sugerencia (quickstart, escenario
   - "Cancelar" no envía nada.
   - En una Cuenta Cerrada no se ofrece la acción.
   - `account_closed` e `invalid_participant` muestran el mensaje traducido.
-- [ ] T030 [US2] Crear `web/src/app/actions/settlements.ts` (`"use server"`) con `createSettlementAction`, que hace `revalidatePath` de la pestaña. Crear `web/src/components/balances/SuggestionList.tsx` y `web/src/components/balances/MarkPaidDialog.tsx`, que reutiliza `ConfirmDialog`, y mostrarlos en la página de saldos.
-- [ ] T031 [P] [US2] Test unitario en `mobile/src/__tests__/screens/suggestions.test.tsx`. Se escribe primero y tiene que fallar. Mismas reglas que T029.
-- [ ] T032 [US2] Agregar `create` en `mobile/src/services/api/settlements.ts`. Crear `mobile/src/components/balances/SuggestionList.tsx`, con el diálogo de confirmación de `AccountBits`, y mostrarlo en `AccountBalancesScreen.tsx`. Después de confirmar, la pantalla se recarga.
+- [X] T030 [US2] Crear `web/src/app/actions/settlements.ts` (`"use server"`) con `createSettlementAction`, que hace `revalidatePath` de la pestaña. Crear `web/src/components/balances/SuggestionList.tsx` y `web/src/components/balances/MarkPaidDialog.tsx`, que reutiliza `ConfirmDialog`, y mostrarlos en la página de saldos.
+- [X] T031 [P] [US2] Test unitario en `mobile/src/__tests__/screens/suggestions.test.tsx`. Se escribe primero y tiene que fallar. Mismas reglas que T029.
+- [X] T032 [US2] Agregar `create` en `mobile/src/services/api/settlements.ts`. Crear `mobile/src/components/balances/SuggestionList.tsx`, con el diálogo de confirmación de `AccountBits`, y mostrarlo en `AccountBalancesScreen.tsx`. Después de confirmar, la pantalla se recarga.
 
 **Checkpoint**: US1 y US2 funcionan: se ven los saldos y se pueden saldar con las sugerencias.
 
@@ -261,7 +261,7 @@ reembolso aparece primero en la lista (quickstart, escenario 4).
 
 ### Tests for User Story 3 ⚠️
 
-- [ ] T033 [P] [US3] Test de contrato en `backend/tests/contract/test_settlements_list_contract.py`. `GET /api/v1/accounts/{id}/settlements`:
+- [X] T033 [P] [US3] Test de contrato en `backend/tests/contract/test_settlements_list_contract.py`. `GET /api/v1/accounts/{id}/settlements`:
   - Da `200 SettlementPage` ordenado por `date` desc y después `createdAt` desc.
   - Con 120 reembolsos se recorren las páginas de 50 sin repetidos.
   - Da `422 validation_error` con `limit` fuera de 1–100 o con un cursor inválido.
@@ -271,20 +271,20 @@ reembolso aparece primero en la lista (quickstart, escenario 4).
 
 ### Implementation for User Story 3
 
-- [ ] T034 [US3] Agregar `list_settlements(account_id, user_id, limit, cursor)` en `backend/app/services/settlement_service.py` y `GET /accounts/{account_id}/settlements` en `backend/app/api/v1/settlements.py`. Después, regenerar los tipos.
-- [ ] T035 [P] [US3] Test unitario en `web/src/__tests__/components/SettlementForm.test.tsx` y `SettlementList.test.tsx`. Se escribe primero y tiene que fallar. Casos:
+- [X] T034 [US3] Agregar `list_settlements(account_id, user_id, limit, cursor)` en `backend/app/services/settlement_service.py` y `GET /accounts/{account_id}/settlements` en `backend/app/api/v1/settlements.py`. Después, regenerar los tipos.
+- [X] T035 [P] [US3] Test unitario en `web/src/__tests__/components/SettlementForm.test.tsx` y `SettlementList.test.tsx`. Se escribe primero y tiene que fallar. Casos:
   - El formulario tiene quién paga y quién recibe (solo participantes activos), el importe en la moneda de la Cuenta y la fecha de hoy después de hidratar.
   - Rechaza la misma persona en las dos puntas y los errores de `parseAmountInput`.
   - En JPY no acepta decimales.
   - Envía `source: "manual"`.
   - La lista muestra fecha, quién pagó, quién recibió e importe, con la marca "Participante quitado" cuando corresponde, y tiene "Cargar más".
-- [ ] T036 [US3] Crear:
+- [X] T036 [US3] Crear:
   - `listSettlements` en `web/src/lib/balancesServer.ts` y `loadMoreSettlementsAction` en `web/src/app/actions/settlements.ts`.
   - `web/src/components/balances/SettlementForm.tsx` y `web/src/components/balances/SettlementList.tsx`.
   - La página `web/src/app/(private)/accounts/[accountId]/settlements/new/page.tsx`.
   - En la pestaña "Saldos", el botón "Registrar reembolso" (oculto si la Cuenta está Cerrada) y la lista debajo de las sugerencias.
-- [ ] T037 [P] [US3] Test unitario en `mobile/src/__tests__/screens/settlementForm.test.tsx`. Se escribe primero y tiene que fallar. Mismas reglas que T035, con el selector de fecha nativo. Además, en `AccountBalancesScreen` el botón "Registrar reembolso" navega a `settlements/new` y no se muestra si la Cuenta está Cerrada.
-- [ ] T038 [US3] Crear:
+- [X] T037 [P] [US3] Test unitario en `mobile/src/__tests__/screens/settlementForm.test.tsx`. Se escribe primero y tiene que fallar. Mismas reglas que T035, con el selector de fecha nativo. Además, en `AccountBalancesScreen` el botón "Registrar reembolso" navega a `settlements/new` y no se muestra si la Cuenta está Cerrada.
+- [X] T038 [US3] Crear:
   - `list` en `mobile/src/services/api/settlements.ts`.
   - `mobile/src/components/balances/SettlementList.tsx`.
   - `mobile/src/screens/balances/SettlementFormScreen.tsx`, que reutiliza el selector de fecha de `ExpenseFormScreen.tsx`.
@@ -306,7 +306,7 @@ vuelve a aparecer. Si otro miembro intenta eliminarlo de nuevo, ve el aviso de q
 
 ### Tests for User Story 4 ⚠️
 
-- [ ] T039 [P] [US4] Test de integración en `backend/tests/integration/test_settlement_deletion.py`. `DELETE /api/v1/accounts/{id}/settlements/{sid}`:
+- [X] T039 [P] [US4] Test de integración en `backend/tests/integration/test_settlement_deletion.py`. `DELETE /api/v1/accounts/{id}/settlements/{sid}`:
   - Da `204`, deja `isDeleted: true` con `deletedAt` y `deletedBy`, y el documento sigue en la base.
   - Registra `settlement.deleted` con `entityId` igual al id del reembolso, en la misma transacción.
   - Un segundo `DELETE` da `404`.
@@ -318,17 +318,17 @@ vuelve a aparecer. Si otro miembro intenta eliminarlo de nuevo, ve el aviso de q
 
 ### Implementation for User Story 4
 
-- [ ] T040 [US4] Agregar `delete_settlement(account_id, settlement_id, user_id, client)` en `backend/app/services/settlement_service.py`:
+- [X] T040 [US4] Agregar `delete_settlement(account_id, settlement_id, user_id, client)` en `backend/app/services/settlement_service.py`:
   - Exige ser miembro.
   - Dentro de `run_in_transaction`: `guard_money_write` sin participantes (si no actualiza, `409 account_closed`), después `soft_delete` (si no actualiza, `404`), y después registra `settlement.deleted`.
   - Agregar el endpoint `DELETE` en `backend/app/api/v1/settlements.py`.
-- [ ] T041 [P] [US4] Test unitario en `web/src/__tests__/components/SettlementList.test.tsx`. Se escribe primero y tiene que fallar. Casos:
+- [X] T041 [P] [US4] Test unitario en `web/src/__tests__/components/SettlementList.test.tsx`. Se escribe primero y tiene que fallar. Casos:
   - "Eliminar" abre un diálogo con "Continuar" y "Cancelar", y solo "Continuar" llama a la acción.
   - Ante `not_found` muestra "Este reembolso ya no existe" y recarga.
   - En una Cuenta Cerrada no se ofrece eliminar.
-- [ ] T042 [US4] Agregar `deleteSettlementAction` en `web/src/app/actions/settlements.ts` y el botón "Eliminar" con `ConfirmDialog` en `SettlementList.tsx`.
-- [ ] T043 [P] [US4] Test unitario en `mobile/src/__tests__/screens/settlementDelete.test.tsx`. Se escribe primero y tiene que fallar. Mismas reglas que T041.
-- [ ] T044 [US4] Agregar `remove` en `mobile/src/services/api/settlements.ts` y la acción de eliminar, con `ConfirmDialog`, en `mobile/src/components/balances/SettlementList.tsx`.
+- [X] T042 [US4] Agregar `deleteSettlementAction` en `web/src/app/actions/settlements.ts` y el botón "Eliminar" con `ConfirmDialog` en `SettlementList.tsx`.
+- [X] T043 [P] [US4] Test unitario en `mobile/src/__tests__/screens/settlementDelete.test.tsx`. Se escribe primero y tiene que fallar. Mismas reglas que T041.
+- [X] T044 [US4] Agregar `remove` en `mobile/src/services/api/settlements.ts` y la acción de eliminar, con `ConfirmDialog`, en `mobile/src/components/balances/SettlementList.tsx`.
 
 **Checkpoint**: US4 funciona por su lado.
 
@@ -344,7 +344,7 @@ de cada una y los totales separados por moneda, contando la Cerrada (quickstart,
 
 ### Tests for User Story 5 ⚠️
 
-- [ ] T045 [P] [US5] Test de integración en `backend/tests/integration/test_account_list_balances.py`. `GET /api/v1/accounts`:
+- [X] T045 [P] [US5] Test de integración en `backend/tests/integration/test_account_list_balances.py`. `GET /api/v1/accounts`:
   - Trae `myBalance` y `currencyDecimals` en cada `AccountSummary`.
   - `myBalance` coincide con el `BalanceEntry` de `isMe` de `GET .../balances` en cada Cuenta, incluida una Cerrada.
   - Una Cuenta sin gastos tiene `"0.00"`.
@@ -352,18 +352,18 @@ de cada una y los totales separados por moneda, contando la Cerrada (quickstart,
   - Una Cuenta abandonada no figura.
   - Una Cuenta dada de baja por el Owner no figura.
   - Se hacen solo dos consultas de saldos para todas las Cuentas.
-- [ ] T046 [P] [US5] Tests de rendimiento en `backend/tests/perf/test_balances_perf.py`:
+- [X] T046 [P] [US5] Tests de rendimiento en `backend/tests/perf/test_balances_perf.py`:
   - `GET .../balances` con 500 gastos y 100 reembolsos: p95 < 300 ms.
   - `GET /accounts` con 20 Cuentas de 500 gastos: p95 < 500 ms.
 
 ### Implementation for User Story 5
 
-- [ ] T047 [US5] Agregar `currency_decimals` y `my_balance` a `AccountSummary` en `backend/app/schemas/account.py`:
+- [X] T047 [US5] Agregar `currency_decimals` y `my_balance` a `AccountSummary` en `backend/app/schemas/account.py`:
   - Agregar `my_balances(accounts, user_id)` en `backend/app/services/balance_service.py`, que usa `expenses.active_for_balances` y `settlements.active_for_accounts` con todas las Cuentas en una consulta cada uno, y `compute_balances` por Cuenta.
   - Usarlo en `list_my_accounts` de `backend/app/services/account_service.py`.
   - Actualizar los tests de contrato de la 002 que comparan el cuerpo completo.
   - Regenerar los tipos.
-- [ ] T048 [P] [US5] Tests unitarios. Se escriben primero y tienen que fallar.
+- [X] T048 [P] [US5] Tests unitarios. Se escriben primero y tienen que fallar.
   - `web/src/__tests__/lib/balanceTotals.test.ts`. Casos de `totalsByCurrency(accounts)`:
     - Separa por moneda y nunca mezcla monedas.
     - Suma por separado los positivos ("Te deben") y los negativos ("Debés").
@@ -372,11 +372,11 @@ de cada una y los totales separados por moneda, contando la Cerrada (quickstart,
     - Respeta los decimales de cada moneda.
     - Con todo en cero no muestra totales.
   - `web/src/__tests__/components/BalanceSummary.test.tsx`: el saldo por Cuenta y la marca de Cerrada.
-- [ ] T049 [US5] Crear `web/src/lib/balanceTotals.ts` y `web/src/components/balances/BalanceSummary.tsx`:
+- [X] T049 [US5] Crear `web/src/lib/balanceTotals.ts` y `web/src/components/balances/BalanceSummary.tsx`:
   - Mostrar el resumen en `web/src/app/(private)/dashboard/page.tsx`, con los totales sobre todas las Cuentas y la lista de recientes con su saldo.
   - Agregar el saldo por Cuenta en `web/src/components/accounts/AccountList.tsx`.
-- [ ] T050 [P] [US5] Tests unitarios en `mobile/src/__tests__/utils/balanceTotals.test.ts` y `mobile/src/__tests__/screens/dashboardBalances.test.tsx`. Se escriben primero y tienen que fallar. Mismos casos que T048.
-- [ ] T051 [US5] Crear `mobile/src/utils/balanceTotals.ts` y `mobile/src/components/balances/BalanceSummary.tsx`. Mostrar el resumen en `mobile/src/screens/DashboardScreen.tsx` y el saldo por Cuenta en `AccountListItems` de `mobile/src/screens/accounts/AccountsScreen.tsx`.
+- [X] T050 [P] [US5] Tests unitarios en `mobile/src/__tests__/utils/balanceTotals.test.ts` y `mobile/src/__tests__/screens/dashboardBalances.test.tsx`. Se escriben primero y tienen que fallar. Mismos casos que T048.
+- [X] T051 [US5] Crear `mobile/src/utils/balanceTotals.ts` y `mobile/src/components/balances/BalanceSummary.tsx`. Mostrar el resumen en `mobile/src/screens/DashboardScreen.tsx` y el saldo por Cuenta en `AccountListItems` de `mobile/src/screens/accounts/AccountsScreen.tsx`.
 
 **Checkpoint**: las cinco User Stories funcionan por su lado.
 
@@ -384,10 +384,10 @@ de cada una y los totales separados por moneda, contando la Cerrada (quickstart,
 
 ## Phase 8: Polish & Cross-Cutting Concerns
 
-- [ ] T052 [P] Verificar que pasan los tests de paridad de catálogos (`web/src/__tests__/i18n/messagesParity.test.ts` y `mobile/src/__tests__/i18n/localesParity.test.ts`) y el de inmutabilidad de la auditoría con las claves y los módulos nuevos.
-- [ ] T053 [P] Revisar que ningún componente nuevo convierta importes a `number` para hacer cuentas. Buscar `parseFloat`, `Number(` y `* 100` en `web/src/**/balances*`, `web/src/lib/balanceTotals.ts`, `mobile/src/**/balances*` y `mobile/src/utils/balanceTotals.ts`. Revisar también que la página de saldos de la Web no tenga diferencias de hidratación.
-- [ ] T054 Actualizar `README.md` con una sección "Balances and settlements (feature 004)": rutas nuevas, endpoints y la regla de las sugerencias.
-- [ ] T055 Correr `uv run ruff check .` y `uv run ruff format --check .` en `backend/`; `npm run lint`, `npx tsc --noEmit` y `npm test` en `web/` y en `mobile/`; y `npx next build` en `web/`. Corregir lo que falle.
+- [X] T052 [P] Verificar que pasan los tests de paridad de catálogos (`web/src/__tests__/i18n/messagesParity.test.ts` y `mobile/src/__tests__/i18n/localesParity.test.ts`) y el de inmutabilidad de la auditoría con las claves y los módulos nuevos.
+- [X] T053 [P] Revisar que ningún componente nuevo convierta importes a `number` para hacer cuentas. Buscar `parseFloat`, `Number(` y `* 100` en `web/src/**/balances*`, `web/src/lib/balanceTotals.ts`, `mobile/src/**/balances*` y `mobile/src/utils/balanceTotals.ts`. Revisar también que la página de saldos de la Web no tenga diferencias de hidratación.
+- [X] T054 Actualizar `README.md` con una sección "Balances and settlements (feature 004)": rutas nuevas, endpoints y la regla de las sugerencias.
+- [X] T055 Correr `uv run ruff check .` y `uv run ruff format --check .` en `backend/`; `npm run lint`, `npx tsc --noEmit` y `npm test` en `web/` y en `mobile/`; y `npx next build` en `web/`. Corregir lo que falle.
 - [ ] T056 Validar los 11 escenarios manuales de `specs/004-balances-settlements/quickstart.md` en Web y en Mobile.
 
 ---

@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 
 import { AccountIcon } from "@/components/accounts/AccountIcon";
+import { AccountTabs } from "@/components/accounts/AccountTabs";
 import { ExpenseList } from "@/components/expenses/ExpenseList";
 import { getAccount } from "@/lib/accountsServer";
 import { ApiError } from "@/lib/api/errors";
@@ -55,6 +56,7 @@ export default async function AccountExpensesPage({ params }: AccountPageProps) 
           )}
         </span>
       </header>
+      <AccountTabs accountId={account.id} active="expenses" />
       <ExpenseList
         key={firstPage.items.map((i) => i.id).join()}
         account={account}

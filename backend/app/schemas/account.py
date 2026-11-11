@@ -127,10 +127,13 @@ class AccountSummary(CamelModel):
     name: str
     icon: AccountIcon
     currency: str
+    currency_decimals: int
     is_closed: bool
     is_owner: bool
     participant_count: int
     updated_at: datetime
+    # The user's participant balance in this account, same sign as BalanceEntry.amount.
+    my_balance: str
 
 
 class AccountResponse(CamelModel):

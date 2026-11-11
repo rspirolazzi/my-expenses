@@ -5,6 +5,7 @@ import { RefreshControl, SectionList, StyleSheet, View } from "react-native";
 import { ActivityIndicator, Button, Chip, Text } from "react-native-paper";
 
 import { AccountIcon } from "../../components/accounts/AccountBits";
+import { AccountTabs } from "../../components/accounts/AccountTabs";
 import { ExpenseListItem } from "../../components/expenses/ExpenseBits";
 import { ErrorText } from "../../components/FormBits";
 import { accountsApi } from "../../services/api/accounts";
@@ -116,6 +117,7 @@ export default function AccountExpensesScreen() {
             </Text>
             {account.isClosed && <Chip compact>{t("accounts.closedBadge")}</Chip>}
           </View>
+          <AccountTabs accountId={account.id} active="expenses" />
           <Text variant="labelMedium">{t("expenses.total")}</Text>
           <Text variant="headlineMedium">
             {formatMoney(total, account.currency, account.currencyDecimals, locale)}

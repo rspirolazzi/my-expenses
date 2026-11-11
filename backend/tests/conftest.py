@@ -241,3 +241,38 @@ def create_expense(db):
         return doc
 
     return _create
+
+
+@pytest.fixture
+def create_settlement(db):
+    """Insert a settlement directly to prepare scenarios (no clientRequestId, no audit)."""
+    from app.repositories import settlements as settlements_repo
+
+    async def _create(
+        account: dict[str, Any],
+        by_user: dict[str, Any],
+        from_participant: str,
+        to_participant: str,
+        amount_minor: int = 1000,
+        date: str | None = None,
+        deleted: bool = False,
+        created_at: datetime | None = None,
+    ) -> dict[str, Any]:
+        doc = settlements_repo.new_settlement_document(
+            account=account,
+            from_participant_id=from_participant,
+            to_participant_id=to_participant,
+            amount_minor=amount_minor,
+            settlement_date=datetime.now(UTC).date(),
+            created_by=by_user["_id"],
+            client_request_id=None,
+        )
+        if date is not None:
+            doc["date"] = date
+        if created_at is not None:
+            doc["createdAt"] = created_at
+        doc["isDeleted"] = deleted
+        doc["_id"] = await settlements_repo.insert(doc)
+        return doc
+
+    return _create
