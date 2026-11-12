@@ -218,7 +218,7 @@ desaparece para todos (quickstart, escenarios 8 y 9).
 - [X] T059 [P] Verificar que pasan los tests de paridad de catálogos (`web/src/__tests__/i18n/messagesParity.test.ts`, `mobile/src/__tests__/i18n/localesParity.test.ts`) y el de inmutabilidad de auditoría (`backend/tests/unit/test_audit_immutability.py`) con las claves y módulos nuevos
 - [X] T060 Actualizar `README.md` (rutas nuevas y el deep link `myexpenses://invite/<code>`) y la tabla de tests de `specs/002-account-management/quickstart.md` si cambió algún nombre de archivo
 - [X] T061 Correr `uv run ruff check .` y `uv run ruff format --check .` en `backend/`, `npm run lint`, `npx tsc --noEmit` y `npm test` en `web/` y `mobile/`, y `npx next build` en `web/`; corregir lo que falle
-- [ ] T062 Validar los 10 escenarios manuales de `specs/002-account-management/quickstart.md` en Web y en Mobile
+- [X] T062 Validar los 10 escenarios manuales de `specs/002-account-management/quickstart.md` en Web y en Mobile
 
 ---
 

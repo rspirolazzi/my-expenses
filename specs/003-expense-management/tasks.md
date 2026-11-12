@@ -229,7 +229,7 @@ el alta y la modificación con quién, cuándo y "90,00 → 120,00"; al eliminar
 - [X] T063 [P] Revisar que ningún componente nuevo convierte importes a `number` para hacer cuentas (búsqueda de `parseFloat`, `Number(` y `* 100` en `web/src/**/expenses*` y `mobile/src/**/expenses*`) y que la Web no tiene diferencias de hidratación en el listado (fechas y totales formateados igual en servidor y cliente)
 - [X] T064 Actualizar `README.md` (rutas nuevas de la Cuenta y de gastos, dependencia del selector de fecha) y la tabla de tests de `specs/003-expense-management/quickstart.md` si cambió algún nombre de archivo
 - [X] T065 Correr `uv run ruff check .` y `uv run ruff format --check .` en `backend/`, `npm run lint`, `npx tsc --noEmit` y `npm test` en `web/` y `mobile/`, y `npx next build` en `web/`; corregir lo que falle
-- [ ] T066 Validar los 13 escenarios manuales de `specs/003-expense-management/quickstart.md` en Web y en Mobile
+- [X] T066 Validar los 13 escenarios manuales de `specs/003-expense-management/quickstart.md` en Web y en Mobile
 
 ---
 
