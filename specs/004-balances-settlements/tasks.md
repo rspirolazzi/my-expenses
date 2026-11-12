@@ -388,7 +388,7 @@ de cada una y los totales separados por moneda, contando la Cerrada (quickstart,
 - [X] T053 [P] Revisar que ningún componente nuevo convierta importes a `number` para hacer cuentas. Buscar `parseFloat`, `Number(` y `* 100` en `web/src/**/balances*`, `web/src/lib/balanceTotals.ts`, `mobile/src/**/balances*` y `mobile/src/utils/balanceTotals.ts`. Revisar también que la página de saldos de la Web no tenga diferencias de hidratación.
 - [X] T054 Actualizar `README.md` con una sección "Balances and settlements (feature 004)": rutas nuevas, endpoints y la regla de las sugerencias.
 - [X] T055 Correr `uv run ruff check .` y `uv run ruff format --check .` en `backend/`; `npm run lint`, `npx tsc --noEmit` y `npm test` en `web/` y en `mobile/`; y `npx next build` en `web/`. Corregir lo que falle.
-- [ ] T056 Validar los 11 escenarios manuales de `specs/004-balances-settlements/quickstart.md` en Web y en Mobile.
+- [X] T056 Validar los 11 escenarios manuales de `specs/004-balances-settlements/quickstart.md` en Web y en Mobile.
 
 ---
 
