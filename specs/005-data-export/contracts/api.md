@@ -36,8 +36,8 @@ Nombres de archivo ([research.md](../research.md) R7), con la fecha UTC del día
 
 | Alcance | es | en |
 |---|---|---|
-| Una Cuenta | `mis-gastos_<slug>_<AAAA-MM-DD>.zip\|json` | `my-expenses_<slug>_<AAAA-MM-DD>.zip\|json` |
-| Todo | `mis-gastos_<AAAA-MM-DD>.zip\|json` | `my-expenses_<AAAA-MM-DD>.zip\|json` |
+| Una Cuenta | `chepagame_<slug>_<AAAA-MM-DD>.zip\|json` | `chepagame_<slug>_<AAAA-MM-DD>.zip\|json` |
+| Todo | `chepagame_<AAAA-MM-DD>.zip\|json` | `chepagame_<AAAA-MM-DD>.zip\|json` |
 
 `<slug>` es el nombre de la Cuenta sin acentos, en minúsculas, con `-` en lugar de espacios y
 símbolos, y como máximo 40 caracteres (`cuenta` / `account` si queda vacío).

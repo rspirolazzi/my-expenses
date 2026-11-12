@@ -1,6 +1,6 @@
 {
   "common": {
-    "appName": "Mis Gastos",
+    "appName": "ChePagame",
     "continue": "Continue",
     "save": "Save",
     "saving": "Saving…",
@@ -23,13 +23,13 @@
     "accountsSoon": "Coming soon"
   },
   "footer": {
-    "rights": "Mis Gastos. Split expenses with friends, hassle-free.",
+    "rights": "ChePagame. Split expenses with friends, hassle-free.",
     "privacy": "Privacy",
     "terms": "Terms"
   },
   "home": {
     "title": "Split expenses with friends, hassle-free",
-    "subtitle": "Add the group's expenses and Mis Gastos tells you who owes whom.",
+    "subtitle": "Add the group's expenses and ChePagame tells you who owes whom.",
     "cta": "Get started"
   },
   "pages": {
@@ -39,7 +39,7 @@
     },
     "about": {
       "title": "About us",
-      "body": "Mis Gastos is a project to make splitting expenses between friends simple and transparent."
+      "body": "ChePagame is a project to make splitting expenses between friends simple and transparent."
     },
     "contact": {
       "title": "Contact",

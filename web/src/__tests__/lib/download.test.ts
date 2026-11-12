@@ -2,8 +2,8 @@ import { fileNameFromDisposition, saveBlob } from "@/lib/download";
 
 it("prefers the UTF-8 file name", () => {
   const header =
-    "attachment; filename=\"mis-gastos_ano_2026-11-12.zip\"; filename*=UTF-8''mis-gastos_a%C3%B1o_2026-11-12.zip";
-  expect(fileNameFromDisposition(header, "export.zip")).toBe("mis-gastos_año_2026-11-12.zip");
+    "attachment; filename=\"chepagame_ano_2026-11-12.zip\"; filename*=UTF-8''chepagame_a%C3%B1o_2026-11-12.zip";
+  expect(fileNameFromDisposition(header, "export.zip")).toBe("chepagame_año_2026-11-12.zip");
 });
 
 it("falls back to the plain name and then to the default", () => {

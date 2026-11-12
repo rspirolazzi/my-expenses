@@ -1,10 +1,12 @@
 # Local development stack: MongoDB, the FastAPI backend and the Next.js web app.
 # All credentials are read from .env (see .env.example); none are written here.
 
+name: chepagame
+
 services:
   mongodb:
     image: mongo:8.0
-    container_name: myexpenses-mongodb
+    container_name: chepagame-mongodb
     restart: unless-stopped
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME:?Set MONGO_INITDB_ROOT_USERNAME in .env}
@@ -39,7 +41,7 @@ services:
 
   backend:
     build: ./backend
-    container_name: myexpenses-backend
+    container_name: chepagame-backend
     env_file: .env
     environment:
       # Inside the compose network MongoDB is reachable as "mongodb", not localhost: the backend
@@ -55,7 +57,7 @@ services:
 
   web:
     build: ./web
-    container_name: myexpenses-web
+    container_name: chepagame-web
     env_file: .env
     environment:
       API_INTERNAL_BASE_URL: http://backend:8000/api/v1

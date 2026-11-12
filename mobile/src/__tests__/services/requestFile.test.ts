@@ -29,7 +29,7 @@ it("downloads the bytes with the token, the language and the file name", async (
     fileResponse([80, 75], {
       "content-type": "application/zip",
       "content-disposition":
-        "attachment; filename=\"my-expenses_trip_2026-11-12.zip\"; filename*=UTF-8''my-expenses_trip_2026-11-12.zip",
+        "attachment; filename=\"chepagame_trip_2026-11-12.zip\"; filename*=UTF-8''chepagame_trip_2026-11-12.zip",
     }),
   );
   const file = await exportsApi.account("a1", "csv");
@@ -42,7 +42,7 @@ it("downloads the bytes with the token, the language and the file name", async (
   });
   expect(file).toEqual({
     bytes: new Uint8Array([80, 75]),
-    fileName: "my-expenses_trip_2026-11-12.zip",
+    fileName: "chepagame_trip_2026-11-12.zip",
     mimeType: "application/zip",
   });
 });

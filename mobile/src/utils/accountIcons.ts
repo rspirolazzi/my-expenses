@@ -56,7 +56,7 @@ export function isValidAccountName(name: string): boolean {
   return trimmed.length > 0 && trimmed.length <= ACCOUNT_NAME_MAX;
 }
 
-/** Accepts a bare invitation code or a pasted link (web or myexpenses://). */
+/** Accepts a bare invitation code or a pasted link (web or chepagame://). */
 export function extractInviteCode(value: string): string | null {
   const trimmed = value.trim();
   const fromLink = trimmed.match(/invite\/([A-Za-z0-9_-]+)/);

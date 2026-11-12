@@ -3,19 +3,19 @@ import type { ConfigContext, ExpoConfig } from "expo/config";
 // Google client IDs and URL schemes come from the environment (.env), never from the repository.
 export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
-  name: "Mis Gastos",
-  slug: "myexpenses",
+  name: "ChePagame",
+  slug: "chepagame",
   version: "1.0.0",
   orientation: "portrait",
   icon: "./assets/images/icon.png",
-  scheme: "myexpenses",
+  scheme: "chepagame",
   userInterfaceStyle: "automatic",
   ios: {
     icon: "./assets/expo.icon",
-    bundleIdentifier: "com.myexpenses.app",
+    bundleIdentifier: "com.chepagame.app",
   },
   android: {
-    package: "com.myexpenses.app",
+    package: "com.chepagame.app",
     adaptiveIcon: {
       backgroundColor: "#E6F4FE",
       foregroundImage: "./assets/images/android-icon-foreground.png",

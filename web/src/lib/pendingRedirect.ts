@@ -2,7 +2,7 @@ import { safeCallbackUrl } from "./safeCallbackUrl";
 
 // Where to go after flows that pass through several pages (sign-up → verify → currency, or a
 // code sign-in), so an invitation link opened without a session is not lost (FR-009).
-const KEY = "myexpenses.pendingRedirect";
+const KEY = "chepagame.pendingRedirect";
 
 export function savePendingRedirect(url: string | null | undefined): void {
   if (!url) return;

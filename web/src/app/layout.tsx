@@ -9,7 +9,7 @@ import { SiteFooter, SiteHeader } from "@/components/SiteHeader";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Mis Gastos",
+  title: "ChePagame",
   description: "Split group expenses simply and transparently.",
 };
 

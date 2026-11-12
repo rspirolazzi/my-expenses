@@ -64,7 +64,7 @@ snapshot y la auditoría. Las dos User Stories los usan.
 ### Backend
 
 - [X] T003 [P] Crear `backend/app/core/export_labels.py` con `LABELS: dict[Language, ...]` para `es` y `en` (research R5, R7; data-model "Tablas CSV"):
-  - Nombres de archivo de las tablas (`cuenta.csv` / `account.csv`, ..., `perfil.csv` / `profile.csv`) y prefijo del archivo descargado (`mis-gastos` / `my-expenses`).
+  - Nombres de archivo de las tablas (`cuenta.csv` / `account.csv`, ..., `perfil.csv` / `profile.csv`) y prefijo del archivo descargado (`chepagame` / `chepagame`).
   - Encabezados de cada columna de cada tabla.
   - Sí/No, las 11 categorías (`other`, `home`, `car`, `hotel`, `beach`, `food`, `money`, `travel`, `party`, `shopping`, `sports`), idioma y tema.
   - Test en `backend/tests/unit/test_export_labels.py`: `es` y `en` tienen exactamente las mismas claves y ninguna está vacía.
@@ -97,7 +97,7 @@ snapshot y la auditoría. Las dos User Stories los usan.
   - `render_json`: `formatVersion`, `exportedAt` con `Z`, `language`, `scope`, claves en `camelCase` iguales en `es` y en `en`; importes como texto; el texto original sin apóstrofo.
   - CSV y JSON del mismo `AccountExport` tienen la misma cantidad de filas por tabla.
   - `slugify`: acentos, espacios, símbolos, nombre vacío (`cuenta` / `account`) y tope de 40 caracteres.
-  - `file_name(scope, slug, format, language, exported_at)`: `mis-gastos_vacaciones_2026-11-12.zip`, `my-expenses_2026-11-12.json`; `content_disposition(...)` con `filename` ASCII y `filename*=UTF-8''`.
+  - `file_name(scope, slug, format, language, exported_at)`: `chepagame_vacaciones_2026-11-12.zip`, `chepagame_2026-11-12.json`; `content_disposition(...)` con `filename` ASCII y `filename*=UTF-8''`.
 - [X] T010 Crear `backend/app/services/export_render.py` sin I/O, hasta que pase T009: `render_csv_zip`, `render_json`, `slugify`, `file_name` y `content_disposition`, con `csv`, `zipfile` (`ZIP_DEFLATED`), `json` e `io.BytesIO` (research R5–R8, contracts "Headers de la respuesta").
 
 ### Web
@@ -180,7 +180,7 @@ en JSON y en CSV y obtiene su perfil y las dos Cuentas completas, cada una en su
   - ZIP con `perfil.csv` / `profile.csv` en la raíz y una carpeta `<slug>_<últimos 6 del id>` por Cuenta con las siete tablas; dos Cuentas con el mismo nombre no chocan.
   - JSON con `scope: "all"`, `profile` y `accounts`.
   - Un nombre de perfil que empieza con `=` sale protegido en `perfil.csv`.
-- [X] T030 [P] [US2] Test de contrato en `backend/tests/contract/test_my_export_contract.py`: `GET /api/v1/users/me/export` con `format=json` y `csv` da `200` con los headers del contrato y el nombre `mis-gastos_<fecha>`; `422` con `format` inválido; `401` sin token.
+- [X] T030 [P] [US2] Test de contrato en `backend/tests/contract/test_my_export_contract.py`: `GET /api/v1/users/me/export` con `format=json` y `csv` da `200` con los headers del contrato y el nombre `chepagame_<fecha>`; `422` con `format` inválido; `401` sin token.
 - [X] T031 [P] [US2] Test de integración en `backend/tests/integration/test_my_export.py`:
   - Incluye las Cuentas abiertas y Cerradas de las que es miembro; no las que abandonó, las dadas de baja ni las ajenas (FR-007).
   - Usuario sin Cuentas: solo el perfil.

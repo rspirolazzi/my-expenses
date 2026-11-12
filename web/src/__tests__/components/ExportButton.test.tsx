@@ -44,7 +44,7 @@ beforeEach(() => {
 });
 
 it("exports in two clicks: Export, then the format (SC-002)", async () => {
-  fetchMock.mockResolvedValueOnce(fileResponse("mis-gastos_vacaciones_2026-11-12.zip"));
+  fetchMock.mockResolvedValueOnce(fileResponse("chepagame_vacaciones_2026-11-12.zip"));
   renderWithIntl(<ExportButton endpoint="/api/exports/accounts/a1" />);
   await userEvent.click(screen.getByRole("button", { name: "Exportar" }));
   expect(screen.getByRole("menuitem", { name: "JSON" })).toBeInTheDocument();
@@ -53,7 +53,7 @@ it("exports in two clicks: Export, then the format (SC-002)", async () => {
   expect(fetchMock).toHaveBeenCalledWith("/api/exports/accounts/a1?format=csv", {
     method: "POST",
   });
-  expect(save.mock.calls[0][1]).toBe("mis-gastos_vacaciones_2026-11-12.zip");
+  expect(save.mock.calls[0][1]).toBe("chepagame_vacaciones_2026-11-12.zip");
 });
 
 it("shows progress and ignores a second click while exporting (FR-018)", async () => {
@@ -66,7 +66,7 @@ it("shows progress and ignores a second click while exporting (FR-018)", async (
   expect(busy).toBeDisabled();
   await userEvent.click(busy);
   expect(fetchMock).toHaveBeenCalledTimes(1);
-  await act(async () => resolve(fileResponse("mis-gastos_2026-11-12.json")));
+  await act(async () => resolve(fileResponse("chepagame_2026-11-12.json")));
   await waitFor(() => expect(save).toHaveBeenCalledTimes(1));
   expect(screen.getByRole("button", { name: "Exportar" })).toBeEnabled();
 });
@@ -74,7 +74,7 @@ it("shows progress and ignores a second click while exporting (FR-018)", async (
 it("shows a clear error and retries the same format", async () => {
   fetchMock
     .mockRejectedValueOnce(new TypeError("Failed to fetch"))
-    .mockResolvedValueOnce(fileResponse("mis-gastos_2026-11-12.json"));
+    .mockResolvedValueOnce(fileResponse("chepagame_2026-11-12.json"));
   renderWithIntl(<ExportButton endpoint="/api/exports/me" />);
   await userEvent.click(screen.getByRole("button", { name: "Exportar" }));
   await userEvent.click(screen.getByRole("menuitem", { name: "JSON" }));

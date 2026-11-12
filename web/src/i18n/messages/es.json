@@ -1,6 +1,6 @@
 {
   "common": {
-    "appName": "Mis Gastos",
+    "appName": "ChePagame",
     "continue": "Continuar",
     "save": "Guardar",
     "saving": "Guardando…",
@@ -23,13 +23,13 @@
     "accountsSoon": "Disponible pronto"
   },
   "footer": {
-    "rights": "Mis Gastos. Dividí gastos entre amigos sin vueltas.",
+    "rights": "ChePagame. Dividí gastos entre amigos sin vueltas.",
     "privacy": "Privacidad",
     "terms": "Términos"
   },
   "home": {
     "title": "Dividí gastos con amigos, sin vueltas",
-    "subtitle": "Cargá los gastos del grupo y Mis Gastos te dice quién le debe a quién.",
+    "subtitle": "Cargá los gastos del grupo y ChePagame te dice quién le debe a quién.",
     "cta": "Empezar"
   },
   "pages": {
@@ -39,7 +39,7 @@
     },
     "about": {
       "title": "Quiénes somos",
-      "body": "Mis Gastos es un proyecto para que dividir gastos entre amigos sea simple y transparente."
+      "body": "ChePagame es un proyecto para que dividir gastos entre amigos sea simple y transparente."
     },
     "contact": {
       "title": "Contacto",
@@ -454,7 +454,7 @@
     "lastUpdated": "Última actualización: 12 de noviembre de 2026.",
     "privacy": {
       "title": "Privacidad",
-      "intro": "Esta página explica qué datos guarda Mis Gastos y qué hace con ellos.",
+      "intro": "Esta página explica qué datos guarda ChePagame y qué hace con ellos.",
       "sections": {
         "data": {
           "title": "Qué datos guardamos",
@@ -488,10 +488,10 @@
     },
     "terms": {
       "title": "Términos",
-      "intro": "Al usar Mis Gastos aceptás estas condiciones.",
+      "intro": "Al usar ChePagame aceptás estas condiciones.",
       "sections": {
         "service": {
-          "title": "Qué es Mis Gastos",
+          "title": "Qué es ChePagame",
           "body": "Una herramienta para registrar gastos compartidos y calcular quién le debe a quién. La app no mueve dinero: los pagos entre participantes se hacen por fuera de ella."
         },
         "access": {

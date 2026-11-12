@@ -99,8 +99,8 @@ Decisiones técnicas de la feature 005. Parten de lo construido en las features 
   - Exportar todo: `perfil.csv` (`profile.csv`) en la raíz y una carpeta por Cuenta con los siete
     CSV. La carpeta se llama con el nombre de la Cuenta pasado a slug ASCII más los últimos 6
     caracteres de su id, para que dos Cuentas con el mismo nombre no choquen.
-  - Archivo descargado: `mis-gastos_<slug-de-la-cuenta>_<AAAA-MM-DD>.zip|json` y
-    `mis-gastos_<AAAA-MM-DD>.zip|json` para todo (`my-expenses_...` en inglés). La fecha es el día
+  - Archivo descargado: `chepagame_<slug-de-la-cuenta>_<AAAA-MM-DD>.zip|json` y
+    `chepagame_<AAAA-MM-DD>.zip|json` para todo (`chepagame_...` en inglés). La fecha es el día
     UTC de la exportación (FR-012).
 - **Rationale**: identifica contenido y fecha; los slugs ASCII evitan problemas con nombres de
   archivo en Windows, Android e iOS. El nombre UTF-8 completo va en `filename*`.

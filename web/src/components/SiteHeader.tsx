@@ -13,7 +13,7 @@ export function SiteHeader({ user }: { user: UserResponse | null }) {
   return (
     <header className="site-header">
       <Link href="/" className="brand">
-        Mis Gastos
+        ChePagame
       </Link>
       <nav aria-label="main">
         <Link href="/">{t("home")}</Link>

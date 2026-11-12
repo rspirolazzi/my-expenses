@@ -52,5 +52,5 @@ it("goes to the verification step without putting the email in the URL", async (
     expect.objectContaining({ email: "ana@mail.com", password: "secret-123" }),
   );
   expect(router.push).toHaveBeenCalledWith("/verify-email");
-  expect(window.sessionStorage.getItem("myexpenses.pendingEmail")).toBe("ana@mail.com");
+  expect(window.sessionStorage.getItem("chepagame.pendingEmail")).toBe("ana@mail.com");
 });

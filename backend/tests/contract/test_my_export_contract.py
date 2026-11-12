@@ -16,7 +16,7 @@ async def test_json_export(client, create_user):
     assert response.status_code == 200
     assert response.headers["content-type"] == "application/json; charset=utf-8"
     assert response.headers["cache-control"] == "no-store"
-    assert response.headers["content-disposition"].startswith('attachment; filename="mis-gastos_2')
+    assert response.headers["content-disposition"].startswith('attachment; filename="chepagame_2')
     document = response.json()
     assert (document["scope"], document["accounts"]) == ("all", [])
     assert set(document["profile"]) == {

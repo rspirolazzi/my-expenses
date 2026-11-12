@@ -1,6 +1,6 @@
 {
   "common": {
-    "appName": "Mis Gastos",
+    "appName": "ChePagame",
     "continue": "Continuar",
     "save": "Guardar",
     "saving": "Guardando…",
@@ -23,13 +23,13 @@
     "accountsSoon": "Disponible pronto"
   },
   "footer": {
-    "rights": "Mis Gastos. Dividí gastos entre amigos sin vueltas.",
+    "rights": "ChePagame. Dividí gastos entre amigos sin vueltas.",
     "privacy": "Privacidad",
     "terms": "Términos"
   },
   "home": {
     "title": "Dividí gastos con amigos, sin vueltas",
-    "subtitle": "Cargá los gastos del grupo y Mis Gastos te dice quién le debe a quién.",
+    "subtitle": "Cargá los gastos del grupo y ChePagame te dice quién le debe a quién.",
     "cta": "Empezar"
   },
   "pages": {
@@ -39,7 +39,7 @@
     },
     "about": {
       "title": "Quiénes somos",
-      "body": "Mis Gastos es un proyecto para que dividir gastos entre amigos sea simple y transparente."
+      "body": "ChePagame es un proyecto para que dividir gastos entre amigos sea simple y transparente."
     },
     "contact": {
       "title": "Contacto",

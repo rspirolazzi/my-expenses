@@ -1,6 +1,6 @@
-# Mis Gastos (MyExpenses) Constitution
+# ChePagame Constitution
 
-**Mis Gastos** es una plataforma multiplataforma (Web y App Mobile) para gestionar y simplificar la
+**ChePagame** es una plataforma multiplataforma (Web y App Mobile) para gestionar y simplificar la
 división de gastos grupales entre personas de forma intuitiva, transparente y sin fricciones.
 
 ## Core Principles
@@ -300,4 +300,4 @@ constitución.
 - El cumplimiento se revisa en el Constitution Check de cada plan y en la revisión de cada cambio;
   toda complejidad adicional MUST justificarse por escrito.
 
-**Version**: 4.4.0 | **Ratified**: 2026-11-04 | **Last Amended**: 2026-11-06
+**Version**: 4.4.1 | **Ratified**: 2026-11-04 | **Last Amended**: 2026-11-12

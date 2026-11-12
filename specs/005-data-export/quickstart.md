@@ -43,7 +43,7 @@ Los endpoints están en [contracts/api.md](contracts/api.md) y el contenido de l
 ## Escenarios manuales
 
 1. **JSON de una Cuenta (US1)**: en "Vacaciones", tocar "Exportar" y elegir "JSON".
-   - Esperado: se descarga `mis-gastos_vacaciones_<fecha>.json` en dos clics. Tiene el gasto de
+   - Esperado: se descarga `chepagame_vacaciones_<fecha>.json` en dos clics. Tiene el gasto de
      90.00 con tres partes de 30.00, el reembolso de Leandro a A y los saldos `30.00`, `0.00` y
      `-30.00`, que suman cero. No hay emails ni el código de invitación.
 2. **CSV de una Cuenta (US1)**: elegir "CSV (planilla)".
@@ -63,7 +63,7 @@ Los endpoints están en [contracts/api.md](contracts/api.md) y el contenido de l
    - Esperado: funciona igual y `cuenta.csv` dice "Cerrada: Sí".
 6. **Inglés**: cambiar el idioma del Perfil a English y exportar en CSV.
    - Esperado: archivos `account.csv`, `expenses.csv`, ...; encabezados y "Yes"/"No" en inglés;
-     importes y fechas iguales que en español. El archivo se llama `my-expenses_...`.
+     importes y fechas iguales que en español. El archivo se llama `chepagame_...`.
 7. **Moneda sin decimales**: exportar la Cuenta en JPY.
    - Esperado: importes sin decimales (`1500`).
 8. **Ajeno**: con el usuario C, pedir `GET /api/v1/accounts/<id de Vacaciones>/export?format=json`
@@ -76,7 +76,7 @@ Los endpoints están en [contracts/api.md](contracts/api.md) y el contenido de l
 10. **Mobile**: repetir los escenarios 1, 2 y 9 en la App.
     - Esperado: se abre la hoja de compartir del sistema con el archivo; guardarlo o enviarlo por
       otra App funciona. Cerrar la hoja sin elegir no muestra error.
-11. **Progreso y errores**: con el backend detenido (`docker stop myexpenses-backend`), exportar.
+11. **Progreso y errores**: con el backend detenido (`docker stop chepagame-backend`), exportar.
     - Esperado: el botón muestra el progreso y no responde a un segundo toque; después aparece un
       error claro con "Reintentar". Al volver a levantar el backend, reintentar funciona.
 12. **Auditoría**: consultar `audit_logs` en MongoDB.

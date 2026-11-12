@@ -22,14 +22,14 @@ class Settings(BaseSettings):
 
     mongodb_uri: str
     mongodb_host_override: str | None = None
-    mongodb_db_name: str = "myexpenses"
-    mongodb_test_db_name: str = "myexpenses_test"
+    mongodb_db_name: str = "chepagame"
+    mongodb_test_db_name: str = "chepagame_test"
 
     jwt_secret: str = Field(min_length=32)
     jwt_algorithm: str = "HS256"
     jwt_access_token_expire_minutes: int = 15
-    jwt_issuer: str = "myexpenses-api"
-    jwt_audience: str = "myexpenses-clients"
+    jwt_issuer: str = "chepagame-api"
+    jwt_audience: str = "chepagame-clients"
     refresh_token_expire_days: int = 30
 
     code_hash_secret: str = Field(min_length=32)

@@ -54,7 +54,7 @@ def _error_response(
 
 def create_app() -> FastAPI:
     app = FastAPI(
-        title="Mis Gastos API",
+        title="ChePagame API",
         version="1.0.0",
         openapi_url="/api/v1/openapi.json",
         docs_url="/api/v1/docs",

@@ -1,6 +1,6 @@
 {
   "common": {
-    "appName": "Mis Gastos",
+    "appName": "ChePagame",
     "continue": "Continue",
     "save": "Save",
     "saving": "Saving…",
@@ -23,13 +23,13 @@
     "accountsSoon": "Coming soon"
   },
   "footer": {
-    "rights": "Mis Gastos. Split expenses with friends, hassle-free.",
+    "rights": "ChePagame. Split expenses with friends, hassle-free.",
     "privacy": "Privacy",
     "terms": "Terms"
   },
   "home": {
     "title": "Split expenses with friends, hassle-free",
-    "subtitle": "Add the group's expenses and Mis Gastos tells you who owes whom.",
+    "subtitle": "Add the group's expenses and ChePagame tells you who owes whom.",
     "cta": "Get started"
   },
   "pages": {
@@ -39,7 +39,7 @@
     },
     "about": {
       "title": "About us",
-      "body": "Mis Gastos is a project to make splitting expenses between friends simple and transparent."
+      "body": "ChePagame is a project to make splitting expenses between friends simple and transparent."
     },
     "contact": {
       "title": "Contact",
@@ -454,7 +454,7 @@
     "lastUpdated": "Last updated: November 12, 2026.",
     "privacy": {
       "title": "Privacy",
-      "intro": "This page explains what data Mis Gastos keeps and what it does with it.",
+      "intro": "This page explains what data ChePagame keeps and what it does with it.",
       "sections": {
         "data": {
           "title": "What data we keep",
@@ -488,10 +488,10 @@
     },
     "terms": {
       "title": "Terms",
-      "intro": "By using Mis Gastos you accept these terms.",
+      "intro": "By using ChePagame you accept these terms.",
       "sections": {
         "service": {
-          "title": "What Mis Gastos is",
+          "title": "What ChePagame is",
           "body": "A tool to record shared expenses and work out who owes whom. The app does not move money: payments between participants happen outside of it."
         },
         "access": {

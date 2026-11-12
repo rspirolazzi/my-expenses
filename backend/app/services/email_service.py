@@ -57,7 +57,7 @@ capture: list[SentEmail] | None = None
 def render(template: EmailTemplate, language: str, context: dict[str, Any]) -> tuple[str, str]:
     tpl = _env.get_template(f"{language}/{template}.html")
     module = tpl.make_module(context)
-    subject = str(getattr(module, "subject", "Mis Gastos")).strip()
+    subject = str(getattr(module, "subject", "ChePagame")).strip()
     return subject, str(module)
 
 

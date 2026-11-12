@@ -133,7 +133,7 @@ mobile/
 ├── app/(app)/accounts/index.tsx              # Mis Cuentas
 ├── app/(app)/accounts/new.tsx
 ├── app/(app)/accounts/[accountId].tsx
-├── app/invite/[code].tsx                     # deep link myexpenses://invite/<code>, fuera de los grupos protegidos
+├── app/invite/[code].tsx                     # deep link chepagame://invite/<code>, fuera de los grupos protegidos
 ├── app/(app)/join.tsx                        # unirse pegando el código
 └── src/
     ├── screens/accounts/                     # pantallas reutilizadas por las rutas

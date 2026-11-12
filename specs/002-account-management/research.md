@@ -88,7 +88,7 @@ paquete oficial de Expo).
     `/login?callbackUrl=/invite/<code>` y se vuelve sola (FR-009). Las escrituras son Server Actions
     que llaman al backend con el token de la sesión. "Accounts" del menú de usuario se habilita.
   - **Mobile**: pantallas en `(app)/accounts`. La invitación llega por deep link
-    `myexpenses://invite/<code>` o pegando el código en "Unirme a una Cuenta". Si el usuario no tiene
+    `chepagame://invite/<code>` o pegando el código en "Unirme a una Cuenta". Si el usuario no tiene
     sesión, `usePendingInvite` guarda el código en memoria y lo abre al terminar de loguearse.
     Compartir usa `Share` de React Native con el enlace web.
   - **Ambos**: diálogos de confirmación para quitar, salir, cerrar, regenerar y dar de baja; el de

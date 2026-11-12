@@ -55,7 +55,7 @@ feature 001 funcionando ([quickstart 001](../001-user-auth-profile/quickstart.md
    - Esperado: diálogo con "Continuar" y "Cancelar"; con "Cancelar" no cambia nada; con "Continuar"
      desaparece del panel de A y de B, el enlace deja de funcionar y en la base queda
      `isDeleted: true`.
-10. **Mobile**: repetir 1, 2 (abriendo `myexpenses://invite/<code>` o pegando el código), 6 y 9 en la
+10. **Mobile**: repetir 1, 2 (abriendo `chepagame://invite/<code>` o pegando el código), 6 y 9 en la
     App.
 
 ## Criterio de listo

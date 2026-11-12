@@ -15,9 +15,9 @@ beforeEach(() => {
 
 it("writes the file to the cache and opens the share sheet", async () => {
   const bytes = new Uint8Array([123, 125]);
-  await shareFile(bytes, "mis-gastos_2026-11-12.json", "application/json; charset=utf-8");
-  expect(files.get("file:///cache/exports/mis-gastos_2026-11-12.json")).toBe(bytes);
-  expect(share).toHaveBeenCalledWith("file:///cache/exports/mis-gastos_2026-11-12.json", {
+  await shareFile(bytes, "chepagame_2026-11-12.json", "application/json; charset=utf-8");
+  expect(files.get("file:///cache/exports/chepagame_2026-11-12.json")).toBe(bytes);
+  expect(share).toHaveBeenCalledWith("file:///cache/exports/chepagame_2026-11-12.json", {
     mimeType: "application/json",
     UTI: "public.json",
   });
@@ -40,10 +40,10 @@ it("fails clearly when the device cannot share", async () => {
 it("reads the file name from Content-Disposition", () => {
   expect(
     fileNameFromDisposition(
-      "attachment; filename=\"a.zip\"; filename*=UTF-8''mis-gastos_a%C3%B1o_2026-11-12.zip",
+      "attachment; filename=\"a.zip\"; filename*=UTF-8''chepagame_a%C3%B1o_2026-11-12.zip",
       "x",
     ),
-  ).toBe("mis-gastos_año_2026-11-12.zip");
+  ).toBe("chepagame_año_2026-11-12.zip");
   expect(fileNameFromDisposition('attachment; filename="b.json"', "x")).toBe("b.json");
   expect(fileNameFromDisposition(null, "export.zip")).toBe("export.zip");
 });

@@ -179,7 +179,7 @@ la constitución.
 ## R13. Tests
 
 - **Decision**:
-  - **Backend**: pytest con un MongoDB real (el del compose, base `myexpenses_test`, que se borra
+  - **Backend**: pytest con un MongoDB real (el del compose, base `chepagame_test`, que se borra
     entre módulos), `httpx.AsyncClient` sobre la app ASGI, `EMAIL_DELIVERY=console`, y Google
     simulado inyectando un verificador falso por dependencia.
   - **Web**: Jest (`next/jest`) + React Testing Library para formularios y hooks.

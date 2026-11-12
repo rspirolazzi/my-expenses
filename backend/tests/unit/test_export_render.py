@@ -338,17 +338,17 @@ def test_slugify(text: str, expected: str) -> None:
 
 
 def test_file_names() -> None:
-    assert file_name("vacaciones", "csv", "es", NOW) == "mis-gastos_vacaciones_2026-11-12.zip"
-    assert file_name("", "json", "es", NOW) == "mis-gastos_cuenta_2026-11-12.json"
-    assert file_name(None, "json", "en", NOW) == "my-expenses_2026-11-12.json"
-    assert file_name(None, "csv", "es", NOW) == "mis-gastos_2026-11-12.zip"
+    assert file_name("vacaciones", "csv", "es", NOW) == "chepagame_vacaciones_2026-11-12.zip"
+    assert file_name("", "json", "es", NOW) == "chepagame_cuenta_2026-11-12.json"
+    assert file_name(None, "json", "en", NOW) == "chepagame_2026-11-12.json"
+    assert file_name(None, "csv", "es", NOW) == "chepagame_2026-11-12.zip"
 
 
 def test_content_disposition() -> None:
-    value = content_disposition("mis-gastos_vacaciones_2026-11-12.zip")
+    value = content_disposition("chepagame_vacaciones_2026-11-12.zip")
     assert value == (
-        'attachment; filename="mis-gastos_vacaciones_2026-11-12.zip"; '
-        "filename*=UTF-8''mis-gastos_vacaciones_2026-11-12.zip"
+        'attachment; filename="chepagame_vacaciones_2026-11-12.zip"; '
+        "filename*=UTF-8''chepagame_vacaciones_2026-11-12.zip"
     )
 
 

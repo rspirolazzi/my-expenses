@@ -1,7 +1,7 @@
 [project]
-name = "myexpenses-backend"
+name = "chepagame-backend"
 version = "0.1.0"
-description = "Mis Gastos REST API"
+description = "ChePagame REST API"
 requires-python = ">=3.13,<3.14"
 dependencies = [
     "fastapi",

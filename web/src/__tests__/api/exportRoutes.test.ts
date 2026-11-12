@@ -45,7 +45,7 @@ it("forwards the file with the user's language, not the browser's", async () => 
       status: 200,
       headers: {
         "Content-Type": "application/zip",
-        "Content-Disposition": 'attachment; filename="my-expenses_trip_2026-11-12.zip"',
+        "Content-Disposition": 'attachment; filename="chepagame_trip_2026-11-12.zip"',
         "X-Internal": "secret",
       },
     }),
@@ -64,7 +64,7 @@ it("forwards the file with the user's language, not the browser's", async () => 
   expect(response.status).toBe(200);
   expect(response.headers.get("content-type")).toBe("application/zip");
   expect(response.headers.get("content-disposition")).toBe(
-    'attachment; filename="my-expenses_trip_2026-11-12.zip"',
+    'attachment; filename="chepagame_trip_2026-11-12.zip"',
   );
   expect(response.headers.get("cache-control")).toBe("no-store");
   expect(response.headers.get("x-internal")).toBeNull();
@@ -96,7 +96,7 @@ it("exports all my data from the profile endpoint", async () => {
       status: 200,
       headers: {
         "Content-Type": "application/json; charset=utf-8",
-        "Content-Disposition": 'attachment; filename="my-expenses_2026-11-12.json"',
+        "Content-Disposition": 'attachment; filename="chepagame_2026-11-12.json"',
       },
     }),
   );

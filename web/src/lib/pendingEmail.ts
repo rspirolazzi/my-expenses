@@ -1,6 +1,6 @@
 // The email being verified is kept in sessionStorage instead of the URL, so it does not end up in
 // browser history or server logs.
-const KEY = "myexpenses.pendingEmail";
+const KEY = "chepagame.pendingEmail";
 
 export function savePendingEmail(email: string): void {
   try {

@@ -1,4 +1,4 @@
-# Mis Gastos (MyExpenses)
+# ChePagame
 
 Group expense splitting for Web and Mobile. This repository has three sibling projects:
 
@@ -45,7 +45,7 @@ docker compose up -d --build
   `/invite/<code>` (signing in or up from there comes back to the invitation) and `/join` to paste a
   code.
 - Mobile: the same screens under "Mis Cuentas"; invitations open with the deep link
-  `myexpenses://invite/<code>` or by pasting the code in "Join with a code". Shared links use
+  `chepagame://invite/<code>` or by pasting the code in "Join with a code". Shared links use
   `EXPO_PUBLIC_WEB_BASE_URL`.
 
 ## Expenses (feature 003)
@@ -98,7 +98,7 @@ docker compose up -d --build
 ## Tests
 
 ```bash
-cd backend && uv run pytest          # needs the compose MongoDB running; uses myexpenses_test
+cd backend && uv run pytest          # needs the compose MongoDB running; uses chepagame_test
 cd backend && uv run pytest -m perf  # latency goals (optional)
 cd web && npm test
 cd mobile && npm test

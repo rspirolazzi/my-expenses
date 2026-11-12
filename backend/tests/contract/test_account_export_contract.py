@@ -41,8 +41,8 @@ async def test_json_export(client, create_user, create_account, create_expense):
     assert response.headers["content-type"] == "application/json; charset=utf-8"
     assert response.headers["cache-control"] == "no-store"
     disposition = response.headers["content-disposition"]
-    assert disposition.startswith('attachment; filename="mis-gastos_vacaciones_')
-    assert ".json\"; filename*=UTF-8''mis-gastos_vacaciones_" in disposition
+    assert disposition.startswith('attachment; filename="chepagame_vacaciones_')
+    assert ".json\"; filename*=UTF-8''chepagame_vacaciones_" in disposition
     document = response.json()
     assert (document["formatVersion"], document["scope"], document["language"]) == (
         1,
@@ -79,7 +79,7 @@ async def test_english_file_names(client, create_user, create_account):
     account = await create_account(owner, name="Trip")
     headers = {**auth_headers(owner["_id"]), "Accept-Language": "en"}
     response = await client.get(url(account["_id"]), params={"format": "csv"}, headers=headers)
-    assert 'filename="my-expenses_trip_' in response.headers["content-disposition"]
+    assert 'filename="chepagame_trip_' in response.headers["content-disposition"]
     with zipfile.ZipFile(io.BytesIO(response.content)) as archive:
         assert archive.namelist()[0] == "account.csv"
 

@@ -56,7 +56,7 @@ def slugify(text: str) -> str:
 def file_name(
     slug: str | None, export_format: ExportFormat, language: Language, exported_at: datetime
 ) -> str:
-    """`mis-gastos_<slug>_<day>.zip` for an account, `mis-gastos_<day>.zip` for everything."""
+    """`chepagame_<slug>_<day>.zip` for an account, `chepagame_<day>.zip` for everything."""
     texts = labels(language)["files"]
     extension = "zip" if export_format == "csv" else "json"
     day = exported_at.astimezone(UTC).date().isoformat()

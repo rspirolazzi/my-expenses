@@ -13,7 +13,7 @@ CONTEXT = {"code": "123456", "expiresInMinutes": 15, "newEmail": "new@mail.com"}
 def test_every_template_exists_in_both_languages(template, language):
     assert (TEMPLATES_DIR / language / f"{template}.html").is_file()
     subject, html = render(template, language, CONTEXT)
-    assert subject and subject != "Mis Gastos"
+    assert subject and subject != "ChePagame"
     assert f'lang="{language}"' in html
 
 

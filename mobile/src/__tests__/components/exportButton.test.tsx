@@ -10,7 +10,7 @@ const share = Sharing.shareAsync as jest.Mock;
 
 const file = {
   bytes: new Uint8Array([80, 75]),
-  fileName: "mis-gastos_vacaciones_2026-11-12.zip",
+  fileName: "chepagame_vacaciones_2026-11-12.zip",
   mimeType: "application/zip",
 };
 
@@ -23,7 +23,7 @@ it("exports in two taps: Export, then the format, and opens the share sheet (SC-
   fireEvent.press(await screen.findByText("CSV (planilla)"));
   await waitFor(() => expect(share).toHaveBeenCalledTimes(1));
   expect(run).toHaveBeenCalledWith("csv");
-  expect(share.mock.calls[0][0]).toBe("file:///cache/exports/mis-gastos_vacaciones_2026-11-12.zip");
+  expect(share.mock.calls[0][0]).toBe("file:///cache/exports/chepagame_vacaciones_2026-11-12.zip");
   expect(share.mock.calls[0][1]).toEqual({
     mimeType: "application/zip",
     UTI: "public.zip-archive",

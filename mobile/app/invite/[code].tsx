@@ -5,7 +5,7 @@ import { setPendingInvite } from "../../src/hooks/usePendingInvite";
 import { InvitationScreen } from "../../src/screens/accounts/JoinScreens";
 
 /**
- * Deep link myexpenses://invite/<code>, reachable with or without a session. Without one, the code
+ * Deep link chepagame://invite/<code>, reachable with or without a session. Without one, the code
  * is remembered and the user goes to sign in; usePendingInvite opens it afterwards (FR-009).
  */
 export default function InviteRoute() {

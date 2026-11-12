@@ -22,7 +22,7 @@ TABLES: Final = (
 LABELS: Final[dict[Language, dict[str, dict[str, str]]]] = {
     "es": {
         "files": {
-            "prefix": "mis-gastos",
+            "prefix": "chepagame",
             "account_fallback": "cuenta",
             "profile": "perfil.csv",
             "account": "cuenta.csv",
@@ -91,7 +91,7 @@ LABELS: Final[dict[Language, dict[str, dict[str, str]]]] = {
     },
     "en": {
         "files": {
-            "prefix": "my-expenses",
+            "prefix": "chepagame",
             "account_fallback": "account",
             "profile": "profile.csv",
             "account": "account.csv",

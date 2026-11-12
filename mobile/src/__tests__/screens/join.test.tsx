@@ -44,7 +44,7 @@ describe("usePendingInvite (FR-009)", () => {
 
 describe("JoinScreen", () => {
   it("accepts a pasted link or a bare code", () => {
-    expect(extractInviteCode("myexpenses://invite/abcDEF_12345")).toBe("abcDEF_12345");
+    expect(extractInviteCode("chepagame://invite/abcDEF_12345")).toBe("abcDEF_12345");
     expect(extractInviteCode("http://localhost:3000/invite/abcDEF_12345")).toBe("abcDEF_12345");
     renderScreen(<JoinScreen />);
     fireEvent.changeText(screen.getByLabelText("Código o enlace de invitación"), "abcDEF_12345");

@@ -32,7 +32,7 @@ beforeEach(async () => {
 it("exports all my data from the profile and shares the file (US2)", async () => {
   mine.mockResolvedValue({
     bytes: new Uint8Array([1]),
-    fileName: "mis-gastos_2026-11-12.json",
+    fileName: "chepagame_2026-11-12.json",
     mimeType: "application/json; charset=utf-8",
   });
   renderScreen(<ProfileScreen />);
