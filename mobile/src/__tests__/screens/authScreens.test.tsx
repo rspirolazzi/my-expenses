@@ -46,6 +46,11 @@ beforeEach(async () => {
 });
 
 describe("Login", () => {
+  it("shows the slogan", () => {
+    renderScreen(<LoginScreen />);
+    expect(screen.getByText("Para que la guita no sea un problema")).toBeTruthy();
+  });
+
   it("signs in with the password", async () => {
     (authApi.loginWithPassword as jest.Mock).mockResolvedValue(authResponse);
     renderScreen(<LoginScreen />);

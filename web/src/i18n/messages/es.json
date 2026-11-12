@@ -8,7 +8,8 @@
     "email": "Email",
     "password": "Contraseña",
     "or": "o",
-    "back": "Volver"
+    "back": "Volver",
+    "slogan": "Para que la guita no sea un problema"
   },
   "nav": {
     "home": "Inicio",
@@ -23,12 +24,12 @@
     "accountsSoon": "Disponible pronto"
   },
   "footer": {
-    "rights": "ChePagame. Dividí gastos entre amigos sin vueltas.",
+    "rights": "ChePagame. Para que la guita no sea un problema.",
     "privacy": "Privacidad",
     "terms": "Términos"
   },
   "home": {
-    "title": "Dividí gastos con amigos, sin vueltas",
+    "title": "Para que la guita no sea un problema",
     "subtitle": "Cargá los gastos del grupo y ChePagame te dice quién le debe a quién.",
     "cta": "Empezar"
   },

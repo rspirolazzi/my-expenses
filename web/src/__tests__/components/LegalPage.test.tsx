@@ -7,8 +7,9 @@ import { renderWithIntl } from "../support/render";
 
 jest.mock("@/app/actions/auth", () => ({ signOutAction: jest.fn() }));
 
-it("the footer links to the privacy and terms pages", () => {
+it("the footer shows the slogan and links to the privacy and terms pages", () => {
   renderWithIntl(<SiteFooter />);
+  expect(screen.getByText("ChePagame. Para que la guita no sea un problema.")).toBeInTheDocument();
   expect(screen.getByRole("link", { name: "Privacidad" })).toHaveAttribute("href", "/privacy");
   expect(screen.getByRole("link", { name: "Términos" })).toHaveAttribute("href", "/terms");
 });

@@ -50,6 +50,7 @@ export default function LoginScreen() {
       <Text variant="headlineMedium" style={formStyles.title}>
         {t("auth.login.title")}
       </Text>
+      <Text style={{ textAlign: "center" }}>{t("common.slogan")}</Text>
       <GoogleSignInButton onMessage={setMessage} />
       <Text style={{ textAlign: "center" }}>{t("mobile.orUseEmail")}</Text>
       <TextInput

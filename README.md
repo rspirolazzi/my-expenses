@@ -1,5 +1,7 @@
 # ChePagame
 
+> Para que la guita no sea un problema.
+
 Group expense splitting for Web and Mobile. This repository has three sibling projects:
 
 | Folder | Stack | What it is |

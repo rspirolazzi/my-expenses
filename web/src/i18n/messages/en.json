@@ -8,7 +8,8 @@
     "email": "Email",
     "password": "Password",
     "or": "or",
-    "back": "Back"
+    "back": "Back",
+    "slogan": "So money is never a problem"
   },
   "nav": {
     "home": "Home",
@@ -23,12 +24,12 @@
     "accountsSoon": "Coming soon"
   },
   "footer": {
-    "rights": "ChePagame. Split expenses with friends, hassle-free.",
+    "rights": "ChePagame. So money is never a problem.",
     "privacy": "Privacy",
     "terms": "Terms"
   },
   "home": {
-    "title": "Split expenses with friends, hassle-free",
+    "title": "So money is never a problem",
     "subtitle": "Add the group's expenses and ChePagame tells you who owes whom.",
     "cta": "Get started"
   },
