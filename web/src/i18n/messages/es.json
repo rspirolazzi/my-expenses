@@ -449,5 +449,68 @@
     "mineTitle": "Exportar mis datos",
     "mineHint": "Descargá tu perfil y todas tus Cuentas en CSV (un ZIP con una planilla por tabla) o en JSON.",
     "mineButton": "Exportar mis datos"
+  },
+  "legal": {
+    "lastUpdated": "Última actualización: 12 de noviembre de 2026.",
+    "privacy": {
+      "title": "Privacidad",
+      "intro": "Esta página explica qué datos guarda Mis Gastos y qué hace con ellos.",
+      "sections": {
+        "data": {
+          "title": "Qué datos guardamos",
+          "body": "Tu email, tu nombre y apellido si los cargás, tus preferencias (idioma, moneda por defecto y tema) y lo que cargás en tus Cuentas: participantes, gastos, reembolsos y sus cambios."
+        },
+        "use": {
+          "title": "Para qué los usamos",
+          "body": "Solo para que la app funcione: identificarte, mostrarte tus Cuentas y calcular los saldos. No usamos publicidad ni herramientas de analítica, y no vendemos ni compartimos tus datos."
+        },
+        "members": {
+          "title": "Quién ve tus datos",
+          "body": "Los miembros de una Cuenta ven lo que tiene esa Cuenta: participantes, gastos, reembolsos y saldos. Nadie fuera de la Cuenta puede verla."
+        },
+        "providers": {
+          "title": "Servicios externos",
+          "body": "Si entrás con Google, Google nos confirma tu identidad. Los emails con códigos de acceso se envían a través de un proveedor de envío de emails, que solo recibe tu dirección y el mensaje."
+        },
+        "history": {
+          "title": "Historial de cambios",
+          "body": "Los cambios en gastos y reembolsos quedan registrados para que los miembros puedan ver quién cambió qué. Lo que se elimina deja de mostrarse, pero se conserva en el historial."
+        },
+        "export": {
+          "title": "Tus datos son tuyos",
+          "body": "Podés descargar todos tus datos en CSV o JSON desde tu Perfil, en Exportar mis datos, y cada Cuenta desde su propia página."
+        },
+        "questions": {
+          "title": "Consultas",
+          "body": "Si tenés preguntas sobre tus datos, escribinos desde la página de Contacto."
+        }
+      }
+    },
+    "terms": {
+      "title": "Términos",
+      "intro": "Al usar Mis Gastos aceptás estas condiciones.",
+      "sections": {
+        "service": {
+          "title": "Qué es Mis Gastos",
+          "body": "Una herramienta para registrar gastos compartidos y calcular quién le debe a quién. La app no mueve dinero: los pagos entre participantes se hacen por fuera de ella."
+        },
+        "access": {
+          "title": "Tu acceso",
+          "body": "Sos responsable de cuidar el acceso a tu email o a tu cuenta de Google, y de lo que cargás en tus Cuentas."
+        },
+        "balances": {
+          "title": "Saldos",
+          "body": "Los saldos se calculan con los importes que cargan los miembros. Revisalos antes de pagar o cobrar."
+        },
+        "data": {
+          "title": "Tus datos",
+          "body": "Los datos que cargás son tuyos y podés exportarlos cuando quieras. Cómo los tratamos está explicado en la página de Privacidad."
+        },
+        "changes": {
+          "title": "Cambios",
+          "body": "Podemos actualizar estas condiciones. La fecha de la última actualización figura al pie de esta página."
+        }
+      }
+    }
   }
 }

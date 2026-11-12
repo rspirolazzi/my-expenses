@@ -49,8 +49,8 @@ export function SiteFooter() {
     <footer className="site-footer">
       <p>{t("rights")}</p>
       <nav aria-label="legal">
-        <Link href="/about">{t("privacy")}</Link>
-        <Link href="/about">{t("terms")}</Link>
+        <Link href="/privacy">{t("privacy")}</Link>
+        <Link href="/terms">{t("terms")}</Link>
       </nav>
     </footer>
   );

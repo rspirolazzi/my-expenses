@@ -449,5 +449,68 @@
     "mineTitle": "Export my data",
     "mineHint": "Download your profile and all your accounts as CSV (a ZIP with one spreadsheet per table) or JSON.",
     "mineButton": "Export my data"
+  },
+  "legal": {
+    "lastUpdated": "Last updated: November 12, 2026.",
+    "privacy": {
+      "title": "Privacy",
+      "intro": "This page explains what data Mis Gastos keeps and what it does with it.",
+      "sections": {
+        "data": {
+          "title": "What data we keep",
+          "body": "Your email, your first and last name if you add them, your preferences (language, default currency and theme) and what you add to your accounts: participants, expenses, settlements and their changes."
+        },
+        "use": {
+          "title": "What we use it for",
+          "body": "Only to make the app work: identify you, show your accounts and calculate balances. We use no advertising or analytics tools, and we never sell or share your data."
+        },
+        "members": {
+          "title": "Who sees your data",
+          "body": "The members of an account see what that account holds: participants, expenses, settlements and balances. Nobody outside the account can see it."
+        },
+        "providers": {
+          "title": "External services",
+          "body": "If you sign in with Google, Google confirms your identity to us. Emails with access codes are sent through an email delivery provider, which only receives your address and the message."
+        },
+        "history": {
+          "title": "Change history",
+          "body": "Changes to expenses and settlements are recorded so members can see who changed what. Deleted items are no longer shown, but they are kept in the history."
+        },
+        "export": {
+          "title": "Your data is yours",
+          "body": "You can download all your data as CSV or JSON from your Profile, under Export my data, and each account from its own page."
+        },
+        "questions": {
+          "title": "Questions",
+          "body": "If you have questions about your data, write to us from the Contact page."
+        }
+      }
+    },
+    "terms": {
+      "title": "Terms",
+      "intro": "By using Mis Gastos you accept these terms.",
+      "sections": {
+        "service": {
+          "title": "What Mis Gastos is",
+          "body": "A tool to record shared expenses and work out who owes whom. The app does not move money: payments between participants happen outside of it."
+        },
+        "access": {
+          "title": "Your access",
+          "body": "You are responsible for keeping access to your email or Google account safe, and for what you add to your accounts."
+        },
+        "balances": {
+          "title": "Balances",
+          "body": "Balances are calculated from the amounts members enter. Check them before paying or collecting."
+        },
+        "data": {
+          "title": "Your data",
+          "body": "The data you add is yours and you can export it whenever you want. How we handle it is explained on the Privacy page."
+        },
+        "changes": {
+          "title": "Changes",
+          "body": "We may update these terms. The date of the last update is shown at the bottom of this page."
+        }
+      }
+    }
   }
 }
