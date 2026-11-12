@@ -6,8 +6,10 @@ import { ActivityIndicator, Button, Chip, Text } from "react-native-paper";
 
 import { AccountIcon } from "../../components/accounts/AccountBits";
 import { AccountTabs } from "../../components/accounts/AccountTabs";
+import { ExportButton } from "../../components/exports/ExportButton";
 import { ExpenseListItem } from "../../components/expenses/ExpenseBits";
 import { ErrorText } from "../../components/FormBits";
+import { exportsApi } from "../../services/api/exports";
 import { accountsApi } from "../../services/api/accounts";
 import { expensesApi } from "../../services/api/expenses";
 import {
@@ -118,6 +120,8 @@ export default function AccountExpensesScreen() {
             {account.isClosed && <Chip compact>{t("accounts.closedBadge")}</Chip>}
           </View>
           <AccountTabs accountId={account.id} active="expenses" />
+          {/* Also on closed accounts: exporting is read only (FR-001). */}
+          <ExportButton run={(format) => exportsApi.account(account.id, format)} />
           <Text variant="labelMedium">{t("expenses.total")}</Text>
           <Text variant="headlineMedium">
             {formatMoney(total, account.currency, account.currencyDecimals, locale)}

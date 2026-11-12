@@ -4,9 +4,11 @@ import { ScrollView } from "react-native";
 import { Button, Divider, SegmentedButtons, Text, TextInput } from "react-native-paper";
 
 import { CurrencyPicker } from "../components/CurrencyPicker";
+import { ExportButton } from "../components/exports/ExportButton";
 import { CodeInput, ErrorText, formStyles } from "../components/FormBits";
 import { useAuth } from "../hooks/useAuth";
 import { usePreferences } from "../hooks/usePreferences";
+import { exportsApi } from "../services/api/exports";
 import { type ApiErrorCode, errorCodeOf } from "../services/api/types";
 import { usersApi } from "../services/api/users";
 import { displayName } from "../utils/displayName";
@@ -155,6 +157,11 @@ export default function ProfileScreen() {
       {emailStep === "done" && <Text>{t("profile.emailChanged", { email: user.email })}</Text>}
       <ErrorText messageKey={message} />
       <ErrorText code={error} />
+
+      <Divider />
+      <Text variant="titleSmall">{t("exports.mineTitle")}</Text>
+      <Text variant="bodySmall">{t("exports.mineHint")}</Text>
+      <ExportButton run={exportsApi.mine} label={t("exports.mineButton")} />
 
       <Divider />
       <Button mode="text" onPress={logout}>

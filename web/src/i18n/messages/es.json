@@ -436,5 +436,18 @@
       "sameParticipant": "Quien paga y quien recibe tienen que ser distintos.",
       "dateRequired": "Elegí una fecha."
     }
+  },
+  "exports": {
+    "button": "Exportar",
+    "menuLabel": "Elegí el formato de exportación",
+    "csv": "CSV (planilla)",
+    "json": "JSON",
+    "exporting": "Exportando…",
+    "error": "No se pudo exportar. Revisá tu conexión e intentá de nuevo.",
+    "notFound": "La Cuenta ya no existe o ya no sos miembro.",
+    "retry": "Reintentar",
+    "mineTitle": "Exportar mis datos",
+    "mineHint": "Descargá tu perfil y todas tus Cuentas en CSV (un ZIP con una planilla por tabla) o en JSON.",
+    "mineButton": "Exportar mis datos"
   }
 }

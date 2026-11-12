@@ -99,8 +99,12 @@ async def find_for_member(
     return await _collection().find_one({"_id": oid, **_member_filter(user_id)}, session=session)
 
 
-async def list_for_member(user_id: ObjectId) -> list[dict[str, Any]]:
-    cursor = _collection().find(_member_filter(user_id)).sort("updatedAt", DESCENDING)
+async def list_for_member(
+    user_id: ObjectId, session: AsyncClientSession | None = None
+) -> list[dict[str, Any]]:
+    cursor = (
+        _collection().find(_member_filter(user_id), session=session).sort("updatedAt", DESCENDING)
+    )
     return [doc async for doc in cursor]
 
 

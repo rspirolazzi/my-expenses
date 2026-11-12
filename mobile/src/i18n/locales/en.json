@@ -446,5 +446,18 @@
       "sameParticipant": "The payer and the receiver must be different.",
       "dateRequired": "Choose a date."
     }
+  },
+  "exports": {
+    "button": "Export",
+    "menuLabel": "Choose the export format",
+    "csv": "CSV (spreadsheet)",
+    "json": "JSON",
+    "exporting": "Exporting…",
+    "error": "The export failed. Check your connection and try again.",
+    "notFound": "The account no longer exists or you are no longer a member.",
+    "retry": "Retry",
+    "mineTitle": "Export my data",
+    "mineHint": "Download your profile and all your accounts as CSV (a ZIP with one spreadsheet per table) or JSON.",
+    "mineButton": "Export my data"
   }
 }

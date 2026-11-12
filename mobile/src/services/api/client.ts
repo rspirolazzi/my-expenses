@@ -1,3 +1,6 @@
+import { fetch as expoFetch } from "expo/fetch";
+
+import { fileNameFromDisposition } from "../../utils/fileName";
 import { clearTokens, getTokens, saveTokens } from "../auth/tokenStorage";
 
 import { ApiError, type ApiErrorCode, type TokenPair } from "./types";
@@ -89,18 +92,58 @@ async function parse<T>(response: Response): Promise<T> {
   return payload as T;
 }
 
-export async function apiRequest<T>(path: string, options: RequestOptions = {}): Promise<T> {
-  const tokens = options.authenticated ? await getTokens() : null;
-  let response = await send(path, options, tokens?.accessToken);
-
-  if (response.status === 401 && options.authenticated && tokens) {
-    const fresh = await refreshOnce(tokens.refreshToken);
-    if (!fresh) {
-      await clearTokens();
-      expiredListeners.forEach((listener) => listener());
-      throw new ApiError(401, "invalid_refresh_token");
-    }
-    response = await send(path, options, fresh.accessToken);
+/** Sends with the stored access token and, on 401, refreshes it once and retries. */
+async function withFreshToken(sendWith: (accessToken?: string) => Promise<Response>) {
+  const tokens = await getTokens();
+  const response = await sendWith(tokens?.accessToken);
+  if (response.status !== 401 || !tokens) return response;
+  const fresh = await refreshOnce(tokens.refreshToken);
+  if (!fresh) {
+    await clearTokens();
+    expiredListeners.forEach((listener) => listener());
+    throw new ApiError(401, "invalid_refresh_token");
   }
+  return sendWith(fresh.accessToken);
+}
+
+export async function apiRequest<T>(path: string, options: RequestOptions = {}): Promise<T> {
+  const response = options.authenticated
+    ? await withFreshToken((accessToken) => send(path, options, accessToken))
+    : await send(path, options);
   return parse<T>(response);
+}
+
+export interface DownloadedFile {
+  bytes: Uint8Array;
+  fileName: string;
+  mimeType: string;
+}
+
+/**
+ * Authenticated binary download (feature 005, research R13). Uses `expo/fetch`, which reads
+ * binary bodies reliably on device; errors come back as `ApiError` like any other request.
+ */
+export async function requestFile(path: string, fallbackName: string): Promise<DownloadedFile> {
+  const response = await withFreshToken(async (accessToken) => {
+    const headers: Record<string, string> = { "X-Client": "mobile", "Accept-Language": language };
+    if (accessToken) headers.Authorization = `Bearer ${accessToken}`;
+    try {
+      return (await expoFetch(`${baseUrl()}${path}`, { headers })) as unknown as Response;
+    } catch {
+      throw new ApiError(0, "network_error");
+    }
+  });
+  if (!response.ok) await parse<never>(response);
+  let bytes: Uint8Array;
+  try {
+    bytes = new Uint8Array(await response.arrayBuffer());
+  } catch {
+    // The connection dropped mid-download: never hand over a partial file.
+    throw new ApiError(0, "network_error");
+  }
+  return {
+    bytes,
+    fileName: fileNameFromDisposition(response.headers.get("content-disposition"), fallbackName),
+    mimeType: response.headers.get("content-type") ?? "application/octet-stream",
+  };
 }

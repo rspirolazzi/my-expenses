@@ -11,7 +11,7 @@ interface ApiFetchOptions {
   language?: string;
 }
 
-function baseUrl(): string {
+export function baseUrl(): string {
   const url = process.env.API_INTERNAL_BASE_URL ?? process.env.NEXT_PUBLIC_API_BASE_URL;
   if (!url) throw new Error("API_INTERNAL_BASE_URL is not configured");
   return url.replace(/\/$/, "");

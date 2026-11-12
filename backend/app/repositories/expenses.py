@@ -176,3 +176,16 @@ async def active_for_balances(account_ids: list[ObjectId]) -> list[dict[str, Any
         {"accountId": 1, "amountMinor": 1, "paidById": 1, "participantIds": 1},
     )
     return [doc async for doc in cursor]
+
+
+# Fields an export never needs; internal and user identifiers stay out of the file (research R9).
+_EXPORT_EXCLUDED = {"clientRequestId": 0, "createdBy": 0, "deletedBy": 0, "version": 0}
+
+
+async def active_for_export(
+    account_ids: list[ObjectId], session: AsyncClientSession | None = None
+) -> list[dict[str, Any]]:
+    """Active expenses of the given accounts in the app's listing order (FR-005)."""
+    query = {"accountId": {"$in": account_ids}, "isDeleted": False}
+    cursor = _collection().find(query, _EXPORT_EXCLUDED, session=session).sort(LIST_SORT)
+    return [doc async for doc in cursor]

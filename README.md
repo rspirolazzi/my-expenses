@@ -78,6 +78,23 @@ docker compose up -d --build
 - Settlements are not edited: a wrong one is deleted (logical delete, audited) and recorded again.
   A closed account is read only.
 
+## Data export (feature 005)
+
+- Any member exports an account, open or closed, with "Exportar" next to the "Gastos" and "Saldos"
+  tabs; the profile has "Export my data" with the profile and every account the user is a member
+  of. Formats: CSV (a ZIP with one file per table: account, participants, expenses, shares,
+  settlements, balances and suggestions; one folder per account for "all my data") and JSON (one
+  document with stable keys and amounts as decimal text).
+- API: `GET /api/v1/accounts/{id}/export?format=csv|json` and `GET /api/v1/users/me/export?format=csv|json`.
+  The file is built on the fly from one consistent read and never stored; every export is audited
+  (`account.exported`, `user.data_exported`). Files never include other users' emails or ids,
+  invite codes or tokens.
+- Web downloads through the BFF (`POST /api/exports/...`), so backend tokens stay on the server.
+  Mobile opens the system share sheet with `expo-sharing`: rebuild the development build after
+  pulling this feature (`npx expo run:android` or `npx expo run:ios`).
+- CSV always uses `,` and a decimal point, whatever the language. A spreadsheet set to Spanish may
+  need "Import CSV" (with a dot as the decimal separator) instead of a double click.
+
 ## Tests
 
 ```bash
@@ -104,5 +121,6 @@ cd mobile && npm run gen:api
 
 End-to-end scenarios: [001](specs/001-user-auth-profile/quickstart.md),
 [002](specs/002-account-management/quickstart.md),
-[003](specs/003-expense-management/quickstart.md) and
-[004](specs/004-balances-settlements/quickstart.md).
+[003](specs/003-expense-management/quickstart.md),
+[004](specs/004-balances-settlements/quickstart.md) and
+[005](specs/005-data-export/quickstart.md).

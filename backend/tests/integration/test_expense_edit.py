@@ -12,7 +12,8 @@ async def test_member_edits_expense_loaded_by_another(
     member = await create_user(email="member@mail.com")
     account = await create_account(owner)
     await link(db, account, "Leandro", member)
-    expense = await create_expense(account, owner)
+    # Same date as body(), so the diff never depends on the day the suite runs.
+    expense = await create_expense(account, owner, date="2026-11-11")
     javier = participant_id(account, "Javier")
     response = await client.put(
         f"/accounts/{account['_id']}/expenses/{expense['_id']}",

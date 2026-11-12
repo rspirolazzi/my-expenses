@@ -44,6 +44,13 @@ async def transaction() -> AsyncIterator[AsyncClientSession]:
             yield session
 
 
+@asynccontextmanager
+async def snapshot_session() -> AsyncIterator[AsyncClientSession]:
+    """Read-only session whose reads all see the same point in time (feature 005, research R3)."""
+    async with get_client().start_session(snapshot=True) as session:
+        yield session
+
+
 async def run_in_transaction[T](callback: Callable[[AsyncClientSession], Awaitable[T]]) -> T:
     """Run `callback` in a transaction, retrying it on transient errors such as write conflicts.
 

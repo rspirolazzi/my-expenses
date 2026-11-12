@@ -5,6 +5,7 @@ import { getTranslations } from "next-intl/server";
 import { AccountIcon } from "@/components/accounts/AccountIcon";
 import { AccountTabs } from "@/components/accounts/AccountTabs";
 import { ExpenseList } from "@/components/expenses/ExpenseList";
+import { ExportButton } from "@/components/exports/ExportButton";
 import { getAccount } from "@/lib/accountsServer";
 import { ApiError } from "@/lib/api/errors";
 import { firstExpensePage } from "@/lib/expensesServer";
@@ -49,6 +50,8 @@ export default async function AccountExpensesPage({ params }: AccountPageProps) 
           <Link href={`/accounts/${account.id}/settings`} className="button secondary">
             {t("settings")}
           </Link>
+          {/* Also on closed accounts: exporting is read only (FR-001). */}
+          <ExportButton endpoint={`/api/exports/accounts/${account.id}`} />
           {!account.isClosed && (
             <Link href={`/accounts/${account.id}/expenses/new`} className="button">
               {t("new")}

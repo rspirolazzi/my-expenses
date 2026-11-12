@@ -7,6 +7,7 @@ import { AccountTabs } from "@/components/accounts/AccountTabs";
 import { BalanceList } from "@/components/balances/BalanceList";
 import { SettlementList } from "@/components/balances/SettlementList";
 import { SuggestionList } from "@/components/balances/SuggestionList";
+import { ExportButton } from "@/components/exports/ExportButton";
 import { getAccount } from "@/lib/accountsServer";
 import { ApiError } from "@/lib/api/errors";
 import { getBalances, listSettlements } from "@/lib/balancesServer";
@@ -57,6 +58,8 @@ export default async function AccountBalancesPage({ params }: BalancesPageProps)
           <Link href={`/accounts/${account.id}/settings`} className="button secondary">
             {tExpenses("settings")}
           </Link>
+          {/* Also on closed accounts: exporting is read only (FR-001). */}
+          <ExportButton endpoint={`/api/exports/accounts/${account.id}`} />
           {!account.isClosed && (
             <Link href={`/accounts/${account.id}/settlements/new`} className="button">
               {t("new")}

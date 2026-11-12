@@ -35,3 +35,52 @@ jest.mock("@react-native-google-signin/google-signin", () => ({
 jest.mock("expo-localization", () => ({
   getLocales: jest.fn(() => [{ languageCode: "es", regionCode: "AR", currencyCode: "ARS" }]),
 }));
+
+// Feature 005: binary downloads go through expo/fetch, which is the global fetch under Jest.
+jest.mock("expo/fetch", () => ({
+  fetch: (...args: Parameters<typeof fetch>) => global.fetch(...args),
+}));
+
+jest.mock("expo-sharing", () => ({
+  isAvailableAsync: jest.fn(async () => true),
+  shareAsync: jest.fn(async () => undefined),
+}));
+
+jest.mock("expo-file-system", () => {
+  const files = new Map<string, Uint8Array>();
+  const folders = new Set<string>();
+  const join = (...parts: (string | { uri: string })[]) =>
+    parts.map((part) => (typeof part === "string" ? part : part.uri)).join("/");
+  class Directory {
+    uri: string;
+    constructor(...parts: (string | { uri: string })[]) {
+      this.uri = join(...parts);
+    }
+    get exists() {
+      return folders.has(this.uri);
+    }
+    create() {
+      folders.add(this.uri);
+    }
+    delete() {
+      folders.delete(this.uri);
+      for (const key of [...files.keys()]) if (key.startsWith(`${this.uri}/`)) files.delete(key);
+    }
+  }
+  class File {
+    uri: string;
+    constructor(...parts: (string | { uri: string })[]) {
+      this.uri = join(...parts);
+    }
+    get exists() {
+      return files.has(this.uri);
+    }
+    write(content: Uint8Array) {
+      files.set(this.uri, content);
+    }
+    delete() {
+      files.delete(this.uri);
+    }
+  }
+  return { __files: files, Directory, File, Paths: { cache: new Directory("file:///cache") } };
+});
